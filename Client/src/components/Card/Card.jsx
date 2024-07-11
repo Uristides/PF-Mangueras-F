@@ -1,11 +1,22 @@
 import styles from "./Card.module.css"
+import { useDispatch, useSelector } from "react-redux";
+import { addItem } from "../../redux/cartSlice";
 
-const Card = ({name, brand, price, image})=>{
 
+const Card = (props)=>{
 
+    const {id, name, brand, price, image, diameter,longitude, stock, type, description, available} = props.data
+
+    const items = useSelector((state)=>state.cart.items)
+    const dispatch = useDispatch()
+
+    const handleAddToCart = ()=>{
+        dispatch(addItem(props.data))
+    }
     
+    console.log("In Card(s): ", items)
     return(
-        <article className={styles.card}>
+        <article className={styles.card} key={id}>
             <h1>{name}</h1>
             <h2>{brand}</h2>
             <h2>${price}</h2>
@@ -14,6 +25,7 @@ const Card = ({name, brand, price, image})=>{
             alt="manguera pic"
             className={styles.img}
             />
+            <button onClick={handleAddToCart}>Add to Cart</button>
         </article>
     )
 }
