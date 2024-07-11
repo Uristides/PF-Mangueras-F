@@ -3,12 +3,12 @@ import { useEffect, useState } from "react";
 import Card from "../Card/Card";
 import styles from "./Cards.module.css";
 
-const Cards = ({ filters }) => {
+const Cards = ({ filters, sortOption, searchQuery }) => {
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 10;
 
-  const applyFilters = () => {
+  const applyFiltersSortAndSearch = () => {
     let filteredProducts = mangueras;
 
     if (filters.type) {
@@ -23,25 +23,43 @@ const Cards = ({ filters }) => {
       );
     }
 
-    return filteredProducts.filter(
+    filteredProducts = filteredProducts.filter(
       (mang) => mang.available === true && mang.stock > 0
     );
+
+    if (searchQuery) {
+      filteredProducts = filteredProducts.filter((mang) =>
+        mang.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    if (sortOption === "price_asc") {
+      filteredProducts.sort((a, b) => Number(a.price) - Number(b.price));
+    } else if (sortOption === "price_desc") {
+      filteredProducts.sort((a, b) => Number(b.price) - Number(a.price));
+    } else if (sortOption === "name_asc") {
+      filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (sortOption === "name_desc") {
+      filteredProducts.sort((a, b) => b.name.localeCompare(a.name));
+    }
+
+    return filteredProducts;
   };
 
   useEffect(() => {
-    const data = applyFilters();
+    const data = applyFiltersSortAndSearch();
     setProducts(data.slice(0, itemsPerPage));
-  }, [filters]);
+  }, [filters, sortOption, searchQuery]);
 
   const restart = () => {
     setCurrentPage(0);
-    const data = applyFilters();
+    const data = applyFiltersSortAndSearch();
     setProducts(data.slice(0, itemsPerPage));
   };
 
   const nextPage = () => {
     const next = currentPage + 1;
-    const data = applyFilters();
+    const data = applyFiltersSortAndSearch();
     const Index = next * itemsPerPage;
     if (Index >= data.length) return;
     setProducts(data.slice(Index, Index + itemsPerPage));
@@ -51,7 +69,7 @@ const Cards = ({ filters }) => {
   const prevPage = () => {
     const prev = currentPage - 1;
     if (prev < 0) return;
-    const data = applyFilters();
+    const data = applyFiltersSortAndSearch();
     const first = prev * itemsPerPage;
     setProducts(data.slice(first, first + itemsPerPage));
     setCurrentPage(prev);
@@ -64,15 +82,7 @@ const Cards = ({ filters }) => {
           <Card
             key={mang.id}
             id={mang.id}
-            name={mang.name}
-            image={mang.image}
-            price={mang.price}
-            diameter={mang.diameter}
-            length={mang.longitude}
-            brand={mang.brand}
-            stock={mang.stock}
-            type={mang.type}
-            description={mang.description}
+            data={mang}
           />
         ))}
       </article>
