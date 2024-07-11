@@ -82,15 +82,7 @@ const Cards = ({ filters, sortOption, searchQuery }) => {
           <Card
             key={mang.id}
             id={mang.id}
-            name={mang.name}
-            image={mang.image}
-            price={mang.price}
-            diameter={mang.diameter}
-            length={mang.longitude}
-            brand={mang.brand}
-            stock={mang.stock}
-            type={mang.type}
-            description={mang.description}
+            data={mang}
           />
         ))}
       </article>
