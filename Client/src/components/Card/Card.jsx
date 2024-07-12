@@ -1,20 +1,26 @@
 import styles from "./Card.module.css"
-import { useDispatch, useSelector } from "react-redux";
-import { addItem } from "../../redux/cartSlice";
 
 
 const Card = (props)=>{
 
-    const {id, name, brand, price, image, diameter,longitude, stock, type, description, available} = props.data
+        // "id": 1,
+		// "name": "AquaFlex",
+		// "image": "https://th.bing.com/th?id=OPHS.eyiN15kcAhBeCQ474C474&w=200&h=220&c=17&pid=21.1",
+		// "price": "35",
+		// "diameter": "1.0",
+		// "longitude": "15, 30",
+		// "brand": "HydroPro",
+		// "type": "Domestico",
+		// "description": "Manguera de alta calidad, flexible y resistente para uso doméstico.",
+		// "available": true,
+		// "stockId": null
 
-    const items = useSelector((state)=>state.cart.items)
-    const dispatch = useDispatch()
+    const {id, name, image, price, diameter, longitude, brand, type, description, available, stockId} = props.data
 
-    const handleAddToCart = ()=>{
-        dispatch(addItem(props.data))
-    }
+
+
+ 
     
-    console.log("In Card(s): ", items)
     return(
         <article className={styles.card} key={id}>
             <h1>{name}</h1>
@@ -25,22 +31,9 @@ const Card = (props)=>{
             alt="manguera pic"
             className={styles.img}
             />
-            <button onClick={handleAddToCart}>Add to Cart</button>
+        
         </article>
     )
 }
 
 export default Card;
-        // "id": 1,
-        //   "image": "https://tauber.com.mx/storage/customer/images/312005_B7_STV_1_2_100.JPG",
-        //   "name": "Manguera1",
-        //   "price": 50.0,
-        //   "diameter": 1.5,
-        //   "longitude": {
-        //     "feet": [50.0, 100.0],
-        //     "meters": [15.24, 30.48]
-        // "brand": "MarcaA",
-        //   "stock": 10,
-        //   "type": "Doméstico",
-        //   "description": "Manguera de alta calidad para uso doméstico",
-        //   "available": true

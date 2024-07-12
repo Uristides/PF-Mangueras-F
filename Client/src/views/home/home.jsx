@@ -9,6 +9,8 @@ export function Home() {
   const [sortOption, setSortOption] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
 
+  
+
   const handleFilterChange = (name, value) => {
     setFilters((prevFilters) => ({
       ...prevFilters,
