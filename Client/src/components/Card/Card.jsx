@@ -1,4 +1,5 @@
 import styles from "./Card.module.css"
+import { Link } from "react-router-dom"
 
 
 const Card = (props)=>{
@@ -22,17 +23,22 @@ const Card = (props)=>{
  
     
     return(
-        <article className={styles.card} key={id}>
-            <h1>{name}</h1>
-            <h2>{brand}</h2>
-            <h2>${price}</h2>
-            <img
-            src={image}
-            alt="manguera pic"
-            className={styles.img}
-            />
-        
-        </article>
+
+        <div>
+                <Link to={`/detail/${id}`}>
+                <article className={styles.card} key={id}>
+                    <h1>{name}</h1>
+                    <h2>{brand}</h2>
+                    <h2>${price}</h2>
+                    <img
+                    src={image}
+                    alt="manguera pic"
+                    className={styles.img}
+                     />
+                </article>
+                </Link>
+                <button>Add to cart</button>
+        </div>
     )
 }
 
