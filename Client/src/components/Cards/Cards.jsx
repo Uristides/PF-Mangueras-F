@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Card from '../Card/Card';
@@ -35,12 +36,6 @@ const Cards = ({ filters, sortOption, searchQuery }) => {
       if (filters.price) {
         filteredProducts = filteredProducts.filter(
           (mang) => Number(mang.price) <= Number(filters.price)
-        );
-      }
-
-      if (searchQuery) {
-        filteredProducts = filteredProducts.filter((mang) =>
-          mang.name.toLowerCase().includes(searchQuery.toLowerCase())
         );
       }
 
