@@ -9,6 +9,8 @@ export function Login({sesion}) {
         correo:"",
         contraseña:""
     })
+    const [okey, setOkey] = useState("")
+    const [notOkey, setNotOkey] = useState("")
     const[errors,setErrors] = useState({
         nombre:"Solo puedes poner letras en este campo",
         correo:"Por favor, introduce un correo electrónico válido.",
@@ -16,6 +18,7 @@ export function Login({sesion}) {
     });
     const handleChangue = (e)=>{
         const {name, value} = e.target;
+        setOkey("");setNotOkey("")
         if (name === "correo") {
             const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (regex.test(value)) {
@@ -46,10 +49,53 @@ export function Login({sesion}) {
             }
         }
     }
-    const [okey, setOkey] = useState("")
     const handleSubmit = async(e)=>{
         e.preventDefault();
-        alert("logeadoooo")
+        try {
+            if (loged) {
+             const response = await fetch("http://localhost:3001/user/login",{method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                credentials:'include',
+                body:JSON.stringify({
+                    email:info.correo,
+                    password:info.contraseña
+                })
+             })  
+             
+             if (response.ok) {
+                sesion();
+                setOkey("¡Inicio de sesion exitoso!")
+                console.log("funciona creo"); }
+            else{
+                setNotOkey("contraseña o correo invalidos")
+            }}
+            else{
+                const response = await fetch("http://localhost:3001/user/register",{
+                    method:'POST',
+                    headers:{
+                        'Content-Type':'application/json'
+                    },
+                    credentials:'include',
+                    body:JSON.stringify({
+                        name:info.nombre,
+                        email:info.correo,
+                        password:info.contraseña,
+                    })
+                })
+                if (response.ok) {
+                    sesion();
+                    setOkey("¡Registro exitoso! Ahora inicia sesión.");
+                }
+                else{
+                    setNotOkey("correo en uso")
+                }
+            }
+        } catch (error) {
+            console.log(error.message);
+            throw new Error(error.message);
+        }
     }
     return(
         <main className={styles.main}>
@@ -83,11 +129,12 @@ export function Login({sesion}) {
                     />
                         <span className={styles.error}>{errors.contraseña}</span>
                 </label>
-                {loged &&<button type="submit" className={styles.button} onClick={handleSubmit} disabled={!errors.correo && !errors.nombre && !errors}>
+                {loged &&<button type="submit" className={styles.button} onClick={handleSubmit} disabled={!!errors.correo || !!errors.nombre}>
                     Iniciar sesión  
                 </button>}
-                {!loged && <button className={styles.button} onClick={handleSubmit}>Registrarse</button>}
+                {!loged && <button className={styles.button} onClick={handleSubmit} disabled={!!errors.correo || !!errors.nombre || !!errors.contraseña}>Registrarse</button>}
                 {okey && <span className={styles.ok}>{okey}</span>}
+                {notOkey && <span className={styles.error}>{notOkey}</span>}
                 
               
                 

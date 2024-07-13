@@ -1,7 +1,7 @@
 import styles from "./Card.module.css"
 import { useDispatch, useSelector } from "react-redux";
 import { addItem } from "../../redux/cartSlice";
-
+import { FaCartPlus } from "react-icons/fa6";
 
 const Card = (props)=>{
 
@@ -25,7 +25,7 @@ const Card = (props)=>{
             alt="manguera pic"
             className={styles.img}
             />
-            <button onClick={handleAddToCart}>Add to Cart</button>
+            <button onClick={handleAddToCart}className={styles.btn}><FaCartPlus> </FaCartPlus></button>
         </article>
     )
 }

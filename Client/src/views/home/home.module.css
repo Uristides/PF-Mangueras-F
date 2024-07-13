@@ -1,0 +1,32 @@
+
+.logout{
+    padding: 1em;
+    font-size: 1em;
+    margin: 1em;
+    background-color: red;
+    color: white;
+    border-radius:.5em;
+}
+.header{
+
+    
+    width: 100%;
+}
+.sectionmain{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+.filter{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: auto;
+    height: 100vh;
+    max-height: 50em;
+    padding: 1em;
+}
+h1{
+    font-size: 2em;
+    text-align: center;
+}
