@@ -1,18 +1,18 @@
-import { createSlice, createAsyncThunk, createAction } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
+import axios from "axios";
 
-export const fetchItems = createAsyncThunk('items/fetchItems', async () => {
+export const fetchItems = createAsyncThunk("items/fetchItems", async () => {
   try {
-    const response = await axios.get('http://localhost:3001/products/');
+    const response = await axios.get("http://localhost:3001/products/");
     return response.data;
   } catch (error) {
-    console.error('Error in fetchItems: ', error.message);
+    console.error("Error in fetchItems: ", error.message);
     throw error;
   }
 });
 
 export const searchItems = createAsyncThunk(
-  'items/searchItems',
+  "items/searchItems",
   async (query) => {
     try {
       const response = await axios.get(
@@ -20,64 +20,71 @@ export const searchItems = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
-      console.error('Error in searchItems: ', error.message);
+      console.error("Error in searchItems: ", error.message);
       throw error;
     }
   }
 );
 
 export const sortItemsByNameAscending = createAction(
-  'items/sortByNameAscending'
+  "items/sortByNameAscending"
 );
 export const sortItemsByNameDescending = createAction(
-  'items/sortByNameDescending'
+  "items/sortByNameDescending"
 );
 export const sortItemsByPriceAscending = createAction(
-  'items/sortByPriceAscending'
+  "items/sortByPriceAscending"
 );
 export const sortItemsByPriceDescending = createAction(
-  'items/sortByPriceDescending'
+  "items/sortByPriceDescending"
 );
 
 export const filterItemsByPrice = createAction(
-  'items/filterByPrice',
+  "items/filterByPrice",
   (price) => ({ payload: price })
 );
 
-export const filterByType = createAction('items/filterByType', (type) => ({
+export const filterByType = createAction("items/filterByType", (type) => ({
   payload: type,
 }));
 
 const itemsSlice = createSlice({
-  name: 'items',
+  name: "items",
   initialState: {
+    allItems: [],
     items: [],
-    status: 'idle',
+    status: "idle",
     error: null,
+    filter: {
+      type: "",
+      price: null,
+    },
   },
   reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchItems.pending, (state) => {
-        state.status = 'loading';
+        state.status = "loading";
       })
       .addCase(fetchItems.fulfilled, (state, action) => {
-        state.status = 'succeeded';
+        state.status = "succeeded";
+        state.allItems = action.payload;
         state.items = action.payload;
       })
       .addCase(fetchItems.rejected, (state, action) => {
-        state.status = 'failed';
+        state.status = "failed";
         state.error = action.error.message;
       })
       .addCase(searchItems.pending, (state) => {
-        state.status = 'loading';
+        state.status = "loading";
       })
       .addCase(searchItems.fulfilled, (state, action) => {
-        state.status = 'succeeded';
+        state.status = "succeeded";
+        state.allItems = action.payload;
         state.items = action.payload;
       })
       .addCase(searchItems.rejected, (state, action) => {
-        state.status = 'failed';
+        state.status = "failed";
         state.error = action.error.message;
       })
       .addCase(sortItemsByNameAscending, (state) => {
@@ -93,14 +100,32 @@ const itemsSlice = createSlice({
         state.items.sort((a, b) => b.price - a.price);
       })
       .addCase(filterItemsByPrice, (state, action) => {
-        const price = action.payload;
-        state.items = state.items.filter((item) => item.price >= price);
+        state.filter.price = action.payload;
+        applyFilters(state);
       })
       .addCase(filterByType, (state, action) => {
-        const type = action.payload;
-        state.items = state.items.filter((item) => item.type === type);
+        state.filter.type = action.payload;
+        applyFilters(state);
       });
   },
 });
+
+const applyFilters = (state) => {
+  let filteredItems = state.allItems;
+
+  if (state.filter.type) {
+    filteredItems = filteredItems.filter(
+      (item) => item.type === state.filter.type
+    );
+  }
+
+  if (state.filter.price !== null) {
+    filteredItems = filteredItems.filter(
+      (item) => item.price <= state.filter.price
+    );
+  }
+
+  state.items = filteredItems;
+};
 
 export default itemsSlice.reducer;
