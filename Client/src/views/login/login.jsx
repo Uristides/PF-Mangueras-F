@@ -1,25 +1,25 @@
-import { useState } from 'react';
-import styles from './login.module.css';
+import { useState } from "react";
+import styles from "./login.module.css";
 
 export function Login({ sesion }) {
   const [loged, setLoged] = useState(false);
   const [info, setInfo] = useState({
-    nombre: '',
-    correo: '',
-    contraseña: '',
+    nombre: "",
+    correo: "",
+    contraseña: "",
   });
-  const [okey, setOkey] = useState('');
-  const [notOkey, setNotOkey] = useState('');
+  const [okey, setOkey] = useState("");
+  const [notOkey, setNotOkey] = useState("");
   const [errors, setErrors] = useState({
-    nombre: 'Solo puedes poner letras en este campo',
-    correo: 'Por favor, introduce un correo electrónico válido.',
-    contraseña: 'La contraseña debe tener al menos 8 caracteres',
+    nombre: "Solo puedes poner letras en este campo",
+    correo: "Por favor, introduce un correo electrónico válido.",
+    contraseña: "La contraseña debe tener al menos 8 caracteres",
   });
   const handleChangue = (e) => {
     const { name, value } = e.target;
-    setOkey('');
-    setNotOkey('');
-    if (name === 'correo') {
+    setOkey("");
+    setNotOkey("");
+    if (name === "correo") {
       const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (regex.test(value)) {
         setInfo((state) => ({
@@ -28,47 +28,50 @@ export function Login({ sesion }) {
         }));
         setErrors((state) => ({
           ...state,
-          correo: '',
+          correo: "",
         }));
       } else {
         setErrors((state) => ({
           ...state,
-          correo: 'Formato de correo invalido',
+          correo: "Formato de correo invalido",
         }));
       }
-    } else if (name === 'contraseña') {
+    } else if (name === "contraseña") {
       if (value.length > 7) {
         setInfo((state) => ({ ...state, contraseña: value }));
-        setErrors((state) => ({ ...state, contraseña: '' }));
+        setErrors((state) => ({ ...state, contraseña: "" }));
       } else {
         setErrors((state) => ({
           ...state,
-          contraseña: 'Al menos 8 caracteres',
+          contraseña: "Al menos 8 caracteres",
         }));
       }
-    } else if (name === 'nombre') {
+    } else if (name === "nombre") {
       const regex = /^[a-zA-Z\s]+$/;
       if (regex.test(value)) {
         setInfo((state) => ({ ...state, nombre: value }));
-        setErrors((state) => ({ ...state, nombre: '' }));
+        setErrors((state) => ({ ...state, nombre: "" }));
       } else {
         setErrors((state) => ({
           ...state,
-          nombre: 'Solo puedes escribir letras en este campo',
+          nombre: "Solo puedes escribir letras en este campo",
         }));
       }
     }
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       if (loged) {
-        const response = await fetch('http://localhost:3001/user/login', {
-          method: 'POST',
+        console.log("ingreso");
+
+        const response = await fetch("http://localhost:3001/user/login", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
-          credentials: 'include',
+          credentials: "include",
           body: JSON.stringify({
             email: info.correo,
             password: info.contraseña,
@@ -77,18 +80,19 @@ export function Login({ sesion }) {
 
         if (response.ok) {
           sesion();
-          setOkey('¡Inicio de sesion exitoso!');
-          console.log('funciona creo');
+          setOkey("¡Inicio de sesion exitoso!");
+          console.log("funciona creo");
         } else {
-          setNotOkey('contraseña o correo invalidos');
+          console.log("no funciona:,(");
+          setNotOkey("contraseña o correo invalidos");
         }
       } else {
-        const response = await fetch('http://localhost:3001/user/register', {
-          method: 'POST',
+        const response = await fetch("http://localhost:3001/user/register", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
-          credentials: 'include',
+          credentials: "include",
           body: JSON.stringify({
             name: info.nombre,
             email: info.correo,
@@ -97,9 +101,9 @@ export function Login({ sesion }) {
         });
         if (response.ok) {
           sesion();
-          setOkey('¡Registro exitoso! Ahora inicia sesión.');
+          setOkey("¡Registro exitoso! Ahora inicia sesión.");
         } else {
-          setNotOkey('correo en uso');
+          setNotOkey("correo en uso");
         }
       }
     } catch (error) {
@@ -109,15 +113,15 @@ export function Login({ sesion }) {
   };
   return (
     <main className={styles.main}>
-      <h1>{loged ? 'Iniciar sesión' : 'Registrarse'}</h1>
+      <h1>{loged ? "Iniciar sesión" : "Registrarse"}</h1>
       <form className={styles.form}>
         {!loged && (
           <label className={styles.label}>
-            {' '}
+            {" "}
             Nombre de usuario :
             <input
-              type='text'
-              name='nombre'
+              type="text"
+              name="nombre"
               onChange={handleChangue}
               className={styles.input}
             ></input>
@@ -127,9 +131,9 @@ export function Login({ sesion }) {
         <label className={styles.label}>
           Ingresar correo electrónico :
           <input
-            type='email'
+            type="email"
             required
-            name='correo'
+            name="correo"
             onChange={handleChangue}
             className={styles.input}
           />
@@ -138,10 +142,10 @@ export function Login({ sesion }) {
         <label className={styles.label}>
           Tu contraseña :
           <input
-            type='password'
+            type="password"
             required
-            name='contraseña'
-            minLength='8'
+            name="contraseña"
+            minLength="8"
             onChange={handleChangue}
             className={styles.input}
           />
@@ -149,10 +153,10 @@ export function Login({ sesion }) {
         </label>
         {loged && (
           <button
-            type='submit'
+            type="submit"
             className={styles.button}
             onClick={handleSubmit}
-            disabled={!!errors.correo || !!errors.nombre}
+            //disabled={!errors.correo || !errors.nombre}
           >
             Iniciar sesión
           </button>
@@ -177,8 +181,8 @@ export function Login({ sesion }) {
           className={styles.switchButton}
         >
           {loged
-            ? '¿No tienes cuenta? Regístrate'
-            : '¿Ya tienes cuenta? Iniciar sesión'}
+            ? "¿No tienes cuenta? Regístrate"
+            : "¿Ya tienes cuenta? Iniciar sesión"}
         </button>
       </form>
     </main>
