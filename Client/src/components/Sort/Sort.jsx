@@ -1,22 +1,35 @@
-import React from 'react';
+import { useDispatch } from 'react-redux';
+import {
+  sortItemsByNameAscending,
+  sortItemsByNameDescending,
+  sortItemsByPriceAscending,
+  sortItemsByPriceDescending,
+} from '../../redux/itemsSlice';
+import styles from './Sort.module.css';
 
-const Sort = ({ onSortChange }) => {
+const Sort = () => {
+  const dispatch = useDispatch();
   const handleSortChange = (e) => {
     const { value } = e.target;
-    onSortChange(value);
+    if (value === 'price_asc') {
+      dispatch(sortItemsByPriceAscending());
+    } else if (value === 'price_desc') {
+      dispatch(sortItemsByPriceDescending());
+    } else if (value === 'name_asc') {
+      dispatch(sortItemsByNameAscending());
+    } else if (value === 'name_desc') {
+      dispatch(sortItemsByNameDescending());
+    }
   };
 
   return (
-    <div>
-      <h2>Ordenar Productos</h2>
-      <select onChange={handleSortChange}>
-        <option value="">Seleccionar</option>
-        <option value="price_asc">Precio: Bajo a Alto</option>
-        <option value="price_desc">Precio: Alto a Bajo</option>
-        <option value="name_asc">Nombre: A-Z</option>
-        <option value="name_desc">Nombre: Z-A</option>
-      </select>
-    </div>
+    <select onChange={handleSortChange} className={styles.select}>
+      <option value=''>Seleccionar</option>
+      <option value='price_asc'>Precio: Bajo a Alto</option>
+      <option value='price_desc'>Precio: Alto a Bajo</option>
+      <option value='name_asc'>Nombre: A-Z</option>
+      <option value='name_desc'>Nombre: Z-A</option>
+    </select>
   );
 };
 

@@ -1,17 +1,44 @@
-import { Link } from "react-router-dom";
-import styles from './Navbar.module.css'
+import { Link, useLocation } from 'react-router-dom';
+import SearchBar from '../SearchBar/SearchBar';
+import styles from './Navbar.module.css';
 
-
-const Navbar = ()=>{
-
-    return(
-        <div className={styles.main}>
-            Navbar
-            <Link to='/' className={styles.links}>Home</Link>
-            <Link to='/login' className={styles.links}>Login</Link>
-            <Link to='/cart' className={styles.links}>Cart</Link>
-        </div>
-    )
-}
+const Navbar = () => {
+  const { pathname } = useLocation();
+  return (
+    <div className={styles.main}>
+      <Link to='/' className={styles.linksTitle}>
+        The Hose Factory
+      </Link>
+      <div className={styles.linksContainer}>
+        <Link
+          to='/'
+          className={`${styles.links} ${pathname === '/' ? styles.active : ''}`}
+        >
+          Home
+        </Link>
+        <Link
+          to='/cart'
+          className={`${styles.links} ${
+            pathname === '/cart' ? styles.active : ''
+          }`}
+        >
+          Cart
+        </Link>
+        <Link
+          to='/about'
+          className={`${styles.links} ${
+            pathname === '/about' ? styles.active : ''
+          }`}
+        >
+          About
+        </Link>
+      </div>
+      <SearchBar />
+      <Link to='/login' className={styles.loginButton}>
+        Login
+      </Link>
+    </div>
+  );
+};
 
 export default Navbar;

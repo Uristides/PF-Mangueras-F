@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import Card from "../Card/Card";
-import styles from "./Cards.module.css";
-import { fetchItems } from "../../redux/itemsSlice";
+/* eslint-disable react/prop-types */
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import Card from '../Card/Card';
+import styles from './Cards.module.css';
+import { fetchItems } from '../../redux/itemsSlice';
 
 const Cards = ({ filters, sortOption, searchQuery }) => {
   const [products, setProducts] = useState([]);
@@ -13,8 +14,6 @@ const Cards = ({ filters, sortOption, searchQuery }) => {
   const mangueras = useSelector((state) => state.items.items);
   const status = useSelector((state) => state.items.status);
 
-  console.log("Products: ", products)
-
   // Fetch items when status is 'idle'
   useEffect(() => {
     if (status === 'idle') {
@@ -24,46 +23,12 @@ const Cards = ({ filters, sortOption, searchQuery }) => {
 
   // Handle updates to products based on filters, sortOption, searchQuery, and mangueras
   useEffect(() => {
-    
-    const applyFiltersSortAndSearch = () => {
-      let filteredProducts = mangueras || []; // Ensure mangueras is not undefined or null
-    
-      // Apply filters
-      if (filters.type) {
-        filteredProducts = filteredProducts.filter((mang) => mang.type === filters.type);
-      }
-    
-      if (filters.price) {
-        filteredProducts = filteredProducts.filter((mang) => Number(mang.price) <= Number(filters.price));
-      }
-    
-      if (searchQuery) {
-        filteredProducts = filteredProducts.filter((mang) =>
-          mang.name.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-      }
-    
-      // Apply sorting
-      if (sortOption === "price_asc") {
-        filteredProducts.sort((a, b) => Number(a.price) - Number(b.price));
-      } else if (sortOption === "price_desc") {
-        filteredProducts.sort((a, b) => Number(b.price) - Number(a.price));
-      } else if (sortOption === "name_asc") {
-        filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
-      } else if (sortOption === "name_desc") {
-        filteredProducts.sort((a, b) => b.name.localeCompare(a.name));
-      }
-    
-      console.log("Filtered and sorted products: ", filteredProducts); // Log filtered and sorted products
-    
-      return filteredProducts;
-    };
-    
-    
-
-    const filteredData = applyFiltersSortAndSearch();
-    
-    setProducts(filteredData.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage));
+    setProducts(
+      mangueras.slice(
+        currentPage * itemsPerPage,
+        (currentPage + 1) * itemsPerPage
+      )
+    );
   }, [mangueras, filters, sortOption, searchQuery, currentPage, itemsPerPage]);
 
   const restart = () => {
@@ -82,11 +47,7 @@ const Cards = ({ filters, sortOption, searchQuery }) => {
     <section className={styles.section}>
       <article className={styles.Card}>
         {products.map((mang) => (
-          <Card
-            key={mang.id}
-            id={mang.id}
-            data={mang}
-          />
+          <Card key={mang.id} id={mang.id} data={mang} />
         ))}
       </article>
       <article className={styles.pagination}>
