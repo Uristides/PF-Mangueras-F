@@ -2,7 +2,6 @@ import { useContext } from 'react';
 import Filters from '../../components/Filters/Filters';
 import Cards from '../../components/Cards/Cards';
 import styles from './home.module.css';
-import Navbar from '../../components/Navbar/Navbar.jsx';
 import { UserContext } from '../../App.jsx';
 
 export function Home({ sesion }) {
@@ -28,9 +27,6 @@ export function Home({ sesion }) {
 
   return (
     <main>
-      <header className={styles.header}>
-        <Navbar></Navbar>
-      </header>
       <section className={styles.sectionmain}>
         <div className={styles.container}>
           <div className={styles.filters}>

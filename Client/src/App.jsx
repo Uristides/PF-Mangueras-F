@@ -1,5 +1,6 @@
 import { useState, useEffect, createContext } from 'react';
 //import './App.css'
+import Navbar from './components/Navbar/Navbar';
 import { Login } from './views/login/login';
 import { Home } from './views/home/home';
 import Cart from './components/Cart/Cart';
@@ -43,6 +44,7 @@ function App() {
   return (
     <>
       <UserContext.Provider value={{ user, setUser }}>
+        <Navbar />
         <Routes>
           <Route path='/' element={<Home sesion={sesion} />} />
           {user ? (
