@@ -55,9 +55,10 @@ const Detail = () => {
             <div className={styles.moneyContainer}>
                 <h2>$: {product.price}</h2>
                 {product.available === true ? (
-                    <p style={{color: 'green'}}>Disponible</p>
-                    ): (<p style={{color: 'red'}}>No Disponible</p>)}
+                    <p style={{color: 'green'}}><strong>Disponible</strong></p>
+                    ): (<p style={{color: 'red'}}><strong>No Disponible</strong></p>)}
 
+                    {/* <option value="" disabled hidden>Cantidad: {quantity || 1}</option> */}
                     <label>Cantidad: </label>
 
                     <select 
@@ -65,12 +66,11 @@ const Detail = () => {
                     value={quantity}
                     onChange={handleQuantityChange}
                     >
-                    {/* <option value="" disabled hidden>Cantidad: {quantity || 1}</option> */}
-                    {Array.from({ length: product.stock }, (_, index) => index + 1).map((num) => (
+                    {product.available ? Array.from({ length: product.stock }, (_, index) => index + 1).map((num) => (
                         <option key={num} value={num}>
                             {num}
                         </option>
-                        ))}
+                        )) : <></>}
                     </select>
                     <br/>
                 <button 
