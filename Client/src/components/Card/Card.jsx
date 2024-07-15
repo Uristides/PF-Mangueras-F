@@ -22,7 +22,7 @@ const Card = (props) => {
       <Link to={`/detail/${id}`}>
         <article className={styles.card} key={id}>
           <img src={image} alt='manguera pic' className={styles.img} />
-          <h1 className={styles.title}>Product: {name}</h1>
+          <h1 className={styles.title}>{name}</h1>
           <h2 className={styles.otherData}>Brand: {brand}</h2>
           <h2 className={styles.otherData}>
             Price: $<span className={styles.price}>{price}</span>

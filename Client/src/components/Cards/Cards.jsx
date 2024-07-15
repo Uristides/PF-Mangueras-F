@@ -23,37 +23,8 @@ const Cards = ({ filters, sortOption, searchQuery }) => {
 
   // Handle updates to products based on filters, sortOption, searchQuery, and mangueras
   useEffect(() => {
-    const applyFiltersSortAndSearch = () => {
-      let filteredProducts = mangueras || []; // Ensure mangueras is not undefined or null
-
-      // Apply filters
-      if (filters.type) {
-        filteredProducts = filteredProducts.filter(
-          (mang) => mang.type === filters.type
-        );
-      }
-
-      if (filters.price) {
-        filteredProducts = filteredProducts.filter(
-          (mang) => Number(mang.price) <= Number(filters.price)
-        );
-      }
-
-      // Apply sorting
-      if (sortOption === 'price_asc') {
-        filteredProducts.sort((a, b) => Number(a.price) - Number(b.price));
-      } else if (sortOption === 'price_desc') {
-        filteredProducts.sort((a, b) => Number(b.price) - Number(a.price));
-      } else if (sortOption === 'name_asc') {
-        filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
-      } else if (sortOption === 'name_desc') {
-        filteredProducts.sort((a, b) => b.name.localeCompare(a.name));
-      }
-      return filteredProducts;
-    };
-    const filteredData = applyFiltersSortAndSearch();
     setProducts(
-      filteredData.slice(
+      mangueras.slice(
         currentPage * itemsPerPage,
         (currentPage + 1) * itemsPerPage
       )
