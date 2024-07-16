@@ -11,7 +11,6 @@ const Cards = ({ filters, sortOption, searchQuery }) => {
 
   const dispatch = useDispatch();
   const mangueras = useSelector((state) => state.items.items);
-  console.log("Mangueras Cards: ", mangueras)
   const status = useSelector((state) => state.items.status);
 
   // Fetch items when status is 'idle'
@@ -36,11 +35,15 @@ const Cards = ({ filters, sortOption, searchQuery }) => {
   };
 
   const nextPage = () => {
-    setCurrentPage((prevPage) => prevPage + 1);
+    if ((currentPage + 1) * itemsPerPage < mangueras.length) {
+      setCurrentPage((prevPage) => prevPage + 1);
+    }
   };
 
   const prevPage = () => {
-    setCurrentPage((prevPage) => prevPage - 1);
+    if (currentPage > 0) {
+      setCurrentPage((prevPage) => prevPage - 1);
+    }
   };
 
   return (
