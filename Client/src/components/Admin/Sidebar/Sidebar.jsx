@@ -6,7 +6,6 @@ const Sidebar = () => {
 
     return (
         <div>
-            <h2>Dashboard</h2>
             <div>
                 <ul>
                     <li className={pathname === "/admin/products" ? styles.active : ""}>
