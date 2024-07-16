@@ -13,10 +13,10 @@ const ProductItem = (props) => {
             <p>{name}</p>
             <p>{brand}</p>
             <p>{type}</p>
-            <p>${price}</p>
+            <p>{price}$</p>
             <p>{stock}</p>
             {<p style={{color: available ? 'green': 'red'}}>{String(available)}</p>}
-            <p>Edit</p>
+            <p>Editar</p>
         </div>
     );
 };

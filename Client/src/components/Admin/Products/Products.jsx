@@ -12,8 +12,6 @@ const Products = () => {
 
     const dispatch = useDispatch();
 
-    console.log("Mangueras: ", mangueras);
-
     useEffect(() => {
         setProducts(mangueras);
     }, [mangueras]);
@@ -25,18 +23,16 @@ const Products = () => {
     }, [status, dispatch]);
 
     return (
-        <div>
-            <div>Products Component here</div>
-            
+        <div>            
             <div className={styles.productList}>
             <div className={styles.productHeader}>
                     <p>ID</p>
-                    <p>Name</p>
-                    <p>Brand</p>
-                    <p>Type</p>
-                    <p>Price</p>
-                    <p>Stock</p>
-                    <p>Available</p>
+                    <p>Nombre</p>
+                    <p>Marca</p>
+                    <p>Tipo</p>
+                    <p>Precio</p>
+                    <p>Existencia</p>
+                    <p>Disponible</p>
                     <p> </p>
                 </div>
                 {products?.map((mang) => (

@@ -35,16 +35,16 @@ const Filters = () => {
         onChange={handleFilterChange}
         className={styles.select}
       >
-        <option value="">Select Type:</option>
-        <option value="Domestico">Domestic</option>
+        <option value="">Tipos:</option>
+        <option value="Domestico">Domestico</option>
         <option value="Jardineria">Jardineria</option>
-        <option value="Agricultura">Agricultura</option>
+        <option value="Agricultura">Agricola</option>
       </select>
       <input
         type="number"
         name="price"
         onChange={handleFilterPrice}
-        placeholder="Search by maximum price:"
+        placeholder="Rango de precio"
         className={styles.input}
       />
       <Sort />

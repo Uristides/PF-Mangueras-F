@@ -38,7 +38,7 @@ const Navbar = ({ sesion }) => {
           to="/"
           className={`${styles.links} ${pathname === "/" ? styles.active : ""}`}
         >
-          Home
+          INICIO
         </Link>
         <Link 
           to="/cart"
@@ -46,7 +46,7 @@ const Navbar = ({ sesion }) => {
             pathname === "/cart" ? styles.active : ""
           }`}
         >
-          Cart
+          CARRO
         </Link>
         <Link
           to="/about"
@@ -54,7 +54,7 @@ const Navbar = ({ sesion }) => {
             pathname === "/about" ? styles.active : ""
           }`}
         >
-          About
+          SOBRE NOSOTROS
         </Link>
         <Link
           to="/admin"
@@ -62,16 +62,16 @@ const Navbar = ({ sesion }) => {
             pathname === "/admin" ? styles.active : ""
           }`}
         >
-          Admin
+          ADMINISTRADOR
         </Link>
       </div>
       <SearchBar />
       {!user ? (
         <Link to="/login" className={styles.loginButton}>
-          Login
+          REGISTRARSE
         </Link>
       ) : (
-        <button onClick={logout}> logout </button>
+        <button className={styles.loginButton} onClick={logout}> CERRAR SESIÓN </button>
       )}
     </div>
   );

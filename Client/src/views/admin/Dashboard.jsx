@@ -11,7 +11,7 @@ const Dashboard = ()=>{
     return(
         <div className={styles.adminDashboard}>
             <div className={styles.sidebar}>
-                <h3 style={{color: '#3d6a3e'}}>Admin Dashboard</h3>
+                <h3 style={{color: '#3d6a3e'}}>Panel de Administrador</h3>
                 <hr className={styles.hrTag}/>
                 <Sidebar/>
             </div>

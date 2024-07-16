@@ -18,7 +18,7 @@ const SearchBar = () => {
       type='text'
       name='search'
       className={styles.search}
-      placeholder='Search By Name'
+      placeholder='Nombre del producto'
       onChange={handleSearchChange}
     />
   );

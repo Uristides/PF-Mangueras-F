@@ -12,25 +12,25 @@ const Sidebar = () => {
                         <Link 
                             to='products'
                             className={styles.links}
-                        >Products</Link>
+                        >Productos</Link>
                     </li>
                     <li className={pathname === "/admin/users" ? styles.active : ""}>
                         <Link 
                             to='users'
                             className={styles.links}
-                        >Users</Link>
+                        >Usuarios</Link>
                     </li>
                     <li className={pathname === "/admin/create-product" ? styles.active : ""}>
                         <Link
                             to='create-product'
                             className={styles.links}
-                        >Create Product</Link>
+                        >Crear Producto</Link>
                     </li>
                     <li className={pathname === "/admin/orders" ? styles.active : ""}>
                         <Link
                             to='orders'
                             className={styles.links}
-                        >Orders</Link>
+                        >Ordenes</Link>
                     </li>
 
                 </ul>
