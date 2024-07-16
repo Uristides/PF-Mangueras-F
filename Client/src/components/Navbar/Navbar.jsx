@@ -71,7 +71,7 @@ const Navbar = ({ sesion }) => {
           REGISTRARSE
         </Link>
       ) : (
-        <button onClick={logout}> logout </button>
+        <button className={styles.loginButton} onClick={logout}> CERRAR SESIÓN </button>
       )}
     </div>
   );
