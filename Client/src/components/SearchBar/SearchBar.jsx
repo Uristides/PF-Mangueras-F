@@ -1,18 +1,27 @@
-import React from 'react';
+import { useDispatch } from 'react-redux';
+import { searchItems, fetchItems } from '../../redux/itemsSlice';
+import styles from './SearchBar.module.css';
 
-const SearchBar = ({ onSearchChange }) => {
+const SearchBar = () => {
+  const dispatch = useDispatch();
   const handleSearchChange = (e) => {
     const { value } = e.target;
-    onSearchChange(value);
+    if (value === '') {
+      dispatch(fetchItems());
+    } else {
+      dispatch(searchItems(value));
+    }
   };
 
   return (
-    <div>
-      <h2>Buscar Productos</h2>
-      <input type="text" placeholder="Buscar por nombre" onChange={handleSearchChange} />
-    </div>
+    <input
+      type='text'
+      name='search'
+      className={styles.search}
+      placeholder='Nombre del producto'
+      onChange={handleSearchChange}
+    />
   );
 };
-
 
 export default SearchBar;

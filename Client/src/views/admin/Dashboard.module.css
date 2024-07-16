@@ -1,0 +1,27 @@
+/* src/views/admin/Dashboard.module.css */
+
+.adminDashboard {
+    display: flex;
+    height: 100vh;
+  }
+  
+  .sidebar {
+    border-top: solid 10px  #7ed09f;
+    ;
+    width: 200px; /* Adjust width as needed */
+    background-color: #7ed09f;
+    color: white;
+    padding: 20px;
+  }
+  
+  .adminContent {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #f4f4f4;
+    overflow-y: auto; /* Add scroll if content is long */
+  }
+
+  .hrTag{ 
+
+    border: 1px solid rgb(59, 55, 55);
+  }
