@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Card from '../Card/Card';
@@ -12,6 +11,7 @@ const Cards = ({ filters, sortOption, searchQuery }) => {
 
   const dispatch = useDispatch();
   const mangueras = useSelector((state) => state.items.items);
+  console.log("Mangueras Cards: ", mangueras)
   const status = useSelector((state) => state.items.status);
 
   // Fetch items when status is 'idle'

@@ -1,0 +1,27 @@
+.links {
+    font-size: 18px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    text-decoration: none;
+    color: #3d6a3e;
+    display: block;
+    padding: 10px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+li.active {
+    background-color: #3d6a3e;
+}
+
+li.active .links {
+    color: #fff;
+}

@@ -1,0 +1,12 @@
+.productItem {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.productItem p {
+    flex: 1;
+    margin: 0;
+    text-align: center;
+}

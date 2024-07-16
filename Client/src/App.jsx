@@ -1,11 +1,13 @@
 import { useState, useEffect, createContext } from "react";
 //import './App.css'
-import Navbar from "./components/Navbar/Navbar";
 import { Login } from "./views/login/login";
 import { Home } from "./views/home/home";
+
+import About from "./components/About/about";
 import Cart from "./components/Cart/Cart";
 import Detail from "./components/Detail/Detail";
-import About from "./components/About/about";
+import Dashboard from "./views/admin/Dashboard";
+import Navbar from "./components/Navbar/Navbar";
 
 import { Route, Routes } from "react-router-dom";
 
@@ -17,7 +19,7 @@ function App() {
   const sesion = async () => {
     try {
       const data = await fetch("http://localhost:3001/user/protected", {
-        credentials: "include",
+        credentials: "include", 
       });
       if (data.ok) {
         setUser(await data.json());
@@ -52,9 +54,10 @@ function App() {
           ) : (
             <Route path="/cart" element={<Login sesion={sesion} />} />
           )}
-          <Route path="/about" element={<About />} />
+          <Route path="/admin/*" element={<Dashboard />} />
           <Route path="/detail/:id" element={<Detail />} />
           <Route path="/login" element={<Login sesion={sesion} />} />
+          <Route path="/about" element={<About />} />
         </Routes>
       </UserContext.Provider>
     </>

@@ -29,6 +29,7 @@ const Navbar = ({ sesion }) => {
 
   return (
     <div className={styles.main}>
+      
       <Link to="/" className={styles.linksTitle}>
         The Hose Factory
       </Link>
@@ -39,7 +40,7 @@ const Navbar = ({ sesion }) => {
         >
           Home
         </Link>
-        <Link
+        <Link 
           to="/cart"
           className={`${styles.links} ${
             pathname === "/cart" ? styles.active : ""
@@ -54,6 +55,14 @@ const Navbar = ({ sesion }) => {
           }`}
         >
           About
+        </Link>
+        <Link
+          to="/admin"
+          className={`${styles.links} ${
+            pathname === "/admin" ? styles.active : ""
+          }`}
+        >
+          Admin
         </Link>
       </div>
       <SearchBar />

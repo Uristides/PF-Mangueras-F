@@ -22,6 +22,8 @@ const Card = (props) => {
       <Link to={`/detail/${id}`}>
         <article className={styles.card} key={id}>
           <img src={image} alt='manguera pic' className={styles.img} />
+          {!available && <div className={styles.soldOutLabel}>Sold Out</div>}
+          
           <h1 className={styles.title}>{name}</h1>
           <h2 className={styles.otherData}>Brand: {brand}</h2>
           <h2 className={styles.otherData}>
