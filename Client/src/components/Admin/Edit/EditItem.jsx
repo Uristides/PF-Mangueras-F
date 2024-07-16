@@ -5,7 +5,7 @@ const EditItem = ()=>{
     return(
         <div>
             <div>
-                Edit Item
+                Editar Item
             </div>
         </div>
     )

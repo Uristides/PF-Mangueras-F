@@ -44,7 +44,7 @@ const Detail = () => {
             <h1>{product.name}</h1>
             <p>{product.brand}</p>
             <hr/>
-            <h3>$ {product.price}.00</h3>
+            <h3>$ {product.price}</h3>
             <hr/>
             <p>Marca: {product.brand}</p>
             <p>Diametro: {product.diameter}cm</p>
@@ -53,7 +53,7 @@ const Detail = () => {
             </div>
 
             <div className={styles.moneyContainer}>
-                <h2>$: {product.price}</h2>
+                <h2>{product.price} $</h2>
                 {product.available === true ? (
                     <p style={{color: 'green'}}><strong>Disponible</strong></p>
                     ): (<p style={{color: 'red'}}><strong>No Disponible</strong></p>)}
