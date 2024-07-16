@@ -1,0 +1,23 @@
+.aboutUs {
+    padding: 20px;
+    background-color: #f9f9f9;
+    color: #333;
+    font-family: Arial, sans-serif;
+  }
+  
+  .aboutUs h1, .aboutUs h2 {
+    color: #2a9d8f;
+  }
+  
+  .aboutUs p, .aboutUs ul {
+    margin-bottom: 15px;
+  }
+  
+  .aboutUs ul {
+    list-style-type: disc;
+    padding-left: 20px;
+  }
+  
+  .aboutUs strong {
+    color: #e76f51;
+  }

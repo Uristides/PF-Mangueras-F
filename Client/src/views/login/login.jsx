@@ -81,9 +81,7 @@ export function Login({ sesion }) {
         if (response.ok) {
           sesion();
           setOkey("¡Inicio de sesion exitoso!");
-          console.log("funciona creo");
         } else {
-          console.log("no funciona:,(");
           setNotOkey("contraseña o correo invalidos");
         }
       } else {
