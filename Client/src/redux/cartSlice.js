@@ -10,7 +10,7 @@ export const fetchCart = createAsyncThunk('cart/fetchCart', async () => {
     throw error;
   }
 });
-
+ 
 const cartSlice = createSlice({
   name: 'cart',
   initialState: {
