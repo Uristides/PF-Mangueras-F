@@ -3,8 +3,12 @@ import axios from 'axios';
 
 export const fetchCart = createAsyncThunk('cart/fetchCart', async () => {
   try {
-    const { data } = await axios.get('http://localhost:3001/users/cart'); // Replace with your API endpoint
-    return data.cart;
+    const { data } = await axios.get('http://localhost:3001/user'); // Replace with your API endpoint
+    const { cart } = data;
+    if(cart.length > 1) console.log("Empty cart")
+    
+    return cart;
+
   } catch (error) {
     console.error("Error in fetchCart: ", error.message);
     throw error;
@@ -13,7 +17,7 @@ export const fetchCart = createAsyncThunk('cart/fetchCart', async () => {
 
 export const addToCart = createAsyncThunk('cart/addToCart', async (itemInfo) => {
   try {
-    const { data } = await axios.post('http://localhost:3001/users/addCart', itemInfo);
+    const { data } = await axios.post('http://localhost:3001/user/addCart', itemInfo);
     return data;
   } catch (error) {
     console.error("Error in addToCart: ", error.message);
