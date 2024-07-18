@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styles from "./Detail.module.css";
-const backendUrl = process.env.REACT_APP_BACKEND;
+const backendUrl = import.meta.env.VITE_BACKEND;
 
 const Detail = () => {
   const { id } = useParams();

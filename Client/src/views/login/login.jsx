@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styles from "./login.module.css";
-const backendUrl = process.env.REACT_APP_BACKEND;
+const backendUrl = import.meta.env.VITE_BACKEND;
 
 export function Login({ sesion }) {
   const [loged, setLoged] = useState(false);

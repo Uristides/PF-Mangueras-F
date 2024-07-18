@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
 import axios from "axios";
-const backendUrl = process.env.REACT_APP_BACKEND;
+const backendUrl = import.meta.env.VITE_BACKEND;
 
 export const fetchItems = createAsyncThunk("items/fetchItems", async () => {
   try {

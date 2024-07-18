@@ -4,7 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import styles from "./CreateForm.module.css";
 import { createProduct } from "../../redux/actions";
-const backendUrl = process.env.REACT_APP_BACKEND;
+const backendUrl = import.meta.env.VITE_BACKEND;
 
 const CreateForm = () => {
   const initialState = {

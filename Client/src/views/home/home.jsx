@@ -5,7 +5,7 @@ import Cards from "../../components/Cards/Cards";
 import styles from "./home.module.css";
 import { UserContext } from "../../App.jsx";
 import CreateButton from "../../components/CrearBoton/CreateButton.jsx"; // Ajusta la ruta al botón de creación
-const backendUrl = process.env.REACT_APP_BACKEND;
+const backendUrl = import.meta.env.VITE_BACKEND;
 
 const Home = ({ sesion }) => {
   const { user } = useContext(UserContext);

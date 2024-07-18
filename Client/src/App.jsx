@@ -3,7 +3,7 @@ import React, { useState, useEffect, createContext } from "react";
 //import './App.css'
 import { Login } from "./views/login/login";
 import Home from "./views/home/home"; // Importa Home como el componente predeterminado
-const backendUrl = process.env.REACT_APP_BACKEND;
+const backendUrl = import.meta.env.VITE_BACKEND;
 
 import About from "./components/About/about";
 import Cart from "./components/Cart/Cart";

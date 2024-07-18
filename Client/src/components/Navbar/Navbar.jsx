@@ -3,7 +3,7 @@ import SearchBar from "../SearchBar/SearchBar";
 import styles from "./Navbar.module.css";
 import { useContext } from "react";
 import { UserContext } from "../../App";
-const backendUrl = process.env.REACT_APP_BACKEND;
+const backendUrl = import.meta.env.VITE_BACKEND;
 
 const Navbar = ({ sesion }) => {
   const { pathname } = useLocation();

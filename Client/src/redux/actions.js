@@ -1,5 +1,5 @@
 import axios from "axios";
-const backendUrl = process.env.REACT_APP_BACKEND;
+const backendUrl = import.meta.env.VITE_BACKEND;
 
 // Acción para crear un producto (manguera)
 export const createProduct = async (formData) => {
