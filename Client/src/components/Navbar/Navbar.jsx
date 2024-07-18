@@ -3,6 +3,7 @@ import SearchBar from "../SearchBar/SearchBar";
 import styles from "./Navbar.module.css";
 import { useContext } from "react";
 import { UserContext } from "../../App";
+const backendUrl = process.env.REACT_APP_BACKEND;
 
 const Navbar = ({ sesion }) => {
   const { pathname } = useLocation();
@@ -15,7 +16,7 @@ const Navbar = ({ sesion }) => {
   };
 
   const logout = async () => {
-    const out = await fetch("http://localhost:3001/user/logout", {
+    const out = await fetch(`${backendUrl}/user/logout`, {
       method: "POST",
       credentials: "include",
       header: { "Content-Type": "aplication/json" },
@@ -29,7 +30,6 @@ const Navbar = ({ sesion }) => {
 
   return (
     <div className={styles.main}>
-      
       <Link to="/" className={styles.linksTitle}>
         The Hose Factory
       </Link>
@@ -40,7 +40,7 @@ const Navbar = ({ sesion }) => {
         >
           INICIO
         </Link>
-        <Link 
+        <Link
           to="/cart"
           className={`${styles.links} ${
             pathname === "/cart" ? styles.active : ""
@@ -71,7 +71,10 @@ const Navbar = ({ sesion }) => {
           REGISTRARSE
         </Link>
       ) : (
-        <button className={styles.loginButton} onClick={logout}> CERRAR SESIÓN </button>
+        <button className={styles.loginButton} onClick={logout}>
+          {" "}
+          CERRAR SESIÓN{" "}
+        </button>
       )}
     </div>
   );

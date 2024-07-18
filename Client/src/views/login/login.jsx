@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styles from "./login.module.css";
+const backendUrl = process.env.REACT_APP_BACKEND;
 
 export function Login({ sesion }) {
   const [loged, setLoged] = useState(false);
@@ -66,7 +67,7 @@ export function Login({ sesion }) {
       if (loged) {
         console.log("ingreso");
 
-        const response = await fetch("http://localhost:3001/user/login", {
+        const response = await fetch(`${backendUrl}/user/login`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -85,7 +86,7 @@ export function Login({ sesion }) {
           setNotOkey("contraseña o correo invalidos");
         }
       } else {
-        const response = await fetch("http://localhost:3001/user/register", {
+        const response = await fetch(`${backendUrl}/user/register`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
