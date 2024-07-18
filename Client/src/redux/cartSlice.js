@@ -1,13 +1,14 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-export const fetchCart = createAsyncThunk('cart/fetchCart', async () => {
+export const fetchCart = createAsyncThunk('cart/fetchCart', async (userId) => {
   try {
-    const { data } = await axios.get('http://localhost:3001/user'); // Replace with your API endpoint
-    const { cart } = data;
-    if(cart.length > 1) console.log("Empty cart")
     
+    const { data } = await axios.get(`http://localhost:3001/user/get/${userId}`); // Replace with your API endpoint
+    const { cart } = data;
+
     return cart;
+    
 
   } catch (error) {
     console.error("Error in fetchCart: ", error.message);

@@ -1,4 +1,9 @@
 
+.container{
+    display: flex;
+}
+
+
 .cartItemImg{
-    width: 15em;
+    max-width: 100px;
 }
