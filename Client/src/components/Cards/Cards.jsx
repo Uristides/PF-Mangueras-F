@@ -78,7 +78,7 @@ const Cards = ({ filters, sortOption, searchQuery }) => {
   const itemsPerPage = 4;
 
   const dispatch = useDispatch();
-  const mangueras = useSelector((state) => state.items.items);
+  const mangueras = useSelector((state) => state.items.items); 
   const status = useSelector((state) => state.items.status);
 
   // Fetch items when status is 'idle'

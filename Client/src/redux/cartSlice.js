@@ -1,10 +1,15 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-export const fetchCart = createAsyncThunk('cart/fetchCart', async () => {
+export const fetchCart = createAsyncThunk('cart/fetchCart', async (userId) => {
   try {
-    const { data } = await axios.get('http://localhost:3001/users/cart'); // Replace with your API endpoint
-    return data.cart;
+    
+    const { data } = await axios.get(`http://localhost:3001/user/get/${userId}`); // Replace with your API endpoint
+    const { cart } = data;
+
+    return cart;
+    
+
   } catch (error) {
     console.error("Error in fetchCart: ", error.message);
     throw error;
@@ -13,7 +18,7 @@ export const fetchCart = createAsyncThunk('cart/fetchCart', async () => {
 
 export const addToCart = createAsyncThunk('cart/addToCart', async (itemInfo) => {
   try {
-    const { data } = await axios.post('http://localhost:3001/users/addCart', itemInfo);
+    const { data } = await axios.post('http://localhost:3001/user/addCart', itemInfo);
     return data;
   } catch (error) {
     console.error("Error in addToCart: ", error.message);
@@ -22,8 +27,10 @@ export const addToCart = createAsyncThunk('cart/addToCart', async (itemInfo) => 
 });
 
 export const removeFromCart = createAsyncThunk('cart/removeFromCart', async (itemId) => {
+  console.log("TO be removed: ", itemId)
   try {
-    const { data } = await axios.delete(`http://localhost:3001/users/removeCart/${itemId}`);
+    const { data } = await axios.post(`http://localhost:3001/user/removeCart`, itemId);
+    
     return data;
   } catch (error) {
     console.error("Error in removeFromCart: ", error.message);
