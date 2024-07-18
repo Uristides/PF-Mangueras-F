@@ -27,8 +27,10 @@ export const addToCart = createAsyncThunk('cart/addToCart', async (itemInfo) => 
 });
 
 export const removeFromCart = createAsyncThunk('cart/removeFromCart', async (itemId) => {
+  console.log("TO be removed: ", itemId)
   try {
-    const { data } = await axios.delete(`http://localhost:3001/users/removeCart/${itemId}`);
+    const { data } = await axios.post(`http://localhost:3001/user/removeCart`, itemId);
+    
     return data;
   } catch (error) {
     console.error("Error in removeFromCart: ", error.message);

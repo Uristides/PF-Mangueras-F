@@ -11,10 +11,16 @@ const Cart = () => {
   const userCart = useSelector((state) => state.cart.items);
   const dispatch = useDispatch();
   const [totalPrice, setTotalPrice] = useState(0);
+  const [loading, setLoading] = useState(true); // Added loading state
 
   useEffect(() => {
-    dispatch(fetchCart(user.id));
-  }, [user.id, dispatch]);
+    const loadCartData = async () => {
+      await dispatch(fetchCart(user.id));
+      setLoading(false); // Set loading to false after fetching
+    };
+
+    loadCartData();
+  }, [user.id, dispatch, userCart.length]);
 
   const fetchProductPrice = async (id) => {
     try {
@@ -37,62 +43,50 @@ const Cart = () => {
   };
 
   useEffect(() => {
-    const calculateAndSetTotalPrice = async () => {
-      const total = await calculateTotalPrice(userCart);
-      setTotalPrice(total);
-    };
-    
-    calculateAndSetTotalPrice();
+    if (userCart.length > 0) {
+      const calculateAndSetTotalPrice = async () => {
+        const total = await calculateTotalPrice(userCart);
+        setTotalPrice(total);
+      };
+
+      calculateAndSetTotalPrice();
+    }
   }, [userCart]);
+
+  if (loading) {
+    return <div>Loading...</div>; // Show loading message while data is being fetched
+  }
 
   return (
     <div className={styles.container}>
       <div className={styles.secondContainer}>
         My Cart
         <hr />
-        {userCart.map((item) => {
+        {userCart?.map((item, index) => {
           const [id, amount] = item.split(":");
           return (
             <CartItem
-              key={id}
+              key={index} // Use index or id if unique
               id={id}
               amount={amount}
-              onPriceUpdate={(id, price) => {
-                // Optionally, handle price updates here if needed
-              }}
+              onPriceUpdate={() => { /* No price update needed here */ }}
             />
           );
         })}
       </div>
 
       <div className={styles.subTotal}>
-        Resumen
-
+        Summary
         <div className={styles.subTotalContainer}>
-        
-        
-        <div>
-
-          Subtotal: ${totalPrice}
-        </div>
-
-
-        <div>
-        Envio: $TBD
-
-        </div>
-
-
-        <div>
-        Total Estimado: ${totalPrice}
-
-        </div>
-
-      
-       
-        
-       
-
+          <div>
+            Subtotal: ${totalPrice}
+          </div>
+          <div>
+            Shipping: $TBD
+          </div>
+          <div>
+            Estimated Total: ${totalPrice}
+          </div>
         </div>
       </div>
     </div>

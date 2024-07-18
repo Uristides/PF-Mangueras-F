@@ -1,5 +1,6 @@
 import styles from './CartItem.module.css';
 import { useState, useEffect } from 'react';
+import RemoveButton from '../AddRemoveCart/RemoveButton';
 import axios from 'axios';
 
 const CartItem = ({ id, amount, onPriceUpdate }) => {
@@ -42,8 +43,12 @@ const CartItem = ({ id, amount, onPriceUpdate }) => {
         <h2>{product.name}</h2>
         <p>Brand: {product.brand}</p>
         <p>Diameter: {product.diameter}</p>
-        <p>Length: {product.length}</p>
+        <p>Length: {product.longitude}</p>
         <p>Quantity: {quantity}</p>
+        <RemoveButton
+        id={product.id}
+        
+        />
       </div>
 
       <div>
