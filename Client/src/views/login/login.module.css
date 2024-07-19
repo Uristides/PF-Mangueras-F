@@ -8,7 +8,31 @@
     height: 100vh;
     background-color: #f5f5f5;
 }
+.facebook {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    color: white;
+    background-color: #4267B2;
+    font-size: 16px;
+    padding: 10px 15px;
+    margin: 1em;
+    cursor: pointer;
+    text-align: center;
+    border: none;
+    width: 3m;
+    height: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
+.facebook:hover {
+    background-color: #365899;
+}
+
+.facebook-button .fa-facebook {
+    margin-right: 10px;
+}
 .form {
     display: flex;
     flex-direction: column;

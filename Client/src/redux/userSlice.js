@@ -5,8 +5,8 @@ import axios from 'axios';
 export const fetchUser = createAsyncThunk('user/fetchUser', async () => {
 
   try {
-    const response = await axios.get('/api/user'); // Replace with your API endpoint
-    return response.data;
+    const {data} = await axios.get('http://localhost:3001/user/'); // Replace with your API endpoint
+    return data;
     
   } catch (error) {
     console.log("error in fetchUser: ", error.message)

@@ -5,29 +5,33 @@ import { useContext } from "react";
 import { UserContext } from "../../App";
 const backendUrl = import.meta.env.VITE_BACKEND;
 
-const Navbar = ({ sesion }) => {
+const Navbar = ({sesion}) => {
   const { pathname } = useLocation();
 
   const { setUser, user } = useContext(UserContext);
-
+  
   const deletCokie = (param) => {
     document.cookie =
       param + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
   };
 
   const logout = async () => {
+   //console.log(document.cookie);
     const out = await fetch(`${backendUrl}/user/logout`, {
+   
+
       method: "POST",
       credentials: "include",
       header: { "Content-Type": "aplication/json" },
     });
     if (out.ok) {
-      sesion();
       deletCokie("lacookie");
+      sesion();
       return location.reload();
+      
     }
   };
-
+  
   return (
     <div className={styles.main}>
       <Link to="/" className={styles.linksTitle}>

@@ -1,33 +1,60 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'; 
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-export const fetchCart = createAsyncThunk('cart/fetchCart', async () => {
+export const fetchCart = createAsyncThunk('cart/fetchCart', async (userId) => {
   try {
-    const response = await axios.get('/api/cart'); // Replace with your API endpoint
-    return response.data;
+    
+    const { data } = await axios.get(`http://localhost:3001/user/get/${userId}`); // Replace with your API endpoint
+    const { cart } = data;
+
+    return cart;
+    
+
   } catch (error) {
     console.error("Error in fetchCart: ", error.message);
     throw error;
   }
 });
- 
+
+export const addToCart = createAsyncThunk('cart/addToCart', async (itemInfo) => {
+  try {
+    const { data } = await axios.post('http://localhost:3001/user/addCart', itemInfo);
+    return data;
+  } catch (error) {
+    console.error("Error in addToCart: ", error.message);
+    throw error;
+  }
+});
+
+export const removeFromCart = createAsyncThunk('cart/removeFromCart', async (itemId) => {
+  console.log("TO be removed: ", itemId)
+  try {
+    const { data } = await axios.post(`http://localhost:3001/user/removeCart`, itemId);
+    
+    return data;
+  } catch (error) {
+    console.error("Error in removeFromCart: ", error.message);
+    throw error;
+  }
+});
+
 const cartSlice = createSlice({
   name: 'cart',
   initialState: {
     items: [],
-    status: 'idle', // added status to handle loading states
-    error: null
+    status: 'idle',
+    error: null,
   },
   reducers: {
     loadItems: (state, action) => {
       state.items = action.payload;
     },
     addItem: (state, action) => {
-      state.items = [...state.items, action.payload];
+      state.items.push(action.payload);
     },
     removeItem: (state, action) => {
       state.items = state.items.filter(item => item.id !== action.payload);
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -41,6 +68,12 @@ const cartSlice = createSlice({
       .addCase(fetchCart.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.error.message;
+      })
+      .addCase(addToCart.fulfilled, (state, action) => {
+        state.items.push(action.payload);
+      })
+      .addCase(removeFromCart.fulfilled, (state, action) => {
+        state.items = state.items.filter(item => item.id !== action.payload.id);
       });
   }
 });
