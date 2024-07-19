@@ -71,7 +71,7 @@ const EditItem = () => {
             <form onSubmit={handleSubmit} className={styles.formDivs}>
                 <div className={styles.pictureDiv} >
                     <label>Current Image: </label>
-                    <img src={fetchedData.image} alt="Current product" />
+                    <img src={fetchedData.image} alt="Current product" className={styles.img}/>
                     <input
                         value={updatedProduct.image}
                         name="image"
