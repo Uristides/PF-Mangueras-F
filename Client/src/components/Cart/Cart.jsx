@@ -20,7 +20,7 @@ const Cart = () => {
     };
 
     loadCartData();
-  }, [user.id, dispatch, userCart.length]);
+  }, [user.id, dispatch, userCart?.length]);
 
   const fetchProductPrice = async (id) => {
     try {
@@ -43,7 +43,7 @@ const Cart = () => {
   };
 
   useEffect(() => {
-    if (userCart.length > 0) {
+    if (userCart?.length > 0) {
       const calculateAndSetTotalPrice = async () => {
         const total = await calculateTotalPrice(userCart);
         setTotalPrice(total);

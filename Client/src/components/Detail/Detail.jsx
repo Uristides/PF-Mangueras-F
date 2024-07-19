@@ -1,8 +1,9 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import AddButton from "../AddRemoveCart/AddButton";
 import styles from './Detail.module.css';
+import { UserContext } from "../../App";
 const backendUrl = import.meta.env.VITE_BACKEND;
 
 
@@ -13,6 +14,7 @@ const Detail = () => {
   const [quantity, setQuantity] = useState(1);
   const [quantityString, setQuantityString] = useState('1');
   const [productWithQuantity, setProductWithQuantity] = useState('');
+  const { user } = useContext(UserContext)
 
   console.log("Product in detail: ", product);
 
@@ -68,36 +70,47 @@ const Detail = () => {
 
           <div className={styles.moneyContainer}>
             <h2>{product.price} $</h2>
-            {product.available ? (
-              <p style={{ color: 'green' }}><strong>Disponible</strong></p>
-            ) : (
-              <p style={{ color: 'red' }}><strong>No Disponible</strong></p>
-            )}
+            {product.available ? product.stock > 0 && (
+                <div>
+                  <p style={{ color: 'green' }}><strong>Disponible</strong></p>
 
-            <label>Cantidad: </label>
-            <select 
-              id="quantity-select"
-              value={quantity}
-              onChange={handleQuantityChange}
-            >
-              {product.available ? Array.from({ length: product.stock }, (_, index) => index + 1).map((num) => (
-                <option key={num} value={num}>
-                  {num}
-                </option>
-              )) : null}
-            </select>
+                  <label>Cantidad: </label>
+                  <div>
+                    <button onClick={() => setQuantity(prevQuantity => Math.max(prevQuantity - 1, 1))}>-</button>
+                    <input
+                      type="number"
+                      value={quantity}
+                      onChange={(e) => {
+                        const value = Math.max(1, Math.min(product.stock, Number(e.target.value)));
+                        setQuantity(value);
+                      }}
+                    />
+                    <button onClick={() => setQuantity(prevQuantity => Math.min(prevQuantity + 1, product.stock))}>+</button>
+                    {product.stock === quantity && (
+                      <p>**{product.stock} es la maxima cantidad disponible </p>
+                    )}
+                  </div>       
+                  <AddButton
+                    data={productWithQuantity}
+                    available={product.available}
+                    className={styles.carritoButton}
+                  /> 
+                  {!user && (
+                    <p>Inicia sesion para agregar a carrito</p>
+                  )}               
+                </div> 
+              ) : (
+                <p style={{ color: 'red' }}><strong>No Disponible</strong></p>
+              )}
+
+
+           
+             
+              
             <br/>
 
-            <AddButton
-              data={productWithQuantity}
-              available={product.available}
-            />                
-            <button 
-              className={styles.carritoButton}
-              disabled={!product.available}
-            >
-              Agregar al Carrito
-            </button>
+            
+            
           </div>
         </div>
       ) : (

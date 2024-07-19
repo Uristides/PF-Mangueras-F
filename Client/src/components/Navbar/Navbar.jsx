@@ -8,7 +8,7 @@ const backendUrl = import.meta.env.VITE_BACKEND;
 const Navbar = ({sesion}) => {
   const { pathname } = useLocation();
 
-  const { setUser, user } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   
   const deletCokie = (param) => {
     document.cookie =
@@ -60,6 +60,9 @@ const Navbar = ({sesion}) => {
         >
           SOBRE NOSOTROS
         </Link>
+
+        {user && user.rol === "User" &&(
+
         <Link
           to="/admin"
           className={`${styles.links} ${
@@ -68,6 +71,10 @@ const Navbar = ({sesion}) => {
         >
           ADMINISTRADOR
         </Link>
+
+        )}
+
+
       </div>
       <SearchBar />
       {!user ? (

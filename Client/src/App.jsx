@@ -10,7 +10,6 @@ import Cart from "./components/Cart/Cart";
 import Detail from "./components/Detail/Detail";
 import Dashboard from "./views/admin/Dashboard";
 import Navbar from "./components/Navbar/Navbar";
-import CreateForm from "./path-to/../components/CreateForm/CreateForm"; // Ajusta la ruta según donde tengas el archivo CreateForm.jsx
 
 import { Route, Routes } from "react-router-dom";
 
@@ -52,7 +51,6 @@ function App() {
       <UserContext.Provider value={{ user, setUser }}>
         <Navbar sesion={sesion} />
         <Routes>
-          <Route path="/create" element={<CreateForm />} />
           <Route path="/" element={<Home sesion={sesion} />} />{" "}
           {/* Renderiza Home correctamente */}
           {user ? (

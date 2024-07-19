@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import styles from "./CreateForm.module.css";
-import { createProduct } from "../../redux/actions";
+// import { createProduct } from "../../redux/actions";
 const backendUrl = import.meta.env.VITE_BACKEND;
 
 const CreateForm = () => {
