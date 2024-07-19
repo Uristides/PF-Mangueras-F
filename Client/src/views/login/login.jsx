@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styles from "./login.module.css";
 import FacebookLogin from 'react-facebook-login';
-
+const backendUrl = import.meta.env.VITE_BACKEND;
 
 
 export function Login({ sesion }) {
@@ -72,7 +72,7 @@ export function Login({ sesion }) {
       if (loged) {
         console.log("Logged: , ingreso");
 
-        const response = await fetch("http://localhost:3001/user/login", {
+        const response = await fetch(`${backendUrl}/user/login`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -91,7 +91,7 @@ export function Login({ sesion }) {
           setNotOkey("contraseña o correo invalidos");
         }
       } else {
-        const response = await fetch("http://localhost:3001/user/register", {
+        const response = await fetch(`${backendUrl}/user/register`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

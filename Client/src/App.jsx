@@ -3,14 +3,14 @@ import React, { useState, useEffect, createContext } from "react";
 //import './App.css'
 import { Login } from "./views/login/login";
 import Home from "./views/home/home"; // Importa Home como el componente predeterminado
+const backendUrl = import.meta.env.VITE_BACKEND;
 
 import About from "./components/About/about";
 import Cart from "./components/Cart/Cart";
 import Detail from "./components/Detail/Detail";
 import Dashboard from "./views/admin/Dashboard";
 import Navbar from "./components/Navbar/Navbar";
-import CreateForm from './path-to/../components/CreateForm/CreateForm'; // Ajusta la ruta según donde tengas el archivo CreateForm.jsx
-
+import CreateForm from "./path-to/../components/CreateForm/CreateForm"; // Ajusta la ruta según donde tengas el archivo CreateForm.jsx
 
 import { Route, Routes } from "react-router-dom";
 
@@ -21,8 +21,8 @@ function App() {
 
   const sesion = async () => {
     try {
-      const data = await fetch("http://localhost:3001/user/protected", {
-        credentials: "include", 
+      const data = await fetch(`${backendUrl}/user/protected`, {
+        credentials: "include",
       });
       if (data.ok) {
         setUser(await data.json());
@@ -52,9 +52,9 @@ function App() {
       <UserContext.Provider value={{ user, setUser }}>
         <Navbar sesion={sesion} />
         <Routes>
-        <Route path="/create" element={<CreateForm />} />
-
-          <Route path="/" element={<Home sesion={sesion} />} /> {/* Renderiza Home correctamente */}
+          <Route path="/create" element={<CreateForm />} />
+          <Route path="/" element={<Home sesion={sesion} />} />{" "}
+          {/* Renderiza Home correctamente */}
           {user ? (
             <Route path="/cart" element={<Cart />} />
           ) : (

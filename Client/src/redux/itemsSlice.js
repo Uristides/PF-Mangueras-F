@@ -1,9 +1,10 @@
 import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
 import axios from "axios";
+const backendUrl = import.meta.env.VITE_BACKEND;
 
 export const fetchItems = createAsyncThunk("items/fetchItems", async () => {
   try {
-    const response = await axios.get("http://localhost:3001/products/");
+    const response = await axios.get(`${backendUrl}/products/`);
     return response.data;
   } catch (error) {
     console.error("Error in fetchItems: ", error.message);
@@ -16,7 +17,7 @@ export const searchItems = createAsyncThunk(
   async (query) => {
     try {
       const response = await axios.get(
-        `http://localhost:3001/products/search?name=${query}`
+        `${backendUrl}/products/search?name=${query}`
       );
       return response.data;
     } catch (error) {

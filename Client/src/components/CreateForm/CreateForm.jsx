@@ -1,28 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import styles from './CreateForm.module.css';
-import { createProduct } from '../../redux/actions'; 
-
-
+import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import styles from "./CreateForm.module.css";
+import { createProduct } from "../../redux/actions";
+const backendUrl = import.meta.env.VITE_BACKEND;
 
 const CreateForm = () => {
   const initialState = {
-    name: '',
-    diameter: '',
-    brand: '',
-    length: '',
-    type: '',
-    stock: '',
-    description: '',
-    image: '',
+    name: "",
+    diameter: "",
+    brand: "",
+    length: "",
+    type: "",
+    stock: "",
+    description: "",
+    image: "",
   };
 
   const [formData, setFormData] = useState(initialState);
   const [loading, setLoading] = useState(false); // Cambiado a false inicialmente
   const [errors, setErrors] = useState({});
-  const [successMessage, setSuccessMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -39,22 +38,22 @@ const CreateForm = () => {
   const validate = () => {
     const newErrors = {};
     if (!formData.name) {
-      newErrors.name = 'Nombre es requerido';
+      newErrors.name = "Nombre es requerido";
     }
     if (!formData.diameter) {
-      newErrors.diameter = 'Diámetro es requerido';
+      newErrors.diameter = "Diámetro es requerido";
     }
     if (!formData.brand) {
-      newErrors.brand = 'Marca es requerida';
+      newErrors.brand = "Marca es requerida";
     }
     if (!formData.length) {
-      newErrors.length = 'Longitud es requerida';
+      newErrors.length = "Longitud es requerida";
     }
     if (!formData.type) {
-      newErrors.type = 'Tipo es requerido';
+      newErrors.type = "Tipo es requerido";
     }
     if (!formData.stock) {
-      newErrors.stock = 'Stock es requerido';
+      newErrors.stock = "Stock es requerido";
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -64,14 +63,14 @@ const CreateForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validate()) {
-      setLoading(true); 
+      setLoading(true);
       try {
-        const response = await axios.post('http://localhost:3001/products', formData);
-        console.log('Respuesta del servidor:', response.data);
-        setSuccessMessage('Manguera creada exitosamente');
+        const response = await axios.post(`${backendUrl}/products`, formData);
+        console.log("Respuesta del servidor:", response.data);
+        setSuccessMessage("Manguera creada exitosamente");
         setFormData(initialState); // Limpiar campos del formulario
       } catch (error) {
-        console.error('Error creando manguera:', error);
+        console.error("Error creando manguera:", error);
       } finally {
         setLoading(false); // Ocultar estado de carga después de completar la solicitud
       }
@@ -80,11 +79,11 @@ const CreateForm = () => {
 
   // para volver a la pagina principal
   const handleClick = () => {
-    navigate('/'); 
+    navigate("/");
   };
 
   return (
-    <div className={styles['create-form']}>
+    <div className={styles["create-form"]}>
       <h1>Crear Nueva Manguera</h1>
       <form onSubmit={handleSubmit}>
         <div>
@@ -166,7 +165,7 @@ const CreateForm = () => {
           />
         </div>
         <button type="submit" disabled={loading}>
-          {loading ? 'Creando...' : 'Crear Manguera'}
+          {loading ? "Creando..." : "Crear Manguera"}
         </button>
       </form>
       {successMessage && <p>{successMessage}</p>}

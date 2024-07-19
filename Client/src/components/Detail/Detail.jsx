@@ -3,24 +3,28 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import AddButton from "../AddRemoveCart/AddButton";
 import styles from './Detail.module.css';
+const backendUrl = import.meta.env.VITE_BACKEND;
+
 
 const Detail = () => {
   const { id } = useParams();
   const productId = id.toString();
-
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [quantityString, setQuantityString] = useState('1');
   const [productWithQuantity, setProductWithQuantity] = useState('');
 
+  console.log("Product in detail: ", product);
+
+
   useEffect(() => {
     const getById = async (id) => {
       try {
-        const { data } = await axios.get(`http://localhost:3001/products/${id}`);
+     const { data } = await axios.get(`${backendUrl}/products/${id}`);
         if (data) {
           setProduct(data);
           setProductWithQuantity(`${id}:1`);
-        }
+        }        
       } catch (error) {
         console.log(error.message);
       }
@@ -44,15 +48,18 @@ const Detail = () => {
       {product ? (
         <div className={styles.productContainer}>
           <div>
-            <img src={product.image} alt="product" className={styles.productImage} />
-          </div>  
-
+            <img
+              src={product.image}
+              alt="product"
+              className={styles.productImage}
+            />
+          </div>
           <div>
             <h1>{product.name}</h1>
             <p>{product.brand}</p>
-            <hr/>
+            <hr />
             <h3>$ {product.price}</h3>
-            <hr/>
+            <hr />
             <p>Marca: {product.brand}</p>
             <p>Diametro: {product.diameter}cm</p>
             <p>Tipo/Uso: {product.type}</p>
@@ -84,8 +91,7 @@ const Detail = () => {
             <AddButton
               data={productWithQuantity}
               available={product.available}
-            />
-                
+            />                
             <button 
               className={styles.carritoButton}
               disabled={!product.available}
