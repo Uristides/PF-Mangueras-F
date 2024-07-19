@@ -3,11 +3,11 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import styles from './EditItem.module.css'
-const backendUrl = backendUrl.env
+// const backendUrl = backendUrl.env
 
 
 
-const EditItem = () => {
+const EditItem = () => { 
     const { id: itemId } = useParams();
     const [fetchedData, setFetchedData] = useState(null);
     const [loading, setLoading] = useState(true);

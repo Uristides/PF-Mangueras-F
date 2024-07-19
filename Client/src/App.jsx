@@ -10,6 +10,7 @@ import Cart from "./components/Cart/Cart";
 import Detail from "./components/Detail/Detail";
 import Dashboard from "./views/admin/Dashboard";
 import Navbar from "./components/Navbar/Navbar";
+import EditItem from "./components/Admin/Edit/EditItem";
 
 import { Route, Routes } from "react-router-dom";
 
@@ -62,6 +63,7 @@ function App() {
           <Route path="/detail/:id" element={<Detail />} />
           <Route path="/login" element={<Login sesion={sesion} />} />
           <Route path="/about" element={<About />} />
+          {/* <Route path='/admin/product/edit/:id' element={<EditItem/>}/> */}
         </Routes>
       </UserContext.Provider>
     </>
