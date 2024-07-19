@@ -70,7 +70,7 @@ export function Login({ sesion }) {
     e.preventDefault();
     try {
       if (loged) {
-        console.log("ingreso");
+        console.log("Logged: , ingreso");
 
         const response = await fetch("http://localhost:3001/user/login", {
           method: "POST",

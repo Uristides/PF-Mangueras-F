@@ -33,6 +33,7 @@ function App() {
       throw new Error(error.message);
     }
   };
+  
   useEffect(() => {
     const handleBeforeUnload = (event) => sesion();
     const handleLoad = () => sesion();
@@ -45,7 +46,7 @@ function App() {
       window.removeEventListener("load", handleLoad);
     };
   }, []);
-  //console.log(user);
+  console.log(user);
   return (
     <>
       <UserContext.Provider value={{ user, setUser }}>
