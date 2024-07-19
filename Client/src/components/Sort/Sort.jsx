@@ -10,15 +10,15 @@ import styles from './Sort.module.css';
 
 const Sort = () => {
   const dispatch = useDispatch();
-  const [selectedSort, setSelectedSort] = useState(
-    localStorage.getItem('selectedSort') || ''
-  );
+  const [selectedSort, setSelectedSort] = useState('');
 
   useEffect(() => {
-    if (selectedSort) {
-      handleSort(selectedSort);
+    const savedSort = localStorage.getItem('selectedSort');
+    if (savedSort) {
+      setSelectedSort(savedSort);
+      handleSort(savedSort);
     }
-  }, [selectedSort]);
+  }, []);
 
   const handleSort = (value) => {
     if (value === 'price_asc') {

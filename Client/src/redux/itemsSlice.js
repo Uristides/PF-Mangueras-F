@@ -1,18 +1,18 @@
-import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
-import axios from "axios";
+import { createSlice, createAsyncThunk, createAction } from '@reduxjs/toolkit';
+import axios from 'axios';
 
-export const fetchItems = createAsyncThunk("items/fetchItems", async () => {
+export const fetchItems = createAsyncThunk('items/fetchItems', async () => {
   try {
-    const response = await axios.get("http://localhost:3001/products/");
+    const response = await axios.get('http://localhost:3001/products/');
     return response.data;
   } catch (error) {
-    console.error("Error in fetchItems: ", error.message);
+    console.error('Error in fetchItems: ', error.message);
     throw error;
   }
 });
 
 export const searchItems = createAsyncThunk(
-  "items/searchItems",
+  'items/searchItems',
   async (query) => {
     try {
       const response = await axios.get(
@@ -20,71 +20,72 @@ export const searchItems = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
-      console.error("Error in searchItems: ", error.message);
+      console.error('Error in searchItems: ', error.message);
       throw error;
     }
   }
 );
 
 export const sortItemsByNameAscending = createAction(
-  "items/sortByNameAscending"
+  'items/sortByNameAscending'
 );
 export const sortItemsByNameDescending = createAction(
-  "items/sortByNameDescending"
+  'items/sortByNameDescending'
 );
 export const sortItemsByPriceAscending = createAction(
-  "items/sortByPriceAscending"
+  'items/sortByPriceAscending'
 );
 export const sortItemsByPriceDescending = createAction(
-  "items/sortByPriceDescending"
+  'items/sortByPriceDescending'
 );
 
 export const filterItemsByPrice = createAction(
-  "items/filterByPrice",
+  'items/filterByPrice',
   (price) => ({ payload: price })
 );
 
-export const filterByType = createAction("items/filterByType", (type) => ({
+export const filterByType = createAction('items/filterByType', (type) => ({
   payload: type,
 }));
 
 const itemsSlice = createSlice({
-  name: "items",
+  name: 'items',
   initialState: {
-    allItems: [],
     items: [],
-    status: "idle",
+    originalItems: [],
+    status: 'idle',
     error: null,
-    filter: {
-      type: "",
-      price: null,
-    },
   },
   reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchItems.pending, (state) => {
-        state.status = "loading";
+        state.status = 'loading';
       })
       .addCase(fetchItems.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.allItems = action.payload;
+        state.status = 'succeeded';
         state.items = action.payload;
+        state.originalItems = action.payload;
+        applyFilters(state);
+        applySort(state, localStorage.getItem('selectedSort'));
       })
       .addCase(fetchItems.rejected, (state, action) => {
-        state.status = "failed";
+        state.status = 'failed';
         state.error = action.error.message;
       })
       .addCase(searchItems.pending, (state) => {
-        state.status = "loading";
+        state.status = 'loading';
       })
       .addCase(searchItems.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.allItems = action.payload;
+        state.status = 'succeeded';
         state.items = action.payload;
+        state.originalItems = action.payload;
+
+        // Aplica los filtros almacenados
+        applyFilters(state);
       })
       .addCase(searchItems.rejected, (state, action) => {
-        state.status = "failed";
+        state.status = 'failed';
         state.error = action.error.message;
       })
       .addCase(sortItemsByNameAscending, (state) => {
@@ -99,29 +100,51 @@ const itemsSlice = createSlice({
       .addCase(sortItemsByPriceDescending, (state) => {
         state.items.sort((a, b) => b.price - a.price);
       })
-      .addCase(filterItemsByPrice, (state, action) => {
-        state.filter.price = action.payload;
+      .addCase(filterByType, (state, action) => {
+        localStorage.setItem('typeValue', action.payload);
         applyFilters(state);
       })
-      .addCase(filterByType, (state, action) => {
-        state.filter.type = action.payload;
+      .addCase(filterItemsByPrice, (state, action) => {
+        localStorage.setItem('priceValue', action.payload);
         applyFilters(state);
       });
   },
 });
 
-const applyFilters = (state) => {
-  let filteredItems = state.allItems;
+const applySort = (state, sortType) => {
+  if (sortType === 'price_asc') {
+    state.items.sort((a, b) => a.price - b.price);
+  } else if (sortType === 'price_desc') {
+    state.items.sort((a, b) => b.price - a.price);
+  } else if (sortType === 'name_asc') {
+    state.items.sort((a, b) => a.name.localeCompare(b.name));
+  } else if (sortType === 'name_desc') {
+    state.items.sort((a, b) => b.name.localeCompare(a.name));
+  }
+};
 
-  if (state.filter.type) {
+const applyFilters = (state) => {
+  let filteredItems = state.originalItems;
+
+  const priceValue = localStorage.getItem('priceValue');
+  const typeValue = localStorage.getItem('typeValue');
+  const searchTerm = localStorage.getItem('searchTerm');
+
+  if (priceValue) {
     filteredItems = filteredItems.filter(
-      (item) => item.type === state.filter.type
+      (item) =>
+        item.price <= priceValue ||
+        item.price.toString().includes(priceValue.toString())
     );
   }
 
-  if (state.filter.price !== null) {
-    filteredItems = filteredItems.filter(
-      (item) => item.price <= state.filter.price
+  if (typeValue) {
+    filteredItems = filteredItems.filter((item) => item.type === typeValue);
+  }
+
+  if (searchTerm) {
+    filteredItems = filteredItems.filter((item) =>
+      item.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }
 

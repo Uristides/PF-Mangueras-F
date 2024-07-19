@@ -79,6 +79,7 @@ const Cards = ({ filters, sortOption, searchQuery }) => {
 
   const dispatch = useDispatch();
   const mangueras = useSelector((state) => state.items.items);
+
   const status = useSelector((state) => state.items.status);
 
   // Fetch items when status is 'idle'
@@ -90,7 +91,7 @@ const Cards = ({ filters, sortOption, searchQuery }) => {
 
   // Handle updates to products based on filters, sortOption, searchQuery, and mangueras
   useEffect(() => {
-    const filteredAndSortedItems = mangueras
+    const filteredAndSortedItems = mangueras;
 
     setProducts(
       filteredAndSortedItems.slice(
@@ -122,13 +123,21 @@ const Cards = ({ filters, sortOption, searchQuery }) => {
         ))}
       </article>
       <article className={styles.pagination}>
-        <button onClick={prevPage} className={styles.button} disabled={currentPage === 0}>
+        <button
+          onClick={prevPage}
+          className={styles.button}
+          disabled={currentPage === 0}
+        >
           ⬅️ Anterior
         </button>
         <button onClick={restart} className={styles.refresh}>
           {currentPage + 1}
         </button>
-        <button onClick={nextPage} className={styles.button} disabled={currentPage >= totalPages - 1}>
+        <button
+          onClick={nextPage}
+          className={styles.button}
+          disabled={currentPage >= totalPages - 1}
+        >
           Siguiente ➡️
         </button>
       </article>
