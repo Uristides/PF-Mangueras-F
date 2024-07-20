@@ -1,7 +1,8 @@
-import styles from './CartItem.module.css';
-import { useState, useEffect } from 'react';
-import RemoveButton from '../AddRemoveCart/RemoveButton';
-import axios from 'axios';
+import styles from "./CartItem.module.css";
+import { useState, useEffect } from "react";
+import RemoveButton from "../AddRemoveCart/RemoveButton";
+import axios from "axios";
+const backendUrl = process.env.VITE_BACKEND;
 
 const CartItem = ({ id, amount, onPriceUpdate }) => {
   const [product, setProduct] = useState(null);
@@ -10,7 +11,7 @@ const CartItem = ({ id, amount, onPriceUpdate }) => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const { data } = await axios.get(`http://localhost:3001/products/${id}`);
+        const { data } = await axios.get(`${backendUrl}/products/${id}`);
         if (data) {
           setProduct(data);
           onPriceUpdate(id, data.price * quantity); // Pass initial price to parent
@@ -33,10 +34,15 @@ const CartItem = ({ id, amount, onPriceUpdate }) => {
 
   return (
     <div className={styles.container}>
-
       <div className={styles.secondContainer}>
         <div></div>
-        {product.image && <img src={product.image} alt='Product'  className={styles.cartItemImg}/>}
+        {product.image && (
+          <img
+            src={product.image}
+            alt="Product"
+            className={styles.cartItemImg}
+          />
+        )}
       </div>
 
       <div>
@@ -45,19 +51,14 @@ const CartItem = ({ id, amount, onPriceUpdate }) => {
         <p>Diameter: {product.diameter}</p>
         <p>Length: {product.longitude}</p>
         <p>Quantity: {quantity}</p>
-        <RemoveButton
-        id={product.id}
-        
-        />
+        <RemoveButton id={product.id} />
       </div>
 
       <div>
         <p>Price: {product.price}</p>
       </div>
 
-      <div>
-        Total: {product.price * quantity}
-      </div>
+      <div>Total: {product.price * quantity}</div>
     </div>
   );
 };

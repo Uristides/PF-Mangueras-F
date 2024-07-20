@@ -16,7 +16,7 @@ const Home = ({ sesion }) => {
   };
 
   const logout = async () => {
-    const response = await fetch(`http://localhost:3001/user/logout`, {
+    const response = await fetch(`${backendUrl}/user/logout`, {
       method: "POST",
       credentials: "include",
       headers: {
