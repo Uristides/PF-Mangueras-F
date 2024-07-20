@@ -5,7 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCart } from "../../redux/cartSlice";
 import axios from "axios";
-const backendUrl = process.env.VITE_BACKEND;
+const backendUrl = import.meta.env.VITE_BACKEND;
 
 const Cart = () => {
   const { user } = useContext(UserContext);

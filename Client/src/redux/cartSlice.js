@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-const backendUrl = process.env.VITE_BACKEND;
+const backendUrl = import.meta.env.VITE_BACKEND;
 
 export const fetchCart = createAsyncThunk("cart/fetchCart", async (userId) => {
   try {

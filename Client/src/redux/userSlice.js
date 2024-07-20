@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-const backendUrl = process.env.VITE_BACKEND;
+const backendUrl = import.meta.env.VITE_BACKEND;
 
 // Async thunk to fetch user data
 export const fetchUser = createAsyncThunk("user/fetchUser", async () => {

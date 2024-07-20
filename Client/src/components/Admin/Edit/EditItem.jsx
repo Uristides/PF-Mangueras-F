@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import styles from "./EditItem.module.css";
-const backendUrl = process.env.VITE_BACKEND;
+const backendUrl = import.meta.env.VITE_BACKEND;
 
 const EditItem = () => {
   const { id: itemId } = useParams();

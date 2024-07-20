@@ -2,7 +2,7 @@ import styles from "./CartItem.module.css";
 import { useState, useEffect } from "react";
 import RemoveButton from "../AddRemoveCart/RemoveButton";
 import axios from "axios";
-const backendUrl = process.env.VITE_BACKEND;
+const backendUrl = import.meta.env.VITE_BACKEND;
 
 const CartItem = ({ id, amount, onPriceUpdate }) => {
   const [product, setProduct] = useState(null);
