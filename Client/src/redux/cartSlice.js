@@ -1,9 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+const backendUrl = import.meta.env.VITE_BACKEND;
 
 export const fetchCart = createAsyncThunk("cart/fetchCart", async (userId) => {
   try {
-    const { data } = await axios.get(`http://localhost:3001/user/id/${userId}`); // Replace with your API endpoint
+    const { data } = await axios.get(`${backendUrl}/user/id/${userId}`); // Replace with your API endpoint
     const { cart } = data;
 
     return cart;
@@ -17,10 +18,7 @@ export const addToCart = createAsyncThunk(
   "cart/addToCart",
   async (itemInfo) => {
     try {
-      const { data } = await axios.post(
-        "http://localhost:3001/user/addCart",
-        itemInfo
-      );
+      const { data } = await axios.post(`${backendUrl}/user/addCart`, itemInfo);
       return data;
     } catch (error) {
       console.error("Error in addToCart: ", error.message);
@@ -35,7 +33,7 @@ export const removeFromCart = createAsyncThunk(
     console.log("TO be removed: ", itemId);
     try {
       const { data } = await axios.post(
-        `http://localhost:3001/user/removeCart`,
+        `${backendUrl}/user/removeCart`,
         itemId
       );
 
