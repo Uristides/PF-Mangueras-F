@@ -5,7 +5,7 @@ const backendUrl = process.env.VITE_BACKEND;
 // Async thunk to fetch user data
 export const fetchUser = createAsyncThunk("user/fetchUser", async () => {
   try {
-    const { data } = await axios.get("${backendUrl}/user/"); // Replace with your API endpoint
+    const { data } = await axios.get(`${backendUrl}/user/`); // Replace with your API endpoint
     return data;
   } catch (error) {
     console.log("error in fetchUser: ", error.message);

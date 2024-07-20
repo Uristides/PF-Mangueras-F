@@ -18,7 +18,7 @@ export const addToCart = createAsyncThunk(
   "cart/addToCart",
   async (itemInfo) => {
     try {
-      const { data } = await axios.post("${backendUrl}/user/addCart", itemInfo);
+      const { data } = await axios.post(`${backendUrl}/user/addCart`, itemInfo);
       return data;
     } catch (error) {
       console.error("Error in addToCart: ", error.message);
