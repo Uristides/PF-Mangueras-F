@@ -16,7 +16,7 @@ const Home = ({ sesion }) => {
   };
 
   const logout = async () => {
-    const response = await fetch(`http://localhost:3001/user/logout`, {
+    const response = await fetch(`${backendUrl}/user/logout`, {
       method: "POST",
       credentials: "include",
       headers: {
@@ -42,7 +42,7 @@ const Home = ({ sesion }) => {
         </div>
         <section className={styles.section}>
           {user && <h1 className={styles.h1}>Bienvenido {user.name}</h1>}
-          <CreateButton /> {/* Renderiza el botón de creación */}
+          {/* <CreateButton /> Renderiza el botón de creación */}
           <button onClick={logout} className={styles.logout}>
             Cerrar sesión
           </button>

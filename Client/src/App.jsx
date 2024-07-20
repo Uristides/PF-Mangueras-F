@@ -10,7 +10,7 @@ import Cart from "./components/Cart/Cart";
 import Detail from "./components/Detail/Detail";
 import Dashboard from "./views/admin/Dashboard";
 import Navbar from "./components/Navbar/Navbar";
-import CreateForm from "./path-to/../components/CreateForm/CreateForm"; // Ajusta la ruta según donde tengas el archivo CreateForm.jsx
+import EditItem from "./components/Admin/Edit/EditItem";
 
 import { Route, Routes } from "react-router-dom";
 
@@ -52,7 +52,6 @@ function App() {
       <UserContext.Provider value={{ user, setUser }}>
         <Navbar sesion={sesion} />
         <Routes>
-          <Route path="/create" element={<CreateForm />} />
           <Route path="/" element={<Home sesion={sesion} />} />{" "}
           {/* Renderiza Home correctamente */}
           {user ? (
@@ -64,6 +63,7 @@ function App() {
           <Route path="/detail/:id" element={<Detail />} />
           <Route path="/login" element={<Login sesion={sesion} />} />
           <Route path="/about" element={<About />} />
+          {/* <Route path='/admin/product/edit/:id' element={<EditItem/>}/> */}
         </Routes>
       </UserContext.Provider>
     </>

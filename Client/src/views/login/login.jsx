@@ -1,13 +1,9 @@
 import { useState } from "react";
 import styles from "./login.module.css";
-import FacebookLogin from 'react-facebook-login';
+//import FacebookLogin from 'react-facebook-login';
 const backendUrl = import.meta.env.VITE_BACKEND;
 
-
 export function Login({ sesion }) {
-  
-  
-  
   const [loged, setLoged] = useState(false);
   const [info, setInfo] = useState({
     nombre: "",
@@ -115,8 +111,8 @@ export function Login({ sesion }) {
       throw new Error(error.message);
     }
   };
-  const responseFacebook = async(response) => {
-    const respuesta = await fetch("http://localhost:3001/user/login", {
+  const responseFacebook = async (response) => {
+    const respuesta = await fetch("${backendUrl}/user/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -124,15 +120,13 @@ export function Login({ sesion }) {
       credentials: "include",
       body: JSON.stringify({
         email: response.email,
-        password:"",
+        password: "",
       }),
     });
     if (respuesta.ok) {
       sesion();
-      
-    }
-    else{
-      const respuesta = await fetch("http://localhost:3001/user/register", {
+    } else {
+      const respuesta = await fetch("${backendUrl}/user/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -142,7 +136,7 @@ export function Login({ sesion }) {
           name: response.name,
           email: response.email,
           password: "",
-          tercero:true
+          tercero: true,
         }),
       });
       if (respuesta.ok) {
@@ -150,26 +144,22 @@ export function Login({ sesion }) {
         //  window.location.reload();
         //}).catch((error) => {
         //  console.error("Error al realizar login o registro:", error);
-       // });
-      }else{
+        // });
+      } else {
         console.log("error");
       }
     }
     console.log(response);
-    
-  }
-  const facebookLogin = ()=>{
-
+  };
+  const facebookLogin = () => {
     window.location.reload();
-  }
+  };
   return (
     <main className={styles.main}>
-      
       <h1>{loged ? "Iniciar sesión" : "Registrarse"}</h1>
       <form className={styles.form}>
         {!loged && (
           <label className={styles.label}>
-            
             Nombre de usuario :
             <input
               type="text"
@@ -236,18 +226,20 @@ export function Login({ sesion }) {
             ? "¿No tienes cuenta? Regístrate"
             : "¿Ya tienes cuenta? Iniciar sesión"}
         </button>
-        <div> 
-         {loged && <FacebookLogin
-            appId="982520500336766"
-            //autoLoad={true}
-            fields="name,email,picture"
-            onClick={facebookLogin}
-            callback={responseFacebook}
-            textButton=""
-            icon="fa-facebook"
-            cssClass={styles.facebook}
-          />}
-        </div>
+        {/* <div>
+          {loged && (
+            <FacebookLogin
+              appId="982520500336766"
+              //autoLoad={true}
+              fields="name,email,picture"
+              onClick={facebookLogin}
+              callback={responseFacebook}
+              textButton=""
+              icon="fa-facebook"
+              cssClass={styles.facebook}
+            />
+          )}
+        </div> */}
       </form>
     </main>
   );

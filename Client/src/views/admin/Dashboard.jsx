@@ -3,6 +3,8 @@ import Sidebar from "../../components/Admin/Sidebar/Sidebar";
 import Products from "../../components/Admin/Products/Products";
 import Users from '../../components/Admin/Users/Users'
 import Orders from '../../components/Admin/Orders/Orders';
+import CreateForm from '../../components/CreateForm/CreateForm';
+import EditItem from '../../components/Admin/Edit/EditItem';
 import styles from './Dashboard.module.css'
 
 
@@ -18,10 +20,12 @@ const Dashboard = ()=>{
                 
             <div className={styles.adminContent}>
                 <Routes>
-                    <Route path="products" element={<Products/>} />
+                    <Route path="products/*" element={<Products/>} />
+                    <Route path="products/edit/:id" element={<EditItem />} />
                     <Route path="users" element={<Users/>} />
                     <Route path='orders' element={<Orders />} />
-                    {/* <Route path="/admin/create-product" element={<Component here></Component>} */}
+                    <Route path="create-product" element={<CreateForm/>}/>
+                    
                 </Routes>
             </div>
 

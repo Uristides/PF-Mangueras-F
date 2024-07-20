@@ -4,7 +4,8 @@ import { UserContext } from "../../App";
 import { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCart } from "../../redux/cartSlice";
-import axios from 'axios';
+import axios from "axios";
+const backendUrl = process.env.VITE_BACKEND;
 
 const Cart = () => {
   const { user } = useContext(UserContext);
@@ -20,11 +21,11 @@ const Cart = () => {
     };
 
     loadCartData();
-  }, [user.id, dispatch, userCart.length]);
+  }, [user.id, dispatch, userCart?.length]);
 
   const fetchProductPrice = async (id) => {
     try {
-      const { data } = await axios.get(`http://localhost:3001/products/${id}`);
+      const { data } = await axios.get(`${backendUrl}/products/${id}`);
       return data.price;
     } catch (error) {
       console.error("Error fetching product price:", error);
@@ -43,7 +44,7 @@ const Cart = () => {
   };
 
   useEffect(() => {
-    if (userCart.length > 0) {
+    if (userCart?.length > 0) {
       const calculateAndSetTotalPrice = async () => {
         const total = await calculateTotalPrice(userCart);
         setTotalPrice(total);
@@ -69,7 +70,9 @@ const Cart = () => {
               key={index} // Use index or id if unique
               id={id}
               amount={amount}
-              onPriceUpdate={() => { /* No price update needed here */ }}
+              onPriceUpdate={() => {
+                /* No price update needed here */
+              }}
             />
           );
         })}
@@ -78,15 +81,9 @@ const Cart = () => {
       <div className={styles.subTotal}>
         Summary
         <div className={styles.subTotalContainer}>
-          <div>
-            Subtotal: ${totalPrice}
-          </div>
-          <div>
-            Shipping: $TBD
-          </div>
-          <div>
-            Estimated Total: ${totalPrice}
-          </div>
+          <div>Subtotal: ${totalPrice}</div>
+          <div>Shipping: $TBD</div>
+          <div>Estimated Total: ${totalPrice}</div>
         </div>
       </div>
     </div>
