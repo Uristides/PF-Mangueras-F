@@ -61,7 +61,7 @@ const Navbar = ({sesion}) => {
           SOBRE NOSOTROS
         </Link>
 
-        {user && user.rol === "User" &&(
+        {user && user.rol === "Admin" &&(
 
         <Link
           to="/admin"

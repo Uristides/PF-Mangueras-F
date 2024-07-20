@@ -59,7 +59,14 @@ function App() {
           ) : (
             <Route path="/cart" element={<Login sesion={sesion} />} />
           )}
-          <Route path="/admin/*" element={<Dashboard />} />
+
+          {user.rol==="Admin" ? (
+            <Route path="/admin/*" element={<Dashboard />} />
+            
+          ): (
+            <Route path="/cart" element={<Login sesion={sesion} />} />
+
+          )}
           <Route path="/detail/:id" element={<Detail />} />
           <Route path="/login" element={<Login sesion={sesion} />} />
           <Route path="/about" element={<About />} />

@@ -73,6 +73,7 @@ const Detail = () => {
             {product.available ? product.stock > 0 && (
                 <div>
                   <p style={{ color: 'green' }}><strong>Disponible</strong></p>
+                  <p>En existencia: {product.stock}</p>
 
                   <label>Cantidad: </label>
                   <div>
