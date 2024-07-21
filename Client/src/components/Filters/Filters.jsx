@@ -5,21 +5,21 @@ import {
   filterItemsByPrice,
   filterByType,
   filterByBrand,
-  getBrands,
 } from '../../redux/itemsSlice';
+import { fetchBrands } from '../../redux/brandsSlice';
 import Sort from '../Sort/Sort';
 import styles from './Filters.module.css';
 
 const Filters = () => {
   const dispatch = useDispatch();
-  const brandsList = useSelector((state) => state.items.brands);
+  const brandsList = useSelector((state) => state.brands.brands);
   const [priceValue, setPriceValue] = useState('');
   const [typeValue, setTypeValue] = useState('');
   const [brandsValue, setBrandsValue] = useState('');
 
   useEffect(() => {
     dispatch(fetchItems());
-    dispatch(getBrands());
+    dispatch(fetchBrands());
     const savedPriceValue = localStorage.getItem('priceValue');
     const savedTypeValue = localStorage.getItem('typeValue');
     const savedBrandValue = localStorage.getItem('brandValue');
@@ -78,7 +78,7 @@ const Filters = () => {
         onChange={handleFilterBrandsChange}
       >
         <option value=''>Marcas:</option>
-        {brandsList.map((brand) => (
+        {brandsList?.map((brand) => (
           <option key={brand.id} value={brand.brand}>
             {brand.brand}
           </option>

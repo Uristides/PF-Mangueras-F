@@ -1,19 +1,10 @@
-<<<<<<< HEAD
 import { createSlice, createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import axios from 'axios';
-=======
-import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
-import axios from "axios";
 const backendUrl = import.meta.env.VITE_BACKEND;
->>>>>>> development
 
 export const fetchItems = createAsyncThunk('items/fetchItems', async () => {
   try {
-<<<<<<< HEAD
-    const response = await axios.get('http://localhost:3001/products/');
-=======
     const response = await axios.get(`${backendUrl}/products/`);
->>>>>>> development
     return response.data;
   } catch (error) {
     console.error('Error in fetchItems: ', error.message);
@@ -21,63 +12,62 @@ export const fetchItems = createAsyncThunk('items/fetchItems', async () => {
   }
 });
 
-export const getBrands = createAsyncThunk('items/getBrands', async () => {
-  try {
-    const response = await axios.get('http://localhost:3001/products/brands');
-    return response.data;
-  } catch (error) {
-    console.error('Error in getBrands: ', error.message);
-    throw error;
+export const editItem = createAsyncThunk(
+  'products/editItem',
+  async (oldProduct) => {
+    const editedItem = {
+      id: oldProduct.id,
+      name: oldProduct.name,
+      image: oldProduct.image,
+      price: oldProduct.price.toString(),
+      diameter: oldProduct.diameter.toString(),
+      longitude: oldProduct.longitude.toString(),
+      description: oldProduct.description,
+      stock: oldProduct.stock,
+      available: oldProduct.available,
+      show: oldProduct.show,
+      brand: oldProduct.brand,
+      type: oldProduct.type,
+    };
+    try {
+      const { data } = await axios.post(
+        `${backendUrl}/products/edit/`,
+        editedItem
+      );
+      if (data) alert('Producto editado exitosamente!');
+      return data;
+    } catch (error) {
+      console.error('Error in editItem: ', error.message);
+      throw error;
+    }
   }
-});
+);
 
-export const editItem = createAsyncThunk("products/editItem", async (oldProduct) => {
-  const editedItem = {
-    id: oldProduct.id,
-    name: oldProduct.name,
-    image: oldProduct.image,
-    price: oldProduct.price.toString(),
-    diameter: oldProduct.diameter.toString(),
-    longitude: oldProduct.longitude.toString(),
-    description: oldProduct.description,
-    stock: oldProduct.stock,
-    available: oldProduct.available,
-    show: oldProduct.show,
-    brand: oldProduct.brand,
-    type: oldProduct.type,
-  };
-  try {
-    const { data } = await axios.post(`${backendUrl}/products/edit/`, editedItem);
-    if(data) alert("Producto editado exitosamente!")
-    return data;
-  } catch (error) {
-    console.error("Error in editItem: ", error.message);
-    throw error;
+export const productCreate = createAsyncThunk(
+  'products/productCreate',
+  async (newProduct) => {
+    const newItem = {
+      name: newProduct.name,
+      image: newProduct.image,
+      price: newProduct.price.toString(),
+      diameter: newProduct.diameter.toString(),
+      longitude: newProduct.longitude.toString(),
+      description: newProduct.description,
+      stock: newProduct.stock,
+      available: newProduct.available,
+      show: newProduct.show,
+      brand: newProduct.brand,
+      type: newProduct.type,
+    };
+    try {
+      const { data } = await axios.post(`${backendUrl}/products/`, newItem);
+      return data;
+    } catch (error) {
+      console.error('Error in productCreate: ', error.message);
+      throw error;
+    }
   }
-});
-
-export const productCreate = createAsyncThunk("products/productCreate", async (newProduct) => {
-  const newItem = {
-    name: newProduct.name,
-    image: newProduct.image,
-    price: newProduct.price.toString(),
-    diameter: newProduct.diameter.toString(),
-    longitude: newProduct.longitude.toString(),
-    description: newProduct.description,
-    stock: newProduct.stock,
-    available: newProduct.available,
-    show: newProduct.show,
-    brand: newProduct.brand,
-    type: newProduct.type,
-  };
-  try {
-    const { data } = await axios.post(`${backendUrl}/products/`, newItem);
-    return data;
-  } catch (error) {
-    console.error("Error in productCreate: ", error.message);
-    throw error;
-  }
-});
+);
 
 export const searchItems = createAsyncThunk(
   'items/searchItems',
@@ -185,36 +175,35 @@ const itemsSlice = createSlice({
         localStorage.setItem('brandValue', action.payload);
         applyFilters(state);
       })
-      .addCase(getBrands.fulfilled, (state, action) => {
-        state.brands = action.payload;
-      })
       .addCase(productCreate.pending, (state) => {
-        state.status = "loading";
+        state.status = 'loading';
       })
       .addCase(productCreate.fulfilled, (state, action) => {
-        state.status = "succeeded";
+        state.status = 'succeeded';
         // Add the newly created item to the items array
         state.allItems.push(action.payload);
         state.items.push(action.payload);
       })
       .addCase(productCreate.rejected, (state, action) => {
-        state.status = "failed";
+        state.status = 'failed';
         state.error = action.error.message;
       })
       .addCase(editItem.pending, (state) => {
-        state.status = "loading";
+        state.status = 'loading';
       })
       .addCase(editItem.fulfilled, (state, action) => {
-        state.status = "succeeded";
+        state.status = 'succeeded';
         // Update the edited item in the items array
-        const index = state.items.findIndex(item => item.id === action.payload.id);
+        const index = state.items.findIndex(
+          (item) => item.id === action.payload.id
+        );
         if (index !== -1) {
           state.items[index] = action.payload;
           state.allItems[index] = action.payload;
         }
       })
       .addCase(editItem.rejected, (state, action) => {
-        state.status = "failed";
+        state.status = 'failed';
         state.error = action.error.message;
       });
   },
