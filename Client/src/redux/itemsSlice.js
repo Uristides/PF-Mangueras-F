@@ -11,6 +11,16 @@ export const fetchItems = createAsyncThunk('items/fetchItems', async () => {
   }
 });
 
+export const getBrands = createAsyncThunk('items/getBrands', async () => {
+  try {
+    const response = await axios.get('http://localhost:3001/products/brands');
+    return response.data;
+  } catch (error) {
+    console.error('Error in getBrands: ', error.message);
+    throw error;
+  }
+});
+
 export const searchItems = createAsyncThunk(
   'items/searchItems',
   async (query) => {
@@ -48,11 +58,16 @@ export const filterByType = createAction('items/filterByType', (type) => ({
   payload: type,
 }));
 
+export const filterByBrand = createAction('items/filterByBrand', (brand) => ({
+  payload: brand,
+}));
+
 const itemsSlice = createSlice({
   name: 'items',
   initialState: {
     items: [],
     originalItems: [],
+    brands: [],
     status: 'idle',
     error: null,
   },
@@ -107,27 +122,23 @@ const itemsSlice = createSlice({
       .addCase(filterItemsByPrice, (state, action) => {
         localStorage.setItem('priceValue', action.payload);
         applyFilters(state);
+      })
+      .addCase(filterByBrand, (state, action) => {
+        localStorage.setItem('brandValue', action.payload);
+        applyFilters(state);
+      })
+      .addCase(getBrands.fulfilled, (state, action) => {
+        state.brands = action.payload;
       });
   },
 });
-
-const applySort = (state, sortType) => {
-  if (sortType === 'price_asc') {
-    state.items.sort((a, b) => a.price - b.price);
-  } else if (sortType === 'price_desc') {
-    state.items.sort((a, b) => b.price - a.price);
-  } else if (sortType === 'name_asc') {
-    state.items.sort((a, b) => a.name.localeCompare(b.name));
-  } else if (sortType === 'name_desc') {
-    state.items.sort((a, b) => b.name.localeCompare(a.name));
-  }
-};
 
 const applyFilters = (state) => {
   let filteredItems = state.originalItems;
 
   const priceValue = localStorage.getItem('priceValue');
   const typeValue = localStorage.getItem('typeValue');
+  const brandValue = localStorage.getItem('brandValue');
   const searchTerm = localStorage.getItem('searchTerm');
 
   if (priceValue) {
@@ -142,6 +153,10 @@ const applyFilters = (state) => {
     filteredItems = filteredItems.filter((item) => item.type === typeValue);
   }
 
+  if (brandValue) {
+    filteredItems = filteredItems.filter((item) => item.brand === brandValue);
+  }
+
   if (searchTerm) {
     filteredItems = filteredItems.filter((item) =>
       item.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -149,6 +164,18 @@ const applyFilters = (state) => {
   }
 
   state.items = filteredItems;
+};
+
+const applySort = (state, sortType) => {
+  if (sortType === 'price_asc') {
+    state.items.sort((a, b) => a.price - b.price);
+  } else if (sortType === 'price_desc') {
+    state.items.sort((a, b) => b.price - a.price);
+  } else if (sortType === 'name_asc') {
+    state.items.sort((a, b) => a.name.localeCompare(b.name));
+  } else if (sortType === 'name_desc') {
+    state.items.sort((a, b) => b.name.localeCompare(a.name));
+  }
 };
 
 export default itemsSlice.reducer;
