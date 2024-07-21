@@ -36,7 +36,7 @@ const Cart = () => {
   const calculateTotalPrice = async (items) => {
     let total = 0;
     for (const item of items) {
-      const [id, amount] = item.split(":");
+      const [id, amount] = item.split(":").map(Number);
       const price = await fetchProductPrice(id);
       total += price * parseInt(amount, 10);
     }
