@@ -12,6 +12,32 @@ export const fetchItems = createAsyncThunk("items/fetchItems", async () => {
   }
 });
 
+
+export const productCreate = createAsyncThunk("products/productCreate",async (newProduct) => {
+
+    const newItem = {
+        name: newProduct.name,
+        image: newProduct.image,
+        price: newProduct.price.toString(),
+        diameter: newProduct.diameter.toString(),
+        longitude: newProduct.longitude.toString(),
+        description: newProduct.description,
+        stock: newProduct.stock,
+        available: newProduct.available,
+        show: newProduct.show,
+        brand: newProduct.brand,
+        type: newProduct.type,
+        }
+  try {
+    const { data } = await axios.post(`${backendUrl}/products/`, newItem  );
+    return data;
+  } catch (error) {
+    console.error("Error in addToCart: ", error.message);
+    throw error;
+  }
+}
+);
+
 export const searchItems = createAsyncThunk(
   "items/searchItems",
   async (query) => {
@@ -107,7 +133,20 @@ const itemsSlice = createSlice({
       .addCase(filterByType, (state, action) => {
         state.filter.type = action.payload;
         applyFilters(state);
-      });
+      })
+      .addCase(productCreate.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(productCreate.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        // Add the newly created item to the items array
+        state.allItems.push(action.payload);
+        state.items.push(action.payload);
+      })
+      .addCase(productCreate.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
   },
 });
 

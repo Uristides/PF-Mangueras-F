@@ -12,9 +12,6 @@ const ProductItem = (props) => {
     return (
 
         <div>
-            
-            
-
         <div className={styles.productItem}>
             <p>{id}</p>
             <p>{name}</p>

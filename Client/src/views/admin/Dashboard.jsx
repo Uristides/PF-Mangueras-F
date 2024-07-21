@@ -1,14 +1,20 @@
 import { Route, Routes } from 'react-router-dom'
+import { useDispatch } from 'react-redux';
+import { fetchItems } from '../../redux/itemsSlice';
 import Sidebar from "../../components/Admin/Sidebar/Sidebar";
 import Products from "../../components/Admin/Products/Products";
 import Users from '../../components/Admin/Users/Users'
 import Orders from '../../components/Admin/Orders/Orders';
-import CreateForm from '../../components/CreateForm/CreateForm';
+import CreateForm from '../../components/Admin/CreateForm/CreateForm';
 import EditItem from '../../components/Admin/Edit/EditItem';
 import styles from './Dashboard.module.css'
+import { useEffect } from 'react';
+import { fetchTypes } from '../../redux/typesSlice';
 
 
 const Dashboard = ()=>{
+
+   
 
     return(
         <div className={styles.adminDashboard}>
@@ -26,7 +32,7 @@ const Dashboard = ()=>{
                     <Route path='orders' element={<Orders />} />
                     <Route path="create-product" element={<CreateForm/>}/>
                     
-                </Routes>
+                </Routes>              
             </div>
 
         </div>
