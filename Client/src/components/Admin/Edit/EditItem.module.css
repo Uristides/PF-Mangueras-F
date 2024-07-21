@@ -1,0 +1,40 @@
+
+.img {
+    max-width: 80%;
+}
+
+input{
+    margin: 5px;
+}
+
+label{
+    margin: 20px;
+}
+
+textarea{
+    width: 300px;
+    max-width: 300px;
+    min-width: 300px;
+    height: 300px;
+    min-height: 150px;
+}
+
+
+.formDivs{
+    display: flex;
+}
+
+.pictureDiv{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.infoDiv{
+    display:block;
+
+ 
+    margin: 20px;
+}

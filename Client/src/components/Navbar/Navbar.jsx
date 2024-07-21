@@ -5,10 +5,12 @@ import { useContext } from 'react';
 import { UserContext } from '../../App';
 import SearchBar from '../SearchBar/SearchBar';
 import styles from './Navbar.module.css';
+const backendUrl = import.meta.env.VITE_BACKEND;
 
 const Navbar = ({ sesion }) => {
   const { pathname } = useLocation();
-  const { setUser, user } = useContext(UserContext);
+
+  const { user } = useContext(UserContext);
 
   const deletCokie = (param) => {
     document.cookie =
@@ -16,14 +18,15 @@ const Navbar = ({ sesion }) => {
   };
 
   const logout = async () => {
-    const out = await fetch('http://localhost:3001/user/logout', {
+    //console.log(document.cookie);
+    const out = await fetch(`${backendUrl}/user/logout`, {
       method: 'POST',
       credentials: 'include',
       header: { 'Content-Type': 'aplication/json' },
     });
     if (out.ok) {
-      sesion();
       deletCokie('lacookie');
+      sesion();
       return location.reload();
     }
   };
@@ -56,25 +59,29 @@ const Navbar = ({ sesion }) => {
         >
           SOBRE NOSOTROS
         </Link>
-        <Link
-          to='/admin'
-          className={`${styles.links} ${
-            pathname === '/admin' ? styles.active : ''
-          }`}
-        >
-          ADMINISTRADOR
-        </Link>
-        {!user ? (
-          <Link to='/login' className={styles.loginButton}>
-            REGISTRARSE
+
+        {user && user.rol === 'Admin' && (
+          <Link
+            to='/admin'
+            className={`${styles.links} ${
+              pathname === '/admin' ? styles.active : ''
+            }`}
+          >
+            ADMINISTRADOR
           </Link>
-        ) : (
-          <button className={styles.loginButton} onClick={logout}>
-            CERRAR SESIÓN
-          </button>
         )}
       </div>
       <SearchBar />
+      {!user ? (
+        <Link to='/login' className={styles.loginButton}>
+          REGISTRARSE
+        </Link>
+      ) : (
+        <button className={styles.logout} onClick={logout}>
+          {' '}
+          CERRAR SESIÓN{' '}
+        </button>
+      )}
     </div>
   );
 };

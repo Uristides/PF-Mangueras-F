@@ -23,7 +23,9 @@ const Products = () => {
     }, [status, dispatch]);
 
     return (
-        <div>            
+        <div>   
+            
+                   
             <div className={styles.productList}>
             <div className={styles.productHeader}>
                     <p>ID</p>
@@ -33,7 +35,8 @@ const Products = () => {
                     <p>Precio</p>
                     <p>Existencia</p>
                     <p>Disponible</p>
-                    <p> </p>
+                    <p>Show </p>
+                    <p></p>
                 </div>
                 {products?.map((mang) => (
                     <ProductItem key={mang.id} data={mang} />

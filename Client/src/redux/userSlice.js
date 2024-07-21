@@ -1,20 +1,19 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
+const backendUrl = import.meta.env.VITE_BACKEND;
 
 // Async thunk to fetch user data
-export const fetchUser = createAsyncThunk('user/fetchUser', async () => {
-
+export const fetchUser = createAsyncThunk("user/fetchUser", async () => {
   try {
-    const response = await axios.get('/api/user'); // Replace with your API endpoint
-    return response.data;
-    
+    const { data } = await axios.get(`${backendUrl}/user/`); // Replace with your API endpoint
+    return data;
   } catch (error) {
-    console.log("error in fetchUser: ", error.message)
+    console.log("error in fetchUser: ", error.message);
   }
 });
 
 const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState: {
     items: {},
     loading: false,

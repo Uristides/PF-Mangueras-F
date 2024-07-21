@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import { Link } from 'react-router-dom';
-import { MdOutlineShoppingCart } from 'react-icons/md';
+import { useEffect, useState } from 'react';
+import AddButton from '../AddRemoveCart/AddButton';
 import styles from './Card.module.css';
+import { Link, useSearchParams } from 'react-router-dom';
 
 const Card = (props) => {
   const {
@@ -19,6 +20,15 @@ const Card = (props) => {
     stockId,
   } = props.data;
 
+  const [productId, setProductId] = useState(id);
+  const [quantity, setQuantity] = useState('1');
+
+  const [productWithQuantity, setProductWithQuantity] = useState('');
+
+  useEffect(() => {
+    setProductWithQuantity(`${productId}:${quantity}`);
+  });
+
   return (
     <div className={styles.container}>
       <Link to={`/detail/${id}`}>
@@ -34,9 +44,7 @@ const Card = (props) => {
           </h2>
         </article>
       </Link>
-      <button className={styles.cartButton}>
-        <MdOutlineShoppingCart />
-      </button>
+      <AddButton available={available} data={productWithQuantity} />
     </div>
   );
 };

@@ -12,18 +12,22 @@
 .form {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
     background: white;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    gap: 1em;
 }
 
 .label {
     display: flex;
     flex-direction: column;
-    margin-bottom: 15px;
+    
     font-size: 14px;
     font-weight: bold;
+    width: 100%;
 }
 
 .input {
@@ -42,7 +46,8 @@
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
-    margin-top: 10px;
+    width: 95%;
+    
 }
 
 .button:hover {
@@ -57,9 +62,34 @@
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
-    margin-top: 10px;
+    width: 95%;
 }
 
+
+.facebookButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: .4em;
+    background-color: #3b5998;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 90%;
+  }
+  
+  .facebookButton:hover {
+    background-color: #365492;
+  }
+  
+  .hiddenText {
+    display: none;
+  }
+  
 .switchButton:hover {
     background-color: #5a6268;
 }
@@ -69,6 +99,7 @@
     font-size: 12px;
     margin-top: 5px;
 }
+
 .ok{
     color: rgb(14, 255, 26);
     font-size: 12px;
