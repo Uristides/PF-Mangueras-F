@@ -4,7 +4,7 @@ import Filters from '../../components/Filters/Filters';
 import Cards from '../../components/Cards/Cards';
 import styles from './home.module.css';
 import { UserContext } from '../../App.jsx';
-import CreateButton from '../../components/CrearBoton/CreateButton.jsx'; // Ajusta la ruta al botón de creación
+import CreateButton from '../../components/CrearBoton/CreateButton.jsx'; 
 
 const Home = ({ sesion }) => {
   const { user } = useContext(UserContext);
@@ -40,14 +40,12 @@ const Home = ({ sesion }) => {
         </div>
         <section className={styles.section}>
           {user && <h1 className={styles.h1}>Bienvenido {user.name}</h1>}
-          <CreateButton /> {/* Renderiza el botón de creación */}
-          <button onClick={logout} className={styles.logout}>
-            Cerrar sesión
-          </button>
+          
+          
         </section>
       </section>
     </main>
   );
 };
 
-export default Home; // Exporta el componente Home como predeterminado
+export default Home; 

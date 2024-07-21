@@ -1,13 +1,13 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import styles from "./login.module.css";
-import FacebookLogin from 'react-facebook-login';
-
+import { FacebookBtn } from "../../components/FacebookBtn/Facebookbtn";
+import { FaFacebookF } from "react-icons/fa";
+import { UserContext } from "../../App";
 
 
 export function Login({ sesion }) {
-  
-  
-  
+  const {user} = useContext(UserContext);
+  const [showLogin, setShowLogin] = useState(false);
   const [loged, setLoged] = useState(false);
   const [info, setInfo] = useState({
     nombre: "",
@@ -66,7 +66,7 @@ export function Login({ sesion }) {
     }
   };
 
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       if (loged) {
@@ -115,53 +115,11 @@ export function Login({ sesion }) {
       throw new Error(error.message);
     }
   };
-  const responseFacebook = async(response) => {
-    const respuesta = await fetch("http://localhost:3001/user/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        email: response.email,
-        password:"",
-      }),
-    });
-    if (respuesta.ok) {
-      sesion();
-      
-    }
-    else{
-      const respuesta = await fetch("http://localhost:3001/user/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          name: response.name,
-          email: response.email,
-          password: "",
-          tercero:true
-        }),
-      });
-      if (respuesta.ok) {
-        //responseFacebook().then(() => {
-        //  window.location.reload();
-        //}).catch((error) => {
-        //  console.error("Error al realizar login o registro:", error);
-       // });
-      }else{
-        console.log("error");
-      }
-    }
-    console.log(response);
-    
-  }
-  const facebookLogin = ()=>{
 
-    window.location.reload();
-  }
+    
+    
+  
+  
   return (
     <main className={styles.main}>
       
@@ -204,20 +162,23 @@ export function Login({ sesion }) {
           <span className={styles.error}>{errors.contraseña}</span>
         </label>
         {loged && (
+          
           <button
             type="submit"
             className={styles.button}
             onClick={handleSubmit}
-            disabled={!!errors.correo || !!errors.contraseña}
+            disabled={errors.correo || errors.contraseña}
           >
             Iniciar sesión
           </button>
+         
+         
         )}
         {!loged && (
           <button
             className={styles.button}
             onClick={handleSubmit}
-            disabled={!!errors.correo || !!errors.nombre || !!errors.contraseña}
+            disabled={errors.correo || errors.nombre || errors.contraseña}
           >
             Registrarse
           </button>
@@ -229,6 +190,7 @@ export function Login({ sesion }) {
           onClick={(e) => {
             e.preventDefault();
             setLoged(!loged);
+            setNotOkey("");
           }}
           className={styles.switchButton}
         >
@@ -236,18 +198,9 @@ export function Login({ sesion }) {
             ? "¿No tienes cuenta? Regístrate"
             : "¿Ya tienes cuenta? Iniciar sesión"}
         </button>
-        <div> 
-         {loged && <FacebookLogin
-            appId="982520500336766"
-            //autoLoad={true}
-            fields="name,email,picture"
-            onClick={facebookLogin}
-            callback={responseFacebook}
-            textButton=""
-            icon="fa-facebook"
-            cssClass={styles.facebook}
-          />}
-        </div>
+        {loged && <div className={styles.facebookButton}>  {showLogin ?<FacebookBtn setShowLogin={setShowLogin}></FacebookBtn>:<button onClick={()=>setShowLogin(true)} disabled={user} className={styles.facebookButton}><FaFacebookF /></button>}</div>}
+        
+        
       </form>
     </main>
   );

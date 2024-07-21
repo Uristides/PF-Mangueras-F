@@ -4,6 +4,7 @@ import styles from "./Navbar.module.css";
 import { useContext } from "react";
 import { UserContext } from "../../App";
 
+
 const Navbar = ({sesion}) => {
   const { pathname } = useLocation();
 
@@ -15,7 +16,7 @@ const Navbar = ({sesion}) => {
   };
 
   const logout = async () => {
-    console.log(document.cookie);
+    
     const out = await fetch("http://localhost:3001/user/logout", {
       method: "POST",
       credentials: "include",
@@ -73,7 +74,7 @@ const Navbar = ({sesion}) => {
           REGISTRARSE
         </Link>
       ) : (
-        <button className={styles.loginButton} onClick={logout}> CERRAR SESIÓN </button>
+        <button className={styles.logout} onClick={logout}> CERRAR SESIÓN </button>
       )}
     </div>
   );

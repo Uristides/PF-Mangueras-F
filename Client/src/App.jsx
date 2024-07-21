@@ -1,15 +1,12 @@
-// src/App.jsx
 import React, { useState, useEffect, createContext } from "react";
-//import './App.css'
 import { Login } from "./views/login/login";
-import Home from "./views/home/home"; // Importa Home como el componente predeterminado
-
+import Home from "./views/home/home"; 
 import About from "./components/About/about";
 import Cart from "./components/Cart/Cart";
 import Detail from "./components/Detail/Detail";
 import Dashboard from "./views/admin/Dashboard";
 import Navbar from "./components/Navbar/Navbar";
-import CreateForm from './path-to/../components/CreateForm/CreateForm'; // Ajusta la ruta según donde tengas el archivo CreateForm.jsx
+import CreateForm from './path-to/../components/CreateForm/CreateForm'; 
 
 
 import { Route, Routes } from "react-router-dom";
@@ -34,7 +31,10 @@ function App() {
     }
   };
   
+
+
   useEffect(() => {
+    
     const handleBeforeUnload = (event) => sesion();
     const handleLoad = () => sesion();
 
@@ -46,7 +46,7 @@ function App() {
       window.removeEventListener("load", handleLoad);
     };
   }, []);
-  console.log(user);
+  
   return (
     <>
       <UserContext.Provider value={{ user, setUser }}>
@@ -54,7 +54,7 @@ function App() {
         <Routes>
         <Route path="/create" element={<CreateForm />} />
 
-          <Route path="/" element={<Home sesion={sesion} />} /> {/* Renderiza Home correctamente */}
+          <Route path="/" element={<Home sesion={sesion} />} /> 
           {user ? (
             <Route path="/cart" element={<Cart />} />
           ) : (
