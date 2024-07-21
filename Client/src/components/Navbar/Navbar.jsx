@@ -82,10 +82,7 @@ const Navbar = ({sesion}) => {
           REGISTRARSE
         </Link>
       ) : (
-        <button className={styles.loginButton} onClick={logout}>
-          {" "}
-          CERRAR SESIÓN{" "}
-        </button>
+        <button className={styles.logout} onClick={logout}> CERRAR SESIÓN </button>
       )}
     </div>
   );
