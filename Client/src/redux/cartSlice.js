@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-const backendUrl = process.env.VITE_BACKEND;
+const backendUrl = import.meta.env.VITE_BACKEND;
 
 export const fetchCart = createAsyncThunk("cart/fetchCart", async (userId) => {
   try {
@@ -14,11 +14,9 @@ export const fetchCart = createAsyncThunk("cart/fetchCart", async (userId) => {
   }
 });
 
-export const addToCart = createAsyncThunk(
-  "cart/addToCart",
-  async (itemInfo) => {
+export const addToCart = createAsyncThunk("cart/addToCart",async (itemInfo) => {
     try {
-      const { data } = await axios.post("${backendUrl}/user/addCart", itemInfo);
+      const { data } = await axios.post(`${backendUrl}/user/addCart`, itemInfo);
       return data;
     } catch (error) {
       console.error("Error in addToCart: ", error.message);

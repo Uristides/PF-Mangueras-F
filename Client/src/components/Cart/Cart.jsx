@@ -5,7 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCart } from "../../redux/cartSlice";
 import axios from "axios";
-const backendUrl = process.env.VITE_BACKEND;
+const backendUrl = import.meta.env.VITE_BACKEND;
 
 const Cart = () => {
   const { user } = useContext(UserContext);
@@ -36,7 +36,7 @@ const Cart = () => {
   const calculateTotalPrice = async (items) => {
     let total = 0;
     for (const item of items) {
-      const [id, amount] = item.split(":");
+      const [id, amount] = item.split(":").map(Number);
       const price = await fetchProductPrice(id);
       total += price * parseInt(amount, 10);
     }

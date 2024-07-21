@@ -42,14 +42,12 @@ const Home = ({ sesion }) => {
         </div>
         <section className={styles.section}>
           {user && <h1 className={styles.h1}>Bienvenido {user.name}</h1>}
-          {/* <CreateButton /> Renderiza el botón de creación */}
-          <button onClick={logout} className={styles.logout}>
-            Cerrar sesión
-          </button>
+          
+          
         </section>
       </section>
     </main>
   );
 };
 
-export default Home; // Exporta el componente Home como predeterminado
+export default Home; 

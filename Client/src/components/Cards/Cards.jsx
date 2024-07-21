@@ -123,6 +123,7 @@ const Cards = ({ filters, sortOption, searchQuery }) => {
           <Card key={mang.id} id={mang.id} data={mang} />
         )): <div>Nothing here</div>}
       </article>
+      {products.length > 0 &&
       <article className={styles.pagination}>
         <button onClick={prevPage} className={styles.button} disabled={currentPage === 0}>
           ⬅️ Anterior
@@ -133,7 +134,7 @@ const Cards = ({ filters, sortOption, searchQuery }) => {
         <button onClick={nextPage} className={styles.button} disabled={currentPage >= totalPages - 1}>
           Siguiente ➡️
         </button>
-      </article>
+      </article>}
     </section>
   );
 };

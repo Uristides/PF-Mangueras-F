@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchItems } from '../../../redux/itemsSlice';
-import {Routes, Route} from 'react-router-dom'
 import ProductItem from './ProductItem';
-import EditItem from '../Edit/EditItem';
 import styles from './Products.module.css';
 
 const Products = () => {
@@ -26,6 +24,7 @@ const Products = () => {
 
     return (
         <div>   
+            
                    
             <div className={styles.productList}>
             <div className={styles.productHeader}>

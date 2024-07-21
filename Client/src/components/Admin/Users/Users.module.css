@@ -1,0 +1,20 @@
+.usersList {
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.usersHeader {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #f4f4f4;
+    border-bottom: 1px solid #ddd;
+}
+
+.usersHeader p {
+    flex: 1;
+    margin: 0;
+    text-align: center;
+}
