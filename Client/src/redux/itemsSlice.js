@@ -12,31 +12,53 @@ export const fetchItems = createAsyncThunk("items/fetchItems", async () => {
   }
 });
 
-
-export const productCreate = createAsyncThunk("products/productCreate",async (newProduct) => {
-
-    const newItem = {
-        name: newProduct.name,
-        image: newProduct.image,
-        price: newProduct.price.toString(),
-        diameter: newProduct.diameter.toString(),
-        longitude: newProduct.longitude.toString(),
-        description: newProduct.description,
-        stock: newProduct.stock,
-        available: newProduct.available,
-        show: newProduct.show,
-        brand: newProduct.brand,
-        type: newProduct.type,
-        }
+export const editItem = createAsyncThunk("products/editItem", async (oldProduct) => {
+  const editedItem = {
+    id: oldProduct.id,
+    name: oldProduct.name,
+    image: oldProduct.image,
+    price: oldProduct.price.toString(),
+    diameter: oldProduct.diameter.toString(),
+    longitude: oldProduct.longitude.toString(),
+    description: oldProduct.description,
+    stock: oldProduct.stock,
+    available: oldProduct.available,
+    show: oldProduct.show,
+    brand: oldProduct.brand,
+    type: oldProduct.type,
+  };
   try {
-    const { data } = await axios.post(`${backendUrl}/products/`, newItem  );
+    const { data } = await axios.post(`${backendUrl}/products/edit/`, editedItem);
+    if(data) alert("Producto editado exitosamente!")
     return data;
   } catch (error) {
-    console.error("Error in addToCart: ", error.message);
+    console.error("Error in editItem: ", error.message);
     throw error;
   }
-}
-);
+});
+
+export const productCreate = createAsyncThunk("products/productCreate", async (newProduct) => {
+  const newItem = {
+    name: newProduct.name,
+    image: newProduct.image,
+    price: newProduct.price.toString(),
+    diameter: newProduct.diameter.toString(),
+    longitude: newProduct.longitude.toString(),
+    description: newProduct.description,
+    stock: newProduct.stock,
+    available: newProduct.available,
+    show: newProduct.show,
+    brand: newProduct.brand,
+    type: newProduct.type,
+  };
+  try {
+    const { data } = await axios.post(`${backendUrl}/products/`, newItem);
+    return data;
+  } catch (error) {
+    console.error("Error in productCreate: ", error.message);
+    throw error;
+  }
+});
 
 export const searchItems = createAsyncThunk(
   "items/searchItems",
@@ -147,6 +169,22 @@ const itemsSlice = createSlice({
         state.status = "failed";
         state.error = action.error.message;
       })
+      .addCase(editItem.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(editItem.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        // Update the edited item in the items array
+        const index = state.items.findIndex(item => item.id === action.payload.id);
+        if (index !== -1) {
+          state.items[index] = action.payload;
+          state.allItems[index] = action.payload;
+        }
+      })
+      .addCase(editItem.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      });
   },
 });
 

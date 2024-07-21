@@ -129,6 +129,7 @@ const CreateForm = () => {
 
   return (
     <div className={styles["create-form"]}>
+      
       <h1>Crear Nueva Manguera</h1>
       <form onSubmit={handleSubmit}>
         <div>
