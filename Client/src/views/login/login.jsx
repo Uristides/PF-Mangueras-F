@@ -2,6 +2,8 @@ import { useState } from "react";
 import styles from "./login.module.css";
 //import FacebookLogin from 'react-facebook-login';
 const backendUrl = import.meta.env.VITE_BACKEND;
+import React, { useRef } from "react";
+import emailjs from "@emailjs/browser";
 
 export function Login({ sesion }) {
   const [loged, setLoged] = useState(false);
@@ -99,7 +101,29 @@ export function Login({ sesion }) {
             password: info.contraseña,
           }),
         });
+
         if (response.ok) {
+          const sendEmail = () => {
+            emailjs
+              .sendForm(
+                "service_fummu1u",
+                "template_u4639sc",
+                { to_email: info.correo },
+                {
+                  publicKey: "rLKlxYuL7bCRIIRjV",
+                }
+              )
+              .then(
+                () => {
+                  console.log("SUCCESS!");
+                },
+                (error) => {
+                  console.log("FAILED...", error.text);
+                }
+              );
+          };
+
+          sendEmail();
           sesion();
           setOkey("¡Registro exitoso! Ahora inicia sesión.");
         } else {
