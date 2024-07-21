@@ -114,12 +114,14 @@ const Cards = ({ filters, sortOption, searchQuery }) => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 0));
   };
 
+  console.log("Products in cards: ", products)
+
   return (
     <section className={styles.section}>
       <article className={styles.Card}>
-        {products.map((mang) => (
+        {products ? products.map((mang) => (
           <Card key={mang.id} id={mang.id} data={mang} />
-        ))}
+        )): <div>Nothing here</div>}
       </article>
       {products.length > 0 &&
       <article className={styles.pagination}>

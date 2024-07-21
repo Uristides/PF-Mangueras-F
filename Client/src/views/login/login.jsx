@@ -3,7 +3,7 @@ import styles from "./login.module.css";
 import { FacebookBtn } from "../../components/FacebookBtn/Facebookbtn";
 import { FaFacebookF } from "react-icons/fa";
 import { UserContext } from "../../App";
-
+const backendUrl = import.meta.env.VITE_BACKEND;
 
 export function Login({ sesion }) {
   const {user} = useContext(UserContext);
@@ -72,7 +72,7 @@ const handleSubmit = async (e) => {
       if (loged) {
         console.log("Logged: , ingreso");
 
-        const response = await fetch("http://localhost:3001/user/login", {
+        const response = await fetch(`${backendUrl}/user/login`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -91,7 +91,7 @@ const handleSubmit = async (e) => {
           setNotOkey("contraseña o correo invalidos");
         }
       } else {
-        const response = await fetch("http://localhost:3001/user/register", {
+        const response = await fetch(`${backendUrl}/user/register`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -122,12 +122,10 @@ const handleSubmit = async (e) => {
   
   return (
     <main className={styles.main}>
-      
       <h1>{loged ? "Iniciar sesión" : "Registrarse"}</h1>
       <form className={styles.form}>
         {!loged && (
           <label className={styles.label}>
-            
             Nombre de usuario :
             <input
               type="text"

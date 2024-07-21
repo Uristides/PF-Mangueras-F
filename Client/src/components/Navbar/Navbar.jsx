@@ -3,12 +3,12 @@ import SearchBar from "../SearchBar/SearchBar";
 import styles from "./Navbar.module.css";
 import { useContext } from "react";
 import { UserContext } from "../../App";
-
+const backendUrl = import.meta.env.VITE_BACKEND;
 
 const Navbar = ({sesion}) => {
   const { pathname } = useLocation();
 
-  const { setUser, user } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   
   const deletCokie = (param) => {
     document.cookie =
@@ -16,8 +16,10 @@ const Navbar = ({sesion}) => {
   };
 
   const logout = async () => {
-    
-    const out = await fetch("http://localhost:3001/user/logout", {
+   //console.log(document.cookie);
+    const out = await fetch(`${backendUrl}/user/logout`, {
+   
+
       method: "POST",
       credentials: "include",
       header: { "Content-Type": "aplication/json" },
@@ -32,7 +34,6 @@ const Navbar = ({sesion}) => {
   
   return (
     <div className={styles.main}>
-      
       <Link to="/" className={styles.linksTitle}>
         The Hose Factory
       </Link>
@@ -43,7 +44,7 @@ const Navbar = ({sesion}) => {
         >
           INICIO
         </Link>
-        <Link 
+        <Link
           to="/cart"
           className={`${styles.links} ${
             pathname === "/cart" ? styles.active : ""
@@ -59,6 +60,9 @@ const Navbar = ({sesion}) => {
         >
           SOBRE NOSOTROS
         </Link>
+
+        {user && user.rol === "Admin" &&(
+
         <Link
           to="/admin"
           className={`${styles.links} ${
@@ -67,6 +71,10 @@ const Navbar = ({sesion}) => {
         >
           ADMINISTRADOR
         </Link>
+
+        )}
+
+
       </div>
       <SearchBar />
       {!user ? (
