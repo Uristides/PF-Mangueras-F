@@ -97,6 +97,7 @@ const CreateForm = () => {
      try {
       await dispatch(productCreate(formData)).unwrap()
       setSuccessMessage("Producto Creado exitosamente!")
+
       setLoading(false)
       setFormData({
         name: '',
@@ -111,6 +112,7 @@ const CreateForm = () => {
         brand: '',
         type: '',
         })
+        alert("Producto Creado exitosamente!")
       
      } catch (error) {
       console.log("Error submit: ", error.message)
@@ -253,7 +255,7 @@ const CreateForm = () => {
           {loading ? "Creando..." : "Crear Manguera"}
         </button>
       </form>
-      {successMessage && <p>{successMessage}</p>}
+      {/* {successMessage && <p>{successMessage}</p>} */}
       <button onClick={handleClick}>Volver a Home</button>
     </div>
   );

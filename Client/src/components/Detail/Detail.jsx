@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState, useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useParams, useNavigate } from 'react-router-dom';
 import AddButton from '../AddRemoveCart/AddButton';
 import styles from './Detail.module.css';
 import { UserContext } from '../../App';
@@ -8,6 +9,8 @@ const backendUrl = import.meta.env.VITE_BACKEND;
 
 const Detail = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const cartItems = useSelector((state) => state.cart.items);
   const productId = id.toString();
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
@@ -41,8 +44,21 @@ const Detail = () => {
     setQuantity(Number(event.target.value));
   };
 
+  const handleBackClick = ()=>{
+    navigate(-1)
+  }
   return (
+    <div>
+      <div className={styles.backButtonDiv}>
+
+      <button 
+      className={styles.backButton}
+      onClick={handleBackClick}>
+        Atras
+      </button>
+        </div>
     <div className={styles.container}>
+      
       <h1>Manguera de tipo: {product?.type}</h1>
 
       {product ? (
@@ -84,7 +100,7 @@ const Detail = () => {
                           Math.max(prevQuantity - 1, 1)
                         )
                       }
-                    >
+                      >
                       -
                     </button>
                     <input
@@ -102,8 +118,8 @@ const Detail = () => {
                       onClick={() =>
                         setQuantity((prevQuantity) =>
                           Math.min(prevQuantity + 1, product.stock)
-                        )
-                      }
+                    )
+                  }
                     >
                       +
                     </button>
@@ -113,6 +129,7 @@ const Detail = () => {
                   </div>
                   <AddButton
                     data={productWithQuantity}
+                    stock={product.stock}
                     available={product.available}
                     className={styles.carritoButton}
                   />
@@ -131,6 +148,7 @@ const Detail = () => {
         <p>Loading...</p>
       )}
     </div>
+      </div>
   );
 };
 

@@ -8,7 +8,7 @@ const CartItem = ({ id, amount, onPriceUpdate }) => {
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(amount);
 
-  useEffect(() => {
+  useEffect(() => { 
     const fetchProduct = async () => {
       try {
         const { data } = await axios.get(`${backendUrl}/products/${id}`);

@@ -14,3 +14,4 @@ services:
       commands:
         install: npm i --legacy-peer-deps
         build: npm run build
+

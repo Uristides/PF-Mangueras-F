@@ -6,6 +6,25 @@
   font-family: Arial, sans-serif;
 }
 
+
+.backButton{
+  background-color: #00b853;
+  margin-top: 50px;
+  margin-left: 100px; 
+  border: 0;
+  border-radius: 2em;
+  width: 5%;
+  height: 25px;
+  text-decoration: underline;
+  color: white;
+}
+
+.backButton:hover{
+  background-color: #218838;
+  cursor: pointer;
+}
+
+
 .productContainer {
   display: flex;
   justify-content: space-around;
