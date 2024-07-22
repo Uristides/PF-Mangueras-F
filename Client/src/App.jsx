@@ -10,7 +10,7 @@ import Dashboard from './views/admin/Dashboard';
 import Navbar from './components/Navbar/Navbar';
 import EditItem from './components/Admin/Edit/EditItem';
 
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 //import './App.css'
 
 export const UserContext = createContext(null);
@@ -59,10 +59,10 @@ function App() {
           ) : (
             <Route path='/cart' element={<Login sesion={sesion} />} />
           )}
-          {user.rol === 'Admin' ? (
+          {user && user.rol === 'Admin' ? (
             <Route path='/admin/*' element={<Dashboard />} />
           ) : (
-            <Route path='/cart' element={<Login sesion={sesion} />} />
+            <Route path='/cart' element={<Navigate to="/login" />} />
           )}
           <Route path='/detail/:id' element={<Detail />} />
           <Route path='/login' element={<Login sesion={sesion} />} />
