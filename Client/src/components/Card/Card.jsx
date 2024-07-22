@@ -40,7 +40,7 @@ const Card = (props) => {
           <h2 className={styles.otherData}>Marca: {brand}</h2>
           <h2 className={styles.otherData}>Tipo: {type}</h2>
           <h2 className={styles.otherData}>
-            Precio: <span className={styles.price}>{price}$</span>
+            Precio: <span className={styles.price}>${price}</span>
           </h2>
         </article>
       </Link>

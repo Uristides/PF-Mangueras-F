@@ -1,10 +1,13 @@
 import CartItem from "../CartItem/CartItem";
+import Checkout from "../Checkout/Checkout";
 import styles from "./Cart.module.css";
 import { UserContext } from "../../App";
 import { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCart } from "../../redux/cartSlice";
 import axios from "axios";
+import { Link } from "react-router-dom";
+
 const backendUrl = import.meta.env.VITE_BACKEND;
 
 const Cart = () => {
@@ -21,14 +24,14 @@ const Cart = () => {
     };
 
     loadCartData();
-  }, [user.id, dispatch, userCart?.length]);
+  }, [user.id, dispatch, userCart.length, totalPrice]);
 
   const fetchProductPrice = async (id) => {
     try {
       const { data } = await axios.get(`${backendUrl}/products/${id}`);
       return data.price;
     } catch (error) {
-      console.error("Error fetching product price:", error);
+      console.error('Error fetching product price:', error);
       return 0; // Default value if there's an error
     }
   };
@@ -36,7 +39,7 @@ const Cart = () => {
   const calculateTotalPrice = async (items) => {
     let total = 0;
     for (const item of items) {
-      const [id, amount] = item.split(":").map(Number);
+      const [id, amount] = item.split(':').map(Number);
       const price = await fetchProductPrice(id);
       total += price * parseInt(amount, 10);
     }
@@ -52,19 +55,23 @@ const Cart = () => {
 
       calculateAndSetTotalPrice();
     }
-  }, [userCart]);
+  }, [userCart, userCart.length]);
 
   if (loading) {
     return <div>Loading...</div>; // Show loading message while data is being fetched
   }
 
+  if(userCart.length === 0){
+    return <div>Carrito Vacio. Ve a comprar!</div>
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.secondContainer}>
-        My Cart
+        <h2 className={styles.title}>Mi Carrito</h2>
         <hr />
         {userCart?.map((item, index) => {
-          const [id, amount] = item.split(":");
+          const [id, amount] = item.split(':');
           return (
             <CartItem
               key={index} // Use index or id if unique
@@ -77,13 +84,19 @@ const Cart = () => {
           );
         })}
       </div>
-
       <div className={styles.subTotal}>
         Summary
         <div className={styles.subTotalContainer}>
           <div>Subtotal: ${totalPrice}</div>
           <div>Shipping: $TBD</div>
           <div>Estimated Total: ${totalPrice}</div>
+          {totalPrice && totalPrice > 1 &&(
+
+            <button><Link
+            to="/checkout"
+            state={{ totalPrice }}
+            >Checkout</Link></button>
+          )}
         </div>
       </div>
     </div>
