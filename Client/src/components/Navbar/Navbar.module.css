@@ -16,11 +16,14 @@
 }
 
 .linksContainer {
+  display: flex;
+  flex-direction: column;
   margin: 20px 0px;
+  align-items: center;
 }
 
 .links {
-  margin: 0px 30px;
+  margin: 10px 0;
   font-size: 18px;
   font-family: Arial, sans-serif;
   font-weight: bold;
@@ -42,24 +45,35 @@
   display: inline-block;
   padding: 1em;
   border: none;
-  border-radius: .3em;
+  border-radius: 0.3em;
   text-decoration: none;
   font-size: 1em;
   font-weight: bold;
-  color: #fff; 
-  background-color: #007bff; 
+  color: #fff;
+  background-color: #007bff;
   margin: 1em;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .loginButton:hover {
-  background-color: #0056b3; 
+  background-color: #0056b3;
   transform: scale(1.05);
 }
 
+@media (min-width: 480px) {
+  .links {
+    margin: 5px 20px;
+  }
+
+  .loginButton {
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+}
+
 .loginButton:active {
-  background-color: #004085; 
+  background-color: #004085;
   transform: scale(0.98);
 }
 
@@ -67,13 +81,13 @@
   display: inline-block;
   padding: 1em;
   border: none;
-  border-radius: .3em;
-  
+  border-radius: 0.3em;
+
   text-decoration: none;
-  font-size: .5em;
+  font-size: 0.5em;
   font-weight: bold;
   color: #fff;
-  background-color: #007bff; 
+  background-color: #007bff;
   margin: 1em;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
@@ -81,15 +95,14 @@
 }
 
 .logout:hover {
-  background-color: #0056b3; 
+  background-color: #0056b3;
   transform: scale(1.03);
 }
 
 .logout:active {
-  background-color: #004085; 
+  background-color: #004085;
   transform: scale(0.98);
 }
-
 
 @media (min-width: 768px) {
   .main {
@@ -99,11 +112,16 @@
     padding: 10px 50px;
   }
 
+  .linksContainer {
+    flex-direction: row;
+  }
+
   .linksTitle {
     font-size: 25px;
   }
 
   .links {
+    margin: 0 30px;
     font-size: 20px;
   }
 
@@ -111,7 +129,7 @@
     padding: 10px 20px;
     font-size: 16px;
   }
-  .logout{
+  .logout {
     font-size: 16px;
   }
 }

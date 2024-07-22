@@ -1,21 +1,19 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
 const backendUrl = import.meta.env.VITE_BACKEND;
 
-
-
-export const fetchBrands = createAsyncThunk("brands/fetchBrands", async () => {
+export const fetchBrands = createAsyncThunk('brands/fetchBrands', async () => {
   try {
     const { data } = await axios.get(`${backendUrl}/products/brands`);
     return data;
   } catch (error) {
-    console.error("Error in fetchBrands:", error.message);
+    console.error('Error in fetchBrands:', error.message);
     throw error;
   }
 });
 
 const brandsSlice = createSlice({
-  name: "brands",
+  name: 'brands',
   initialState: {
     brands: [],
     loading: false,
