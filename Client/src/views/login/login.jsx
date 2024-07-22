@@ -4,9 +4,10 @@ import { FacebookBtn } from "../../components/FacebookBtn/Facebookbtn";
 import { FaFacebookF } from "react-icons/fa";
 import { UserContext } from "../../App";
 const backendUrl = import.meta.env.VITE_BACKEND;
+import emailjs from "@emailjs/browser";
 
 export function Login({ sesion }) {
-  const {user} = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [showLogin, setShowLogin] = useState(false);
   const [loged, setLoged] = useState(false);
   const [info, setInfo] = useState({
@@ -21,6 +22,7 @@ export function Login({ sesion }) {
     correo: "Por favor, introduce un correo electrónico válido.",
     contraseña: "La contraseña debe tener al menos 8 caracteres",
   });
+
   const handleChangue = (e) => {
     const { name, value } = e.target;
     setOkey("");
@@ -66,12 +68,10 @@ export function Login({ sesion }) {
     }
   };
 
-const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       if (loged) {
-        console.log("Logged: , ingreso");
-
         const response = await fetch(`${backendUrl}/user/login`, {
           method: "POST",
           headers: {
@@ -86,9 +86,9 @@ const handleSubmit = async (e) => {
 
         if (response.ok) {
           sesion();
-          setOkey("¡Inicio de sesion exitoso!");
+          setOkey("¡Inicio de sesión exitoso!");
         } else {
-          setNotOkey("contraseña o correo invalidos");
+          setNotOkey("Contraseña o correo inválidos");
         }
       } else {
         const response = await fetch(`${backendUrl}/user/register`, {
@@ -103,41 +103,62 @@ const handleSubmit = async (e) => {
             password: info.contraseña,
           }),
         });
+
         if (response.ok) {
+          const sendEmail = () => {
+            emailjs
+              .send(
+                "service_fummu1u",
+                "template_u4639sc",
+                {
+                  to_name: info.nombre,
+                  to_email: info.correo,
+                  message: "¡Gracias por registrarte!",
+                },
+                "rLKlxYuL7bCRIIRjV"
+              )
+              .then(
+                () => {
+                  console.log("SUCCESS!");
+                  setOkey("¡Registro exitoso! Ahora inicia sesión.");
+                },
+                (error) => {
+                  console.error("FAILED...", error.text);
+                  setNotOkey("Error al enviar el correo de confirmación.");
+                }
+              );
+          };
+
+          sendEmail();
           sesion();
-          setOkey("¡Registro exitoso! Ahora inicia sesión.");
         } else {
-          setNotOkey("correo en uso");
+          setNotOkey("Correo en uso");
         }
       }
     } catch (error) {
-      console.log(error.message);
-      throw new Error(error.message);
+      console.error(error.message);
+      setNotOkey("Ocurrió un error durante el registro/inicio de sesión.");
     }
   };
 
-    
-    
-  
-  
   return (
     <main className={styles.main}>
       <h1>{loged ? "Iniciar sesión" : "Registrarse"}</h1>
-      <form className={styles.form}>
+      <form className={styles.form} onSubmit={handleSubmit}>
         {!loged && (
           <label className={styles.label}>
-            Nombre de usuario :
+            Nombre de usuario:
             <input
               type="text"
               name="nombre"
               onChange={handleChangue}
               className={styles.input}
-            ></input>
+            />
             <span className={styles.error}>{errors.nombre}</span>
           </label>
         )}
         <label className={styles.label}>
-          Ingresar correo electrónico :
+          Ingresar correo electrónico:
           <input
             type="email"
             required
@@ -148,7 +169,7 @@ const handleSubmit = async (e) => {
           <span className={styles.error}>{errors.correo}</span>
         </label>
         <label className={styles.label}>
-          Tu contraseña :
+          Tu contraseña:
           <input
             type="password"
             required
@@ -159,23 +180,18 @@ const handleSubmit = async (e) => {
           />
           <span className={styles.error}>{errors.contraseña}</span>
         </label>
-        {loged && (
-          
+        {loged ? (
           <button
             type="submit"
             className={styles.button}
-            onClick={handleSubmit}
             disabled={errors.correo || errors.contraseña}
           >
             Iniciar sesión
           </button>
-         
-         
-        )}
-        {!loged && (
+        ) : (
           <button
+            type="submit"
             className={styles.button}
-            onClick={handleSubmit}
             disabled={errors.correo || errors.nombre || errors.contraseña}
           >
             Registrarse
@@ -196,9 +212,21 @@ const handleSubmit = async (e) => {
             ? "¿No tienes cuenta? Regístrate"
             : "¿Ya tienes cuenta? Iniciar sesión"}
         </button>
-        {loged && <div className={styles.facebookButton}>  {showLogin ?<FacebookBtn setShowLogin={setShowLogin}></FacebookBtn>:<button onClick={()=>setShowLogin(true)} disabled={user} className={styles.facebookButton}><FaFacebookF /></button>}</div>}
-        
-        
+        {loged && (
+          <div className={styles.facebookButton}>
+            {showLogin ? (
+              <FacebookBtn setShowLogin={setShowLogin} />
+            ) : (
+              <button
+                onClick={() => setShowLogin(true)}
+                disabled={user}
+                className={styles.facebookButton}
+              >
+                <FaFacebookF />
+              </button>
+            )}
+          </div>
+        )}
       </form>
     </main>
   );

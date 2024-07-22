@@ -1,88 +1,86 @@
-import { Link, useLocation } from "react-router-dom";
-import SearchBar from "../SearchBar/SearchBar";
-import styles from "./Navbar.module.css";
-import { useContext } from "react";
-import { UserContext } from "../../App";
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
+import { Link, useLocation } from 'react-router-dom';
+import { useContext } from 'react';
+import { UserContext } from '../../App';
+import SearchBar from '../SearchBar/SearchBar';
+import styles from './Navbar.module.css';
 const backendUrl = import.meta.env.VITE_BACKEND;
 
-const Navbar = ({sesion}) => {
+const Navbar = ({ sesion }) => {
   const { pathname } = useLocation();
 
   const { user } = useContext(UserContext);
-  
+
   const deletCokie = (param) => {
     document.cookie =
-      param + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      param + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
   };
 
   const logout = async () => {
-   //console.log(document.cookie);
+    //console.log(document.cookie);
     const out = await fetch(`${backendUrl}/user/logout`, {
-   
-
-      method: "POST",
-      credentials: "include",
-      header: { "Content-Type": "aplication/json" },
+      method: 'POST',
+      credentials: 'include',
+      header: { 'Content-Type': 'aplication/json' },
     });
     if (out.ok) {
-      deletCokie("lacookie");
+      deletCokie('lacookie');
       sesion();
       return location.reload();
-      
     }
   };
-  
+
   return (
     <div className={styles.main}>
-      <Link to="/" className={styles.linksTitle}>
+      <Link to='/' className={styles.linksTitle}>
         The Hose Factory
       </Link>
-      <div className={styles.linksContainer}>
+      <div className={`${styles.linksContainer}`}>
         <Link
-          to="/"
-          className={`${styles.links} ${pathname === "/" ? styles.active : ""}`}
+          to='/'
+          className={`${styles.links} ${pathname === '/' ? styles.active : ''}`}
         >
           INICIO
         </Link>
         <Link
-          to="/cart"
+          to='/cart'
           className={`${styles.links} ${
-            pathname === "/cart" ? styles.active : ""
+            pathname === '/cart' ? styles.active : ''
           }`}
         >
           CARRO
         </Link>
         <Link
-          to="/about"
+          to='/about'
           className={`${styles.links} ${
-            pathname === "/about" ? styles.active : ""
+            pathname === '/about' ? styles.active : ''
           }`}
         >
           SOBRE NOSOTROS
         </Link>
 
-        {user && user.rol === "Admin" &&(
-
-        <Link
-          to="/admin"
-          className={`${styles.links} ${
-            pathname === "/admin" ? styles.active : ""
-          }`}
-        >
-          ADMINISTRADOR
-        </Link>
-
+        {user && user.rol === 'Admin' && (
+          <Link
+            to='/admin'
+            className={`${styles.links} ${
+              pathname === '/admin' ? styles.active : ''
+            }`}
+          >
+            ADMINISTRADOR
+          </Link>
         )}
-
-
       </div>
       <SearchBar />
       {!user ? (
-        <Link to="/login" className={styles.loginButton}>
+        <Link to='/login' className={styles.loginButton}>
           REGISTRARSE
         </Link>
       ) : (
-        <button className={styles.logout} onClick={logout}> CERRAR SESIÓN </button>
+        <button className={styles.logout} onClick={logout}>
+          {' '}
+          CERRAR SESIÓN{' '}
+        </button>
       )}
     </div>
   );

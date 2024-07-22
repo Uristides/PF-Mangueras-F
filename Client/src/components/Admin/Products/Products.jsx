@@ -7,7 +7,7 @@ import styles from './Products.module.css';
 const Products = () => {
     const [products, setProducts] = useState([]);
 
-    const mangueras = useSelector((state) => state.items.allItems);
+    const mangueras = useSelector((state) => state.items.items);
     const status = useSelector((state) => state.items.status);
 
     const dispatch = useDispatch();
@@ -20,6 +20,7 @@ const Products = () => {
         if (status === 'idle') {
           dispatch(fetchItems());
         }
+        console.log("Mangueras in Products: ", mangueras)
     }, [status, dispatch]);
 
     return (

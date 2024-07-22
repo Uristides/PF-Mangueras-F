@@ -78,7 +78,7 @@ const Cards = ({ filters, sortOption, searchQuery }) => {
   const itemsPerPage = 4;
 
   const dispatch = useDispatch();
-  const mangueras = useSelector((state) => state.items.items); 
+  const mangueras = useSelector((state) => state.items.items);
   const status = useSelector((state) => state.items.status);
 
   // Fetch items when status is 'idle'
@@ -90,7 +90,7 @@ const Cards = ({ filters, sortOption, searchQuery }) => {
 
   // Handle updates to products based on filters, sortOption, searchQuery, and mangueras
   useEffect(() => {
-    const filteredAndSortedItems = mangueras
+    const filteredAndSortedItems = mangueras;
 
     setProducts(
       filteredAndSortedItems.slice(
@@ -114,27 +114,40 @@ const Cards = ({ filters, sortOption, searchQuery }) => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 0));
   };
 
-  console.log("Products in cards: ", products)
+  console.log('Products in cards: ', products);
 
   return (
     <section className={styles.section}>
       <article className={styles.Card}>
-        {products ? products.map((mang) => (
-          <Card key={mang.id} id={mang.id} data={mang} />
-        )): <div>Nothing here</div>}
+        {products ? (
+          products.map((mang) => (
+            <Card key={mang.id} id={mang.id} data={mang} />
+          ))
+        ) : (
+          <div>Nothing here</div>
+        )}
       </article>
-      {products.length > 0 &&
-      <article className={styles.pagination}>
-        <button onClick={prevPage} className={styles.button} disabled={currentPage === 0}>
-          ⬅️ Anterior
-        </button>
-        <button onClick={restart} className={styles.refresh}>
-          {currentPage + 1}
-        </button>
-        <button onClick={nextPage} className={styles.button} disabled={currentPage >= totalPages - 1}>
-          Siguiente ➡️
-        </button>
-      </article>}
+      {products.length > 0 && (
+        <article className={styles.pagination}>
+          <button
+            onClick={prevPage}
+            className={styles.button}
+            disabled={currentPage === 0}
+          >
+            ⬅️ Anterior
+          </button>
+          <button onClick={restart} className={styles.refresh}>
+            {currentPage + 1}
+          </button>
+          <button
+            onClick={nextPage}
+            className={styles.button}
+            disabled={currentPage >= totalPages - 1}
+          >
+            Siguiente ➡️
+          </button>
+        </article>
+      )}
     </section>
   );
 };

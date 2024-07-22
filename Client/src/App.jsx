@@ -1,16 +1,16 @@
-import React, { useState, useEffect, createContext } from "react";
-import { Login } from "./views/login/login";
-import Home from "./views/home/home";
+import React, { useState, useEffect, createContext } from 'react';
+import { Login } from './views/login/login';
+import Home from './views/home/home';
 const backendUrl = import.meta.env.VITE_BACKEND;
 
-import About from "./components/About/about";
-import Cart from "./components/Cart/Cart";
-import Detail from "./components/Detail/Detail";
-import Dashboard from "./views/admin/Dashboard";
-import Navbar from "./components/Navbar/Navbar";
-import EditItem from "./components/Admin/Edit/EditItem";
+import About from './components/About/about';
+import Cart from './components/Cart/Cart';
+import Detail from './components/Detail/Detail';
+import Dashboard from './views/admin/Dashboard';
+import Navbar from './components/Navbar/Navbar';
+import EditItem from './components/Admin/Edit/EditItem';
 
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from 'react-router-dom';
 //import './App.css'
 
 export const UserContext = createContext(null);
@@ -22,7 +22,7 @@ function App() {
   const sesion = async () => {
     try {
       const data = await fetch(`${backendUrl}/user/protected`, {
-        credentials: "include",
+        credentials: 'include',
       });
       if (data.ok) {
         setUser(await data.json());
@@ -33,46 +33,40 @@ function App() {
       throw new Error(error.message);
     }
   };
-  
-
 
   useEffect(() => {
-    
     const handleBeforeUnload = (event) => sesion();
     const handleLoad = () => sesion();
 
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    window.addEventListener("load", handleLoad);
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener('load', handleLoad);
 
     return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-      window.removeEventListener("load", handleLoad);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener('load', handleLoad);
     };
   }, []);
-  
+
   return (
     <>
       <UserContext.Provider value={{ user, setUser }}>
         <Navbar sesion={sesion} />
         <Routes>
-          <Route path="/" element={<Home sesion={sesion} />} />{" "}
+          <Route path='/' element={<Home sesion={sesion} />} />{' '}
           {/* Renderiza Home correctamente */}
           {user ? (
-            <Route path="/cart" element={<Cart />} />
+            <Route path='/cart' element={<Cart />} />
           ) : (
-            <Route path="/cart" element={<Login sesion={sesion} />} />
+            <Route path='/cart' element={<Login sesion={sesion} />} />
           )}
-
-          {user.rol==="Admin" ? (
-            <Route path="/admin/*" element={<Dashboard />} />
-            
-          ): (
-            <Route path="/cart" element={<Login sesion={sesion} />} />
-
+          {user && user.rol === 'Admin' ? (
+            <Route path='/admin/*' element={<Dashboard />} />
+          ) : (
+            <Route path='/cart' element={<Navigate to="/login" />} />
           )}
-          <Route path="/detail/:id" element={<Detail />} />
-          <Route path="/login" element={<Login sesion={sesion} />} />
-          <Route path="/about" element={<About />} />
+          <Route path='/detail/:id' element={<Detail />} />
+          <Route path='/login' element={<Login sesion={sesion} />} />
+          <Route path='/about' element={<About />} />
           {/* <Route path='/admin/product/edit/:id' element={<EditItem/>}/> */}
         </Routes>
       </UserContext.Provider>

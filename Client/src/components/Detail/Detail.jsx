@@ -1,11 +1,10 @@
-import axios from "axios";
-import { useEffect, useState, useContext } from "react";
-import { useParams } from "react-router-dom";
-import AddButton from "../AddRemoveCart/AddButton";
+import axios from 'axios';
+import { useEffect, useState, useContext } from 'react';
+import { useParams } from 'react-router-dom';
+import AddButton from '../AddRemoveCart/AddButton';
 import styles from './Detail.module.css';
-import { UserContext } from "../../App";
+import { UserContext } from '../../App';
 const backendUrl = import.meta.env.VITE_BACKEND;
-
 
 const Detail = () => {
   const { id } = useParams();
@@ -14,19 +13,18 @@ const Detail = () => {
   const [quantity, setQuantity] = useState(1);
   const [quantityString, setQuantityString] = useState('1');
   const [productWithQuantity, setProductWithQuantity] = useState('');
-  const { user } = useContext(UserContext)
+  const { user } = useContext(UserContext);
 
-  console.log("Product in detail: ", product);
-
+  console.log('Product in detail: ', product);
 
   useEffect(() => {
     const getById = async (id) => {
       try {
-     const { data } = await axios.get(`${backendUrl}/products/${id}`);
+        const { data } = await axios.get(`${backendUrl}/products/${id}`);
         if (data) {
           setProduct(data);
           setProductWithQuantity(`${id}:1`);
-        }        
+        }
       } catch (error) {
         console.log(error.message);
       }
@@ -44,7 +42,7 @@ const Detail = () => {
   };
 
   return (
-    <div>
+    <div className={styles.container}>
       <h1>Manguera de tipo: {product?.type}</h1>
 
       {product ? (
@@ -52,7 +50,7 @@ const Detail = () => {
           <div>
             <img
               src={product.image}
-              alt="product"
+              alt='product'
               className={styles.productImage}
             />
           </div>
@@ -70,48 +68,63 @@ const Detail = () => {
 
           <div className={styles.moneyContainer}>
             <h2>{product.price} $</h2>
-            {product.available ? product.stock > 0 && (
+            {product.available ? (
+              product.stock > 0 && (
                 <div>
-                  <p style={{ color: 'green' }}><strong>Disponible</strong></p>
+                  <p style={{ color: 'green' }}>
+                    <strong>Disponible</strong>
+                  </p>
                   <p>En existencia: {product.stock}</p>
 
                   <label>Cantidad: </label>
                   <div>
-                    <button onClick={() => setQuantity(prevQuantity => Math.max(prevQuantity - 1, 1))}>-</button>
+                    <button
+                      onClick={() =>
+                        setQuantity((prevQuantity) =>
+                          Math.max(prevQuantity - 1, 1)
+                        )
+                      }
+                    >
+                      -
+                    </button>
                     <input
-                      type="number"
+                      type='number'
                       value={quantity}
                       onChange={(e) => {
-                        const value = Math.max(1, Math.min(product.stock, Number(e.target.value)));
+                        const value = Math.max(
+                          1,
+                          Math.min(product.stock, Number(e.target.value))
+                        );
                         setQuantity(value);
                       }}
                     />
-                    <button onClick={() => setQuantity(prevQuantity => Math.min(prevQuantity + 1, product.stock))}>+</button>
+                    <button
+                      onClick={() =>
+                        setQuantity((prevQuantity) =>
+                          Math.min(prevQuantity + 1, product.stock)
+                        )
+                      }
+                    >
+                      +
+                    </button>
                     {product.stock === quantity && (
                       <p>**{product.stock} es la maxima cantidad disponible </p>
                     )}
-                  </div>       
+                  </div>
                   <AddButton
                     data={productWithQuantity}
                     available={product.available}
                     className={styles.carritoButton}
-                  /> 
-                  {!user && (
-                    <p>Inicia sesion para agregar a carrito</p>
-                  )}               
-                </div> 
-              ) : (
-                <p style={{ color: 'red' }}><strong>No Disponible</strong></p>
-              )}
-
-
-           
-             
-              
-            <br/>
-
-            
-            
+                  />
+                  {!user && <p>Inicia sesion para agregar a carrito</p>}
+                </div>
+              )
+            ) : (
+              <p style={{ color: 'red' }}>
+                <strong>No Disponible</strong>
+              </p>
+            )}
+            <br />
           </div>
         </div>
       ) : (

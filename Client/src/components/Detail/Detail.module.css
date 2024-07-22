@@ -1,34 +1,90 @@
-.productContainer{
-    display: flex;
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  font-family: Arial, sans-serif;
 }
 
-
-
-.productImage{
-    margin: 50px;
-    max-width: 300px;
+.productContainer {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  max-width: 1200px;
+  margin-top: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
+.imageContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-.moneyContainer{
-    margin: 2%;
+.productImage {
+  max-width: 300px;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.productContainer > div {
+  flex: 1;
+  margin: 0 20px;
+}
+
+.productContainer h1,
+.productContainer h3,
+.productContainer h2 {
+  margin: 10px 0;
+}
+
+.productContainer p {
+  margin: 5px 0;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid #ddd;
+  margin: 10px 0;
+}
+
+.moneyContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.moneyContainer h2 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+#quantity-select {
+  padding: 5px;
+  margin-top: 10px;
 }
 
 .carritoButton {
-    margin: 10px;
-    border: none;
-    border-radius: 20px;
-    height: 7%;
-    width: 200px;
-    background-color: orange;   
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin-top: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-.carritoButton:hover{
-    background-color: orangered;
-    color: white;
+.carritoButton:disabled {
+  background-color: #ddd;
+  cursor: not-allowed;
 }
 
-.carritoButton:disabled{
-    background-color: grey;
-    cursor: not-allowed;
+.carritoButton:hover:not(:disabled) {
+  background-color: #218838;
 }
