@@ -1,3 +1,6 @@
-commands:
-  - name: Install Dependencies
-    command: npm i --legacy-peer-deps
+deployments:
+  - name: production
+    build:
+      command: npm install --legacy-peer-deps
+    start:
+      command: npm start
