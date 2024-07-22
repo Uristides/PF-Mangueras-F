@@ -5,6 +5,7 @@ const backendUrl = import.meta.env.VITE_BACKEND;
 export const fetchItems = createAsyncThunk('items/fetchItems', async () => {
   try {
     const response = await axios.get(`${backendUrl}/products/`);
+    // console.log("fetchItems function: ", response.data)
     return response.data;
   } catch (error) {
     console.error('Error in fetchItems: ', error.message);
