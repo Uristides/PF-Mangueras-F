@@ -1,10 +1,10 @@
-import CartItem from "../CartItem/CartItem";
-import styles from "./Cart.module.css";
-import { UserContext } from "../../App";
-import { useContext, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchCart } from "../../redux/cartSlice";
-import axios from "axios";
+import CartItem from '../CartItem/CartItem';
+import styles from './Cart.module.css';
+import { UserContext } from '../../App';
+import { useContext, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchCart } from '../../redux/cartSlice';
+import axios from 'axios';
 const backendUrl = import.meta.env.VITE_BACKEND;
 
 const Cart = () => {
@@ -28,7 +28,7 @@ const Cart = () => {
       const { data } = await axios.get(`${backendUrl}/products/${id}`);
       return data.price;
     } catch (error) {
-      console.error("Error fetching product price:", error);
+      console.error('Error fetching product price:', error);
       return 0; // Default value if there's an error
     }
   };
@@ -36,7 +36,7 @@ const Cart = () => {
   const calculateTotalPrice = async (items) => {
     let total = 0;
     for (const item of items) {
-      const [id, amount] = item.split(":").map(Number);
+      const [id, amount] = item.split(':').map(Number);
       const price = await fetchProductPrice(id);
       total += price * parseInt(amount, 10);
     }
@@ -61,10 +61,10 @@ const Cart = () => {
   return (
     <div className={styles.container}>
       <div className={styles.secondContainer}>
-        My Cart
+        <h2 className={styles.title}>Mi Carrito</h2>
         <hr />
         {userCart?.map((item, index) => {
-          const [id, amount] = item.split(":");
+          const [id, amount] = item.split(':');
           return (
             <CartItem
               key={index} // Use index or id if unique
@@ -77,7 +77,6 @@ const Cart = () => {
           );
         })}
       </div>
-
       <div className={styles.subTotal}>
         Summary
         <div className={styles.subTotalContainer}>
