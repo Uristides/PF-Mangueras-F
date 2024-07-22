@@ -47,19 +47,27 @@ export const editItem = createAsyncThunk(
 export const productCreate = createAsyncThunk(
   'products/productCreate',
   async (newProduct) => {
+
+    function stringToBoolean(str) {
+      return str.toLowerCase() === "true";
+    }
+    
+   
     const newItem = {
       name: newProduct.name,
       image: newProduct.image,
       price: newProduct.price.toString(),
       diameter: newProduct.diameter.toString(),
       longitude: newProduct.longitude.toString(),
-      description: newProduct.description,
-      stock: newProduct.stock,
-      available: newProduct.available,
-      show: newProduct.show,
       brand: newProduct.brand,
       type: newProduct.type,
+      description: newProduct.description,
+      stock: Number(newProduct.stock),
+      available: stringToBoolean(newProduct.available),
+      show: stringToBoolean(newProduct.show),
     };
+    
+    
     try {
       const { data } = await axios.post(`${backendUrl}/products/`, newItem);
       return data;
@@ -182,7 +190,7 @@ const itemsSlice = createSlice({
       .addCase(productCreate.fulfilled, (state, action) => {
         state.status = 'succeeded';
         // Add the newly created item to the items array
-        state.allItems.push(action.payload);
+        // state.allItems.push(action.payload);
         state.items.push(action.payload);
       })
       .addCase(productCreate.rejected, (state, action) => {

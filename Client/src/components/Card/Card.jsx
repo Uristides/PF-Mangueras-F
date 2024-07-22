@@ -1,9 +1,7 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
 import { useEffect, useState } from 'react';
 import AddButton from '../AddRemoveCart/AddButton';
 import styles from './Card.module.css';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Card = (props) => {
   const {
@@ -15,9 +13,9 @@ const Card = (props) => {
     longitude,
     brand,
     type,
-    description,
+    description, 
     available,
-    stockId,
+    stock,
   } = props.data;
 
   const [productId, setProductId] = useState(id);
@@ -27,7 +25,14 @@ const Card = (props) => {
 
   useEffect(() => {
     setProductWithQuantity(`${productId}:${quantity}`);
-  });
+  }, [productId, quantity]);
+
+  const handleQuantityChange = (event) => {
+    const value = event.target.value;
+    if (value <= stock) {
+      setQuantity(value);
+    }
+  };
 
   return (
     <div className={styles.container}>
@@ -44,7 +49,8 @@ const Card = (props) => {
           </h2>
         </article>
       </Link>
-      <AddButton available={available} data={productWithQuantity} />
+      
+      <AddButton available={available} data={productWithQuantity} stock={stock}/>
     </div>
   );
 };

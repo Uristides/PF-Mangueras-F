@@ -78,7 +78,8 @@ const Cards = ({ filters, sortOption, searchQuery }) => {
   const itemsPerPage = 4;
 
   const dispatch = useDispatch();
-  const mangueras = useSelector((state) => state.items.items);
+  const allMangueras = useSelector((state) => state.items.items);
+  const mangueras = allMangueras.filter((mang)=> mang.show === true)
   const status = useSelector((state) => state.items.status);
 
   // Fetch items when status is 'idle'
@@ -98,7 +99,7 @@ const Cards = ({ filters, sortOption, searchQuery }) => {
         (currentPage + 1) * itemsPerPage
       )
     );
-  }, [mangueras, filters, sortOption, searchQuery, currentPage, itemsPerPage]);
+  }, [allMangueras, filters, sortOption, searchQuery, currentPage, itemsPerPage]);
 
   const totalPages = Math.ceil(mangueras.length / itemsPerPage);
 
