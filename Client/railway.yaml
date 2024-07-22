@@ -1,6 +1,16 @@
-deployments:
-  - name: production
+project: PF-Mangueras-F
+
+services:
+  - name: frontend
+    start: npm run dev -- --host
+    env:
+      VITE_BACKEND: thehosefactorybackend.up.railway.app
+      VITE_CLOUD_NAME: ts1412
+      VITE_PRESET_NAME: rhsln6wx
+    ports:
+      - 4173
     build:
-      command: npm install --legacy-peer-deps
-    start:
-      command: npm start
+      builder: "node"
+      commands:
+        install: npm i --legacy-peer-deps
+        build: npm run build
