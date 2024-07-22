@@ -4,7 +4,7 @@ services:
   - name: frontend
     start: npm run dev -- --host
     env:
-      VITE_BACKEND: https://thehosefactorybackend.up.railway.app/
+      VITE_BACKEND: https://thehosefactorybackend.up.railway.app
       VITE_CLOUD_NAME: ts1412
       VITE_PRESET_NAME: rhsln6wx
     ports:
@@ -14,4 +14,3 @@ services:
       commands:
         install: npm i --legacy-peer-deps
         build: npm run build
-
