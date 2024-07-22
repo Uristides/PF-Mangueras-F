@@ -8,7 +8,7 @@ import Cart from './components/Cart/Cart';
 import Detail from './components/Detail/Detail';
 import Dashboard from './views/admin/Dashboard';
 import Navbar from './components/Navbar/Navbar';
-import EditItem from './components/Admin/Edit/EditItem';
+import Checkout from './components/Checkout/Checkout';
 
 import { Route, Routes, Navigate } from 'react-router-dom';
 //import './App.css'
@@ -55,9 +55,15 @@ function App() {
           <Route path='/' element={<Home sesion={sesion} />} />{' '}
           {/* Renderiza Home correctamente */}
           {user ? (
+            <>
             <Route path='/cart' element={<Cart />} />
+            <Route path='/checkout' element={<Checkout />} />
+            </>
+           
+           
           ) : (
             <Route path='/cart' element={<Login sesion={sesion} />} />
+            
           )}
           {user && user.rol === 'Admin' ? (
             <Route path='/admin/*' element={<Dashboard />} />

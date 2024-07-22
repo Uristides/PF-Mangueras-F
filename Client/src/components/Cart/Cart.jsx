@@ -1,10 +1,13 @@
-import CartItem from '../CartItem/CartItem';
-import styles from './Cart.module.css';
-import { UserContext } from '../../App';
-import { useContext, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchCart } from '../../redux/cartSlice';
-import axios from 'axios';
+import CartItem from "../CartItem/CartItem";
+import Checkout from "../Checkout/Checkout";
+import styles from "./Cart.module.css";
+import { UserContext } from "../../App";
+import { useContext, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCart } from "../../redux/cartSlice";
+import axios from "axios";
+import { Link } from "react-router-dom";
+
 const backendUrl = import.meta.env.VITE_BACKEND;
 
 const Cart = () => {
@@ -21,7 +24,7 @@ const Cart = () => {
     };
 
     loadCartData();
-  }, [user.id, dispatch, userCart?.length]);
+  }, [user.id, dispatch, userCart.length, totalPrice]);
 
   const fetchProductPrice = async (id) => {
     try {
@@ -52,10 +55,14 @@ const Cart = () => {
 
       calculateAndSetTotalPrice();
     }
-  }, [userCart]);
+  }, [userCart, userCart.length]);
 
   if (loading) {
     return <div>Loading...</div>; // Show loading message while data is being fetched
+  }
+
+  if(userCart.length === 0){
+    return <div>Carrito Vacio. Ve a comprar!</div>
   }
 
   return (
@@ -83,6 +90,13 @@ const Cart = () => {
           <div>Subtotal: ${totalPrice}</div>
           <div>Shipping: $TBD</div>
           <div>Estimated Total: ${totalPrice}</div>
+          {totalPrice && totalPrice > 1 &&(
+
+            <button><Link
+            to="/checkout"
+            state={{ totalPrice }}
+            >Checkout</Link></button>
+          )}
         </div>
       </div>
     </div>
