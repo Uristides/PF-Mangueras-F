@@ -1,10 +1,9 @@
-import { useContext, useState } from 'react';
-import styles from './login.module.css';
-import { FacebookBtn } from '../../components/FacebookBtn/Facebookbtn';
-import { FaFacebookF } from 'react-icons/fa';
-import { UserContext } from '../../App';
+import { useContext, useState } from "react";
+import styles from "./login.module.css";
+import { FacebookBtn } from "../../components/FacebookBtn/Facebookbtn";
+import { FaFacebookF } from "react-icons/fa";
+import { UserContext } from "../../App";
 const backendUrl = import.meta.env.VITE_BACKEND;
-import React, { useRef } from "react";
 import emailjs from "@emailjs/browser";
 
 export function Login({ sesion }) {
@@ -12,22 +11,23 @@ export function Login({ sesion }) {
   const [showLogin, setShowLogin] = useState(false);
   const [loged, setLoged] = useState(false);
   const [info, setInfo] = useState({
-    nombre: '',
-    correo: '',
-    contraseña: '',
+    nombre: "",
+    correo: "",
+    contraseña: "",
   });
-  const [okey, setOkey] = useState('');
-  const [notOkey, setNotOkey] = useState('');
+  const [okey, setOkey] = useState("");
+  const [notOkey, setNotOkey] = useState("");
   const [errors, setErrors] = useState({
-    nombre: 'Solo puedes poner letras en este campo',
-    correo: 'Por favor, introduce un correo electrónico válido.',
-    contraseña: 'La contraseña debe tener al menos 8 caracteres',
+    nombre: "Solo puedes poner letras en este campo",
+    correo: "Por favor, introduce un correo electrónico válido.",
+    contraseña: "La contraseña debe tener al menos 8 caracteres",
   });
+
   const handleChangue = (e) => {
     const { name, value } = e.target;
-    setOkey('');
-    setNotOkey('');
-    if (name === 'correo') {
+    setOkey("");
+    setNotOkey("");
+    if (name === "correo") {
       const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (regex.test(value)) {
         setInfo((state) => ({
@@ -36,33 +36,33 @@ export function Login({ sesion }) {
         }));
         setErrors((state) => ({
           ...state,
-          correo: '',
+          correo: "",
         }));
       } else {
         setErrors((state) => ({
           ...state,
-          correo: 'Formato de correo invalido',
+          correo: "Formato de correo invalido",
         }));
       }
-    } else if (name === 'contraseña') {
+    } else if (name === "contraseña") {
       if (value.length > 7) {
         setInfo((state) => ({ ...state, contraseña: value }));
-        setErrors((state) => ({ ...state, contraseña: '' }));
+        setErrors((state) => ({ ...state, contraseña: "" }));
       } else {
         setErrors((state) => ({
           ...state,
-          contraseña: 'Al menos 8 caracteres',
+          contraseña: "Al menos 8 caracteres",
         }));
       }
-    } else if (name === 'nombre') {
+    } else if (name === "nombre") {
       const regex = /^[a-zA-Z\s]+$/;
       if (regex.test(value)) {
         setInfo((state) => ({ ...state, nombre: value }));
-        setErrors((state) => ({ ...state, nombre: '' }));
+        setErrors((state) => ({ ...state, nombre: "" }));
       } else {
         setErrors((state) => ({
           ...state,
-          nombre: 'Solo puedes escribir letras en este campo',
+          nombre: "Solo puedes escribir letras en este campo",
         }));
       }
     }
@@ -72,14 +72,12 @@ export function Login({ sesion }) {
     e.preventDefault();
     try {
       if (loged) {
-        console.log('Logged: , ingreso');
-
         const response = await fetch(`${backendUrl}/user/login`, {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
-          credentials: 'include',
+          credentials: "include",
           body: JSON.stringify({
             email: info.correo,
             password: info.contraseña,
@@ -88,17 +86,17 @@ export function Login({ sesion }) {
 
         if (response.ok) {
           sesion();
-          setOkey('¡Inicio de sesion exitoso!');
+          setOkey("¡Inicio de sesión exitoso!");
         } else {
-          setNotOkey('contraseña o correo invalidos');
+          setNotOkey("Contraseña o correo inválidos");
         }
       } else {
         const response = await fetch(`${backendUrl}/user/register`, {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
-          credentials: 'include',
+          credentials: "include",
           body: JSON.stringify({
             name: info.nombre,
             email: info.correo,
@@ -109,89 +107,91 @@ export function Login({ sesion }) {
         if (response.ok) {
           const sendEmail = () => {
             emailjs
-              .sendForm(
+              .send(
                 "service_fummu1u",
                 "template_u4639sc",
-                { to_email: info.correo },
                 {
-                  publicKey: "rLKlxYuL7bCRIIRjV",
-                }
+                  to_name: info.nombre,
+                  to_email: info.correo,
+                  message: "¡Gracias por registrarte!",
+                },
+                "rLKlxYuL7bCRIIRjV"
               )
               .then(
                 () => {
                   console.log("SUCCESS!");
+                  setOkey("¡Registro exitoso! Ahora inicia sesión.");
                 },
                 (error) => {
-                  console.log("FAILED...", error.text);
+                  console.error("FAILED...", error.text);
+                  setNotOkey("Error al enviar el correo de confirmación.");
                 }
               );
           };
 
           sendEmail();
           sesion();
-          setOkey('¡Registro exitoso! Ahora inicia sesión.');
         } else {
-          setNotOkey('correo en uso');
+          setNotOkey("Correo en uso");
         }
       }
     } catch (error) {
-      console.log(error.message);
-      throw new Error(error.message);
+      console.error(error.message);
+      setNotOkey("Ocurrió un error durante el registro/inicio de sesión.");
     }
   };
+
   return (
     <main className={styles.main}>
-      <h1>{loged ? 'Iniciar sesión' : 'Registrarse'}</h1>
-      <form className={styles.form}>
+      <h1>{loged ? "Iniciar sesión" : "Registrarse"}</h1>
+      <form className={styles.form} onSubmit={handleSubmit}>
         {!loged && (
           <label className={styles.label}>
-            Nombre de usuario :
+            Nombre de usuario:
             <input
-              type='text'
-              name='nombre'
+              type="text"
+              name="nombre"
               onChange={handleChangue}
               className={styles.input}
-            ></input>
+            />
             <span className={styles.error}>{errors.nombre}</span>
           </label>
         )}
         <label className={styles.label}>
-          Ingresar correo electrónico :
+          Ingresar correo electrónico:
           <input
-            type='email'
+            type="email"
             required
-            name='correo'
+            name="correo"
             onChange={handleChangue}
             className={styles.input}
           />
           <span className={styles.error}>{errors.correo}</span>
         </label>
         <label className={styles.label}>
-          Tu contraseña :
+          Tu contraseña:
           <input
-            type='password'
+            type="password"
             required
-            name='contraseña'
-            minLength='8'
+            name="contraseña"
+            minLength="8"
             onChange={handleChangue}
             className={styles.input}
           />
           <span className={styles.error}>{errors.contraseña}</span>
         </label>
-        {loged && (
+        {loged ? (
           <button
-            type='submit'
+            type="submit"
             className={styles.button}
-            onClick={handleSubmit}
             disabled={errors.correo || errors.contraseña}
           >
             Iniciar sesión
           </button>
-        )}
-        {!loged && (
+        ) : (
           <button
+            type="submit"
             className={styles.button}
-            onClick={handleSubmit}
             disabled={errors.correo || errors.nombre || errors.contraseña}
           >
             Registrarse
@@ -204,19 +204,18 @@ export function Login({ sesion }) {
           onClick={(e) => {
             e.preventDefault();
             setLoged(!loged);
-            setNotOkey('');
+            setNotOkey("");
           }}
           className={styles.switchButton}
         >
           {loged
-            ? '¿No tienes cuenta? Regístrate'
-            : '¿Ya tienes cuenta? Iniciar sesión'}
+            ? "¿No tienes cuenta? Regístrate"
+            : "¿Ya tienes cuenta? Iniciar sesión"}
         </button>
         {loged && (
           <div className={styles.facebookButton}>
-            {' '}
             {showLogin ? (
-              <FacebookBtn setShowLogin={setShowLogin}></FacebookBtn>
+              <FacebookBtn setShowLogin={setShowLogin} />
             ) : (
               <button
                 onClick={() => setShowLogin(true)}
