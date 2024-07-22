@@ -3,11 +3,12 @@ import FacebookLogin from 'react-facebook-login';
 import { UserContext } from '../../App';
 import { useContext } from 'react';
 import { FaFacebookF } from 'react-icons/fa';
+const backendUrl = import.meta.env.VITE_BACKEND;
 export function FacebookBtn({ setShowLogin }) {
   const { user, setUser } = useContext(UserContext);
 
   async function login(params) {
-    const response = await fetch('http://localhost:3001/user/login', {
+    const response = await fetch(`${backendUrl}/user/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -19,7 +20,7 @@ export function FacebookBtn({ setShowLogin }) {
       }),
     });
     if (response.ok) {
-      const data = await fetch('http://localhost:3001/user/protected', {
+      const data = await fetch(`${backendUrl}/user/protected`, {
         credentials: 'include',
       });
       if (data.ok) {
@@ -33,7 +34,7 @@ export function FacebookBtn({ setShowLogin }) {
     }
   }
   async function auth(object) {
-    const register = await fetch('http://localhost:3001/user/register', {
+    const register = await fetch(`${backendUrl}/user/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

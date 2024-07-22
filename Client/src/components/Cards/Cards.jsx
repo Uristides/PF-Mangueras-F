@@ -79,7 +79,7 @@ const Cards = ({ filters, sortOption, searchQuery }) => {
 
   const dispatch = useDispatch();
   const allMangueras = useSelector((state) => state.items.items);
-  const mangueras = allMangueras.filter((mang)=> mang.show === true)
+  const mangueras = Array.isArray(allMangueras)? allMangueras.filter((mang)=> mang.show === true) : [];
   const status = useSelector((state) => state.items.status);
 
   // Fetch items when status is 'idle'

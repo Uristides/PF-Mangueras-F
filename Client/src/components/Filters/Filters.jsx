@@ -78,7 +78,7 @@ const Filters = () => {
         onChange={handleFilterBrandsChange}
       >
         <option value=''>Marcas:</option>
-        {brandsList?.map((brand) => (
+        {Array.isArray(brandsList) && brandsList.map((brand) => (
           <option key={brand.id} value={brand.brand}>
             {brand.brand}
           </option>
