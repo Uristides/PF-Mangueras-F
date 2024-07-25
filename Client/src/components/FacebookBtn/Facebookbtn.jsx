@@ -1,27 +1,27 @@
-import styles from './Facebookbtn.module.css';
-import FacebookLogin from 'react-facebook-login';
-import { UserContext } from '../../App';
-import { useContext } from 'react';
-import { FaFacebookF } from 'react-icons/fa';
+import styles from "./Facebookbtn.module.css";
+import FacebookLogin from "react-facebook-login";
+import { UserContext } from "../../App";
+import { useContext } from "react";
+import { FaFacebookF } from "react-icons/fa";
 const backendUrl = import.meta.env.VITE_BACKEND;
 export function FacebookBtn({ setShowLogin }) {
   const { user, setUser } = useContext(UserContext);
 
   async function login(params) {
     const response = await fetch(`${backendUrl}/user/login`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      credentials: 'include',
+      credentials: "include",
       body: JSON.stringify({
         email: params.email,
-        password: '',
+        password: "",
       }),
     });
     if (response.ok) {
       const data = await fetch(`${backendUrl}/user/protected`, {
-        credentials: 'include',
+        credentials: "include",
       });
       if (data.ok) {
         setShowLogin(false);
@@ -35,19 +35,44 @@ export function FacebookBtn({ setShowLogin }) {
   }
   async function auth(object) {
     const register = await fetch(`${backendUrl}/user/register`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      credentials: 'include',
+      credentials: "include",
       body: JSON.stringify({
         name: object.name,
         email: object.email,
-        password: '',
+        password: "",
         tercero: true,
       }),
     });
     if (register.ok) {
+      const sendEmail = () => {
+        emailjs
+          .send(
+            "service_fummu1u",
+            "template_u4639sc",
+            {
+              to_email: object.correo,
+              message: "¡Gracias por registrarte!",
+            },
+            "rLKlxYuL7bCRIIRjV"
+          )
+          .then(
+            () => {
+              console.log("SUCCESS!");
+              setOkey("¡Registro exitoso! Ahora inicia sesión.");
+            },
+            (error) => {
+              console.error("FAILED...", error.text);
+              setNotOkey("Error al enviar el correo de confirmación.");
+            }
+          );
+      };
+
+      sendEmail();
+
       login(object);
     } else {
       login(object);
@@ -60,10 +85,10 @@ export function FacebookBtn({ setShowLogin }) {
 
   return (
     <FacebookLogin
-      appId='982520500336766'
+      appId="982520500336766"
       autoLoad={true}
       cssClass={styles.facebookButton}
-      fields='name,email'
+      fields="name,email"
       callback={facebookResponse}
       textButton={<FaFacebookF />}
     ></FacebookLogin>

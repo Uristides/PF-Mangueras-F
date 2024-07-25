@@ -1,39 +1,39 @@
-import { useDispatch } from 'react-redux';
-import { useEffect, useState } from 'react';
-import { searchItems, fetchItems } from '../../redux/itemsSlice';
-import styles from './SearchBar.module.css';
+import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import styles from "./SearchBar.module.css";
+import { searchItems, fetchItems } from "../../redux/itemsSlice";
 
-const SearchBar = () => {
+const SearchBar = ({ onSearch }) => {
+  const [searchTerm, setSearchTerm] = useState(
+    localStorage.getItem("searchTerm") || ""
+  );
   const dispatch = useDispatch();
-  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    const savedSearchTerm = localStorage.getItem('searchTerm');
-    if (savedSearchTerm) {
-      setSearchTerm(savedSearchTerm);
-      dispatch(searchItems(savedSearchTerm));
-    } else {
-      dispatch(fetchItems());
+    if (searchTerm) {
+      onSearch(searchTerm);
     }
-  }, [dispatch]);
+  }, [searchTerm, onSearch]);
+
+  useEffect(() => {
+    if (!searchTerm) {
+      dispatch(fetchItems()); // Fetch all items if search term is cleared
+    }
+  }, [searchTerm, dispatch]);
 
   const handleSearchChange = (e) => {
     const { value } = e.target;
     setSearchTerm(value);
-    localStorage.setItem('searchTerm', value);
-    if (value === '') {
-      dispatch(fetchItems());
-    } else {
-      dispatch(searchItems(value));
-    }
+    localStorage.setItem("searchTerm", value);
+    onSearch(value);
   };
 
   return (
     <input
-      type='text'
-      name='search'
+      type="text"
+      name="search"
       className={styles.search}
-      placeholder='Nombre del producto'
+      placeholder="Nombre del producto"
       value={searchTerm}
       onChange={handleSearchChange}
     />

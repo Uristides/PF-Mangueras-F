@@ -1,98 +1,140 @@
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   fetchItems,
-  filterItemsByPrice,
+  filterItemsByPriceRange,
   filterByType,
   filterByBrand,
-} from '../../redux/itemsSlice';
-import { fetchBrands } from '../../redux/brandsSlice';
-import Sort from '../Sort/Sort';
-import styles from './Filters.module.css';
+  resetFilters,
+  sortItemsByNameAscending,
+  sortItemsByNameDescending,
+  sortItemsByPriceAscending,
+  sortItemsByPriceDescending,
+} from "../../redux/itemsSlice";
+import { fetchBrands } from "../../redux/brandsSlice";
+import { fetchTypes } from "../../redux/typesSlice";
+import Sort from "../Sort/Sort";
+import styles from "./Filters.module.css";
 
-const Filters = () => {
+const Filters = ({ filters, onFilterChange, onResetFilters }) => {
   const dispatch = useDispatch();
   const brandsList = useSelector((state) => state.brands.brands);
-  const [priceValue, setPriceValue] = useState('');
-  const [typeValue, setTypeValue] = useState('');
-  const [brandsValue, setBrandsValue] = useState('');
+  const typesList = useSelector((state) => state.types.types);
 
   useEffect(() => {
     dispatch(fetchItems());
     dispatch(fetchBrands());
-    const savedPriceValue = localStorage.getItem('priceValue');
-    const savedTypeValue = localStorage.getItem('typeValue');
-    const savedBrandValue = localStorage.getItem('brandValue');
+    dispatch(fetchTypes());
+    const savedFilters = [
+      "minPrice",
+      "maxPrice",
+      "typeValue",
+      "brandsValue",
+      "selectedSort",
+    ].reduce((acc, key) => {
+      const value = localStorage.getItem(key);
+      if (value) acc[key] = value;
+      return acc;
+    }, {});
+    onFilterChange(savedFilters);
+  }, [dispatch, onFilterChange]);
 
-    if (savedPriceValue) {
-      setPriceValue(savedPriceValue);
-      dispatch(filterItemsByPrice(savedPriceValue));
-    }
+  useEffect(() => {
+    const { minPrice, maxPrice, typeValue, brandsValue, sortValue } = filters;
+    if (minPrice || maxPrice)
+      dispatch(filterItemsByPriceRange({ minPrice, maxPrice }));
+    if (typeValue) dispatch(filterByType(typeValue));
+    if (brandsValue) dispatch(filterByBrand(brandsValue));
+    if (sortValue) handleSort(sortValue);
+  }, [filters, dispatch]);
 
-    if (savedTypeValue) {
-      setTypeValue(savedTypeValue);
-      dispatch(filterByType(savedTypeValue));
-    }
-
-    if (savedBrandValue) {
-      setBrandsValue(savedBrandValue);
-      dispatch(filterByBrand(savedBrandValue));
-    }
-  }, [dispatch]);
-
-  const handleFilterChange = (e) => {
-    const { value } = e.target;
-    setTypeValue(value);
-    dispatch(filterByType(value));
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    onFilterChange({ [name]: value });
+    if (name === "minPrice" || name === "maxPrice")
+      dispatch(filterItemsByPriceRange({ ...filters, [name]: value }));
+    if (name === "typeValue") dispatch(filterByType(value));
+    if (name === "brandsValue") dispatch(filterByBrand(value));
+    if (name === "sortValue") handleSort(value);
+    localStorage.setItem(name, value);
   };
 
-  const handleFilterPrice = (e) => {
-    const { value } = e.target;
-    setPriceValue(value);
-    dispatch(filterItemsByPrice(value));
+  const handleSort = (value) => {
+    switch (value) {
+      case "price_asc":
+        dispatch(sortItemsByPriceAscending());
+        break;
+      case "price_desc":
+        dispatch(sortItemsByPriceDescending());
+        break;
+      case "name_asc":
+        dispatch(sortItemsByNameAscending());
+        break;
+      case "name_desc":
+        dispatch(sortItemsByNameDescending());
+        break;
+      default:
+        break;
+    }
   };
 
-  const handleFilterBrandsChange = (e) => {
-    const { value } = e.target;
-    setBrandsValue(value);
-    dispatch(filterByBrand(value));
-  };
+  const { minPrice, maxPrice, typeValue, brandsValue, sortValue } = filters;
 
   return (
     <div className={styles.container}>
       <select
-        name='type'
-        onChange={handleFilterChange}
+        name="typeValue"
+        onChange={handleInputChange}
         className={styles.select}
         value={typeValue}
       >
-        <option value=''>Tipos:</option>
-        <option value='Domestico'>Domestico</option>
-        <option value='Jardineria'>Jardineria</option>
-        <option value='Agricultura'>Agricola</option>
+        <option value="">Tipos:</option>
+        {Array.isArray(typesList) &&
+          typesList.map((type) => (
+            <option key={type.id} value={type.type}>
+              {type.type}
+            </option>
+          ))}
       </select>
       <select
-        name='brand'
+        name="brandsValue"
+        onChange={handleInputChange}
         className={styles.select}
         value={brandsValue}
-        onChange={handleFilterBrandsChange}
       >
-        <option value=''>Marcas:</option>
-        {Array.isArray(brandsList) && brandsList.map((brand) => (
-          <option key={brand.id} value={brand.brand}>
-            {brand.brand}
-          </option>
-        ))}
+        <option value="">Marcas:</option>
+        {Array.isArray(brandsList) &&
+          brandsList.map((brand) => (
+            <option key={brand.id} value={brand.brand}>
+              {brand.brand}
+            </option>
+          ))}
       </select>
       <input
-        type='number'
-        value={priceValue}
-        name='price'
-        onChange={handleFilterPrice}
-        placeholder='Rango de precio'
+        type="number"
+        name="minPrice"
+        value={minPrice}
+        onChange={handleInputChange}
+        placeholder="Precio Mínimo"
         className={styles.input}
       />
-      <Sort />
+      <input
+        type="number"
+        name="maxPrice"
+        value={maxPrice}
+        onChange={handleInputChange}
+        placeholder="Precio Máximo"
+        className={styles.input}
+      />
+      <Sort
+        sortValue={sortValue}
+        onSortChange={(value) =>
+          handleInputChange({ target: { name: "sortValue", value } })
+        }
+      />
+      <button onClick={onResetFilters} className={styles.resetButton}>
+        Limpiar Filtros
+      </button>
     </div>
   );
 };
