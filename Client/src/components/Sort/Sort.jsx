@@ -1,55 +1,51 @@
-import { useDispatch } from 'react-redux';
-import { useEffect, useState } from 'react';
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
 import {
   sortItemsByNameAscending,
   sortItemsByNameDescending,
   sortItemsByPriceAscending,
   sortItemsByPriceDescending,
-} from '../../redux/itemsSlice';
-import styles from './Sort.module.css';
+} from "../../redux/itemsSlice";
+import styles from "./Sort.module.css";
 
-const Sort = () => {
+const Sort = ({ sortValue, onSortChange }) => {
   const dispatch = useDispatch();
-  const [selectedSort, setSelectedSort] = useState('');
 
   useEffect(() => {
-    const savedSort = localStorage.getItem('selectedSort');
-    if (savedSort) {
-      setSelectedSort(savedSort);
-      handleSort(savedSort);
+    if (sortValue) {
+      handleSort(sortValue);
     }
-  }, []);
+  }, [sortValue]);
 
   const handleSort = (value) => {
-    if (value === 'price_asc') {
+    if (value === "price_asc") {
       dispatch(sortItemsByPriceAscending());
-    } else if (value === 'price_desc') {
+    } else if (value === "price_desc") {
       dispatch(sortItemsByPriceDescending());
-    } else if (value === 'name_asc') {
+    } else if (value === "name_asc") {
       dispatch(sortItemsByNameAscending());
-    } else if (value === 'name_desc') {
+    } else if (value === "name_desc") {
       dispatch(sortItemsByNameDescending());
     }
   };
 
   const handleSortChange = (e) => {
     const { value } = e.target;
-    setSelectedSort(value);
-    localStorage.setItem('selectedSort', value);
-    handleSort(value);
+    localStorage.setItem("selectedSort", value);
+    onSortChange(value);
   };
 
   return (
     <select
       onChange={handleSortChange}
-      value={selectedSort}
+      value={sortValue}
       className={styles.select}
     >
-      <option value=''>Seleccionar</option>
-      <option value='price_asc'>Precio: Bajo a Alto</option>
-      <option value='price_desc'>Precio: Alto a Bajo</option>
-      <option value='name_asc'>Nombre: A-Z</option>
-      <option value='name_desc'>Nombre: Z-A</option>
+      <option value="">Ordenar por:</option>
+      <option value="price_asc">Precio: Bajo a Alto</option>
+      <option value="price_desc">Precio: Alto a Bajo</option>
+      <option value="name_asc">Nombre: A-Z</option>
+      <option value="name_desc">Nombre: Z-A</option>
     </select>
   );
 };
