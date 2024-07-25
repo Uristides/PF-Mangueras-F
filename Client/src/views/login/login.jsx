@@ -1,7 +1,6 @@
 import { useContext, useState } from "react";
 import styles from "./login.module.css";
-import { FacebookBtn } from "../../components/FacebookBtn/Facebookbtn";
-import { FaFacebookF } from "react-icons/fa";
+import { GoogleBtn } from "../../components/GoogleBtn/Googlebtn";
 import { UserContext } from "../../App";
 const backendUrl = import.meta.env.VITE_BACKEND;
 import emailjs from "@emailjs/browser";
@@ -18,9 +17,9 @@ export function Login({ sesion }) {
   const [okey, setOkey] = useState("");
   const [notOkey, setNotOkey] = useState("");
   const [errors, setErrors] = useState({
-    nombre: "Solo puedes poner letras en este campo",
-    correo: "Por favor, introduce un correo electrónico válido.",
-    contraseña: "La contraseña debe tener al menos 8 caracteres",
+    nombre: "",
+    correo: "",
+    contraseña: "",
   });
 
   const handleChangue = (e) => {
@@ -154,7 +153,7 @@ export function Login({ sesion }) {
               onChange={handleChangue}
               className={styles.input}
             />
-            <span className={styles.error}>{errors.nombre}</span>
+            {errors.nombre&&<span className={styles.error}>{errors.nombre}</span>}
           </label>
         )}
         <label className={styles.label}>
@@ -166,7 +165,7 @@ export function Login({ sesion }) {
             onChange={handleChangue}
             className={styles.input}
           />
-          <span className={styles.error}>{errors.correo}</span>
+          {errors.correo&&<span className={styles.error}>{errors.correo}</span>}
         </label>
         <label className={styles.label}>
           Tu contraseña:
@@ -178,7 +177,7 @@ export function Login({ sesion }) {
             onChange={handleChangue}
             className={styles.input}
           />
-          <span className={styles.error}>{errors.contraseña}</span>
+          {errors.contraseña&&<span className={styles.error}>{errors.contraseña}</span>}
         </label>
         {loged ? (
           <button
@@ -212,21 +211,7 @@ export function Login({ sesion }) {
             ? "¿No tienes cuenta? Regístrate"
             : "¿Ya tienes cuenta? Iniciar sesión"}
         </button>
-        {loged && (
-          <div className={styles.facebookButton}>
-            {showLogin ? (
-              <FacebookBtn setShowLogin={setShowLogin} />
-            ) : (
-              <button
-                onClick={() => setShowLogin(true)}
-                disabled={user}
-                className={styles.facebookButton}
-              >
-                <FaFacebookF />
-              </button>
-            )}
-          </div>
-        )}
+        {loged && <GoogleBtn></GoogleBtn>}
       </form>
     </main>
   );

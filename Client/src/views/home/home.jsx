@@ -1,3 +1,4 @@
+
 import React, { useContext, useState, useEffect } from "react";
 import Filters from "../../components/Filters/Filters";
 import Cards from "../../components/Cards/Cards";
@@ -75,26 +76,24 @@ const Home = ({ sesion, searchTerm }) => {
     dispatch(fetchItems());
   };
 
-  const borrarCookie = (nombre) => {
-    document.cookie =
-      nombre + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-  };
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = "https://cdn.voiceflow.com/widget/bundle.mjs";
+    script.type = "text/javascript";
+    script.onload = () => {
+      window.voiceflow.chat.load({
+        verify: { projectID: '66a1d9ccfe7738be9c3505fd' },
+        url: 'https://general-runtime.voiceflow.com',
+        versionID: 'production'
+      });
+    };
+    document.body.appendChild(script);
 
-  const logout = async () => {
-    const response = await fetch(`${backendUrl}/user/logout`, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (response.ok) {
-      borrarCookie("lacookie");
-      sesion();
-      return location.reload();
-    }
-  };
+    // Optional: Cleanup the script when the component is unmounted
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
 
   return (
     <main>
@@ -113,6 +112,7 @@ const Home = ({ sesion, searchTerm }) => {
           {user && <h1 className={styles.h1}>Bienvenido {user.name}</h1>}
         </section>
       </section>
+      
     </main>
   );
 };
