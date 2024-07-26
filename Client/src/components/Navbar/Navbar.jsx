@@ -1,16 +1,13 @@
 import { Link, useLocation } from "react-router-dom";
 import { useContext } from "react";
-import { useDispatch } from "react-redux";
 import { UserContext } from "../../App";
 import SearchBar from "../SearchBar/SearchBar";
-import { searchItems, fetchItems } from "../../redux/itemsSlice";
 import styles from "./Navbar.module.css";
 
 const backendUrl = import.meta.env.VITE_BACKEND;
 
 const Navbar = ({ sesion, onSearch }) => {
   const { pathname } = useLocation();
-  const dispatch = useDispatch();
   const { user } = useContext(UserContext);
 
   const deleteCookie = (name) => {
@@ -28,16 +25,6 @@ const Navbar = ({ sesion, onSearch }) => {
       deleteCookie("lacookie");
       sesion();
       location.reload();
-    }
-  };
-
-  const handleSearch = (term) => {
-    localStorage.setItem("searchTerm", term);
-    onSearch(term);
-    if (term === "") {
-      dispatch(fetchItems());
-    } else {
-      dispatch(searchItems(term));
     }
   };
 
@@ -80,7 +67,7 @@ const Navbar = ({ sesion, onSearch }) => {
           </Link>
         )}
       </div>
-      <SearchBar onSearch={handleSearch} />
+      <SearchBar onSearch={onSearch} />
       {!user ? (
         <Link to="/login" className={styles.loginButton}>
           REGISTRARSE

@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import styles from "./SearchBar.module.css";
-import { searchItems, fetchItems } from "../../redux/itemsSlice";
+import { fetchItems } from "../../redux/itemsSlice";
 
 const SearchBar = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState(
