@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext } from "react";
+import React, { useState, useEffect, createContext, useCallback } from "react";
 import { Login } from "./views/login/login";
 import Home from "./views/home/home";
 const backendUrl = import.meta.env.VITE_BACKEND;
@@ -16,7 +16,6 @@ export const UserContext = createContext(null);
 
 function App() {
   const [user, setUser] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
 
   const sesion = async () => {
     try {
@@ -48,14 +47,18 @@ function App() {
     };
   }, []);
 
+  const handleSearch = useCallback((term) => {
+    localStorage.setItem("searchTerm", term);
+  }, []);
+
   return (
     <>
       <UserContext.Provider value={{ user, setUser }}>
-        <Navbar sesion={sesion} onSearch={setSearchTerm} />
+        <Navbar sesion={sesion} onSearch={handleSearch} />
         <Routes>
           <Route
             path="/"
-            element={<Home sesion={sesion} searchTerm={searchTerm} />}
+            element={<Home sesion={sesion} onSearch={handleSearch} />}
           />
           {user ? (
             <>
