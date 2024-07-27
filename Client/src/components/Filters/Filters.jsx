@@ -84,6 +84,12 @@ const Filters = ({ filters, onFilterChange, onResetFilters }) => {
     [dispatch]
   );
 
+  const handleResetFilters = () => {
+    dispatch(resetFilters());
+    dispatch(fetchItems());
+    onResetFilters();
+  };
+
   const memoizedBrandsList = useMemo(() => brandsList, [brandsList]);
   const memoizedTypesList = useMemo(() => typesList, [typesList]);
 
@@ -141,7 +147,7 @@ const Filters = ({ filters, onFilterChange, onResetFilters }) => {
           handleInputChange({ target: { name: "sortValue", value } })
         }
       />
-      <button onClick={onResetFilters} className={styles.resetButton}>
+      <button onClick={handleResetFilters} className={styles.resetButton}>
         Limpiar Filtros
       </button>
     </div>
