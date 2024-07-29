@@ -1,61 +1,64 @@
-import { useContext, useEffect, useState } from "react"
-import { UserContext } from "../../App"
-import axios from "axios"
+import { useContext, useEffect, useState } from "react";
+import { UserContext } from "../../App";
+import axios from "axios";
+import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
+
 const backendUrl = import.meta.env.VITE_BACKEND;
 
+const CheckoutButton = ({ totalPrice }) => {
+  initMercadoPago("TEST-af207a73-ab9d-40df-84b6-480eafe93cc3", {
+    locale: "es-MX",
+  }); // Reemplaza 'YOUR_PUBLIC_KEY' con tu clave pública real
 
+  const { user } = useContext(UserContext);
+  const [possibleCheckout, setPossibleCheckout] = useState(false);
+  const [preferenceId, setPreferenceId] = useState(null);
 
-const CheckoutButton = ({totalPrice})=>{
+  useEffect(() => {
+    if (totalPrice > 1) setPossibleCheckout(true);
+  }, [totalPrice]);
 
-    const { user } = useContext(UserContext)
+  const handleCheckout = async () => {
+    const checkoutOrder = {
+      id: user.id,
+      totalAmount: totalPrice,
+    };
 
-    const [id, setId] = useState(user.id)
-    const [total, setTotal] = useState()
-    const [ possibleCheckout, setPossibleCheckout ] = useState(false)
+    console.log("Checkout order:", checkoutOrder);
 
-    useEffect(()=>{
-        setId(user.id)
-        setTotal(totalPrice)
-        if(total > 1) setPossibleCheckout(true)
-    })
-
-    const checkedOut = 
-    {id: id,
-        total: total}
-
-    console.log("Checking out: ",checkedOut )
-
-    
-    //  console.log("Id: ", id)
-
-    const handleCheckout = async()=>{
-        const checkoutOrder = {
-            id: id,
-            totalAmount: total
+    try {
+      const { data } = await axios.post(
+        `${backendUrl}/user/buyCart`,
+        checkoutOrder, // No necesitamos JSON.stringify aquí
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-        try {
-            const { data } = await axios.post(`${backendUrl}/user/buyCart/`, checkoutOrder)
-            if(data) {
-                
-                setTotal(0)
-                alert("Productos comprados exitosamente! Envio de 100 meses")
-            }
-            
-        } catch (error) {
-            console.log("Error in handleCheckout", error.message)
-            
-        }
+      );
+      console.log("Response data:", data);
+      const { id } = data.data;
+      return id;
+    } catch (error) {
+      console.log("Error in handleCheckout", error.message);
     }
-
-
-
-    return(
-        <button
-        onClick={handleCheckout}
-        disabled={!id && !possibleCheckout}>
-            Checkout
-        </button>
-    )
-}
+  };
+  const handleBuy = async () => {
+    const id = await handleCheckout();
+    if (id) {
+      setPreferenceId(id);
+    }
+  };
+  return (
+    <div>
+      <button onClick={handleBuy} disabled={!possibleCheckout}>
+        Checkout
+      </button>
+      <div id="wallet_container">
+        {preferenceId && <Wallet initialization={{ preferenceId }} />}
+      </div>
+    </div>
+  );
+};
 
 export default CheckoutButton;
