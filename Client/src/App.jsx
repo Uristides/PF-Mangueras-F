@@ -2,6 +2,8 @@ import React, { useState, useEffect, createContext } from "react";
 import { Login } from "./views/login/login";
 import Home from "./views/home/home";
 const backendUrl = import.meta.env.VITE_BACKEND;
+import { initMercadoPago } from '@mercadopago/sdk-react';
+
 
 import About from "./components/About/about";
 import Cart from "./components/Cart/Cart";
@@ -13,6 +15,8 @@ import Checkout from "./components/Checkout/Checkout";
 import { Route, Routes, Navigate } from "react-router-dom";
 
 export const UserContext = createContext(null);
+
+initMercadoPago('APP_USR-dcd6c99c-79cf-4887-85d6-3373d6b837bd');
 
 function App() {
   const [user, setUser] = useState(false);

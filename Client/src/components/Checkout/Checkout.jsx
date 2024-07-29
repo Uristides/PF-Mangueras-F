@@ -1,5 +1,9 @@
 import CheckoutButton from "./CheckoutButton";
 import { useLocation } from "react-router-dom";
+import { initMercadoPago, Wallet } from '@mercadopago/sdk-react'
+initMercadoPago('YOUR_PUBLIC_KEY');
+
+
 
 const Checkout = ()=>{
 
@@ -15,6 +19,7 @@ const Checkout = ()=>{
             </div>
             <div>
                 <CheckoutButton totalPrice={totalPrice} />
+                
             </div>
         </div>
     )

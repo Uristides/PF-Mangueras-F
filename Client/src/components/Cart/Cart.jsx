@@ -1,3 +1,4 @@
+// frontend/src/components/Cart.js
 import CartItem from "../CartItem/CartItem";
 import Checkout from "../Checkout/Checkout";
 import styles from "./Cart.module.css";
@@ -7,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchCart } from "../../redux/cartSlice";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import MercadoPagoButton from "../MercadoPagoButton/MercadoPagoButton";
 
 const backendUrl = import.meta.env.VITE_BACKEND;
 
@@ -15,12 +17,13 @@ const Cart = () => {
   const userCart = useSelector((state) => state.cart.items);
   const dispatch = useDispatch();
   const [totalPrice, setTotalPrice] = useState(0);
-  const [loading, setLoading] = useState(true); // Added loading state
+  const [loading, setLoading] = useState(true);
+  const [preferenceId, setPreferenceId] = useState(null); // Estado para el ID de preferencia
 
   useEffect(() => {
     const loadCartData = async () => {
       await dispatch(fetchCart(user.id));
-      setLoading(false); // Set loading to false after fetching
+      setLoading(false);
     };
 
     loadCartData();
@@ -32,7 +35,7 @@ const Cart = () => {
       return data.price;
     } catch (error) {
       console.error('Error fetching product price:', error);
-      return 0; // Default value if there's an error
+      return 0; // Valor predeterminado si hay un error
     }
   };
 
@@ -57,12 +60,41 @@ const Cart = () => {
     }
   }, [userCart, userCart.length]);
 
+  // Crear preferencia de pago cuando el carrito cambie
+  useEffect(() => {
+    const createPaymentPreference = async () => {
+      try {
+        const items = await Promise.all(userCart.map(async (item) => {
+          const [id, amount] = item.split(':').map(Number);
+          const price = await fetchProductPrice(id);
+          return {
+            title: `Producto ${id}`,
+            quantity: amount,
+            unit_price: price,
+          };
+        }));
+
+        const response = await axios.post(`${backendUrl}/create_preference`, {
+          items: items,
+        });
+
+        setPreferenceId(response.data.id); // Almacenar el ID de preferencia
+      } catch (error) {
+        console.error('Error al crear la preferencia de pago:', error);
+      }
+    };
+
+    if (userCart.length > 0) {
+      createPaymentPreference();
+    }
+  }, [userCart]);
+
   if (loading) {
-    return <div>Loading...</div>; // Show loading message while data is being fetched
+    return <div>Loading...</div>; // Mostrar mensaje de carga mientras se obtienen los datos
   }
 
-  if(userCart.length === 0){
-    return <div>Carrito Vacio. Ve a comprar!</div>
+  if (userCart.length === 0) {
+    return <div>Carrito Vacío. ¡Ve a comprar!</div>
   }
 
   return (
@@ -74,7 +106,7 @@ const Cart = () => {
           const [id, amount] = item.split(':');
           return (
             <CartItem
-              key={index} // Use index or id if unique
+              key={index}
               id={id}
               amount={amount}
               onPriceUpdate={() => {
@@ -90,12 +122,18 @@ const Cart = () => {
           <div>Subtotal: ${totalPrice}</div>
           <div>Shipping: $TBD</div>
           <div>Estimated Total: ${totalPrice}</div>
-          {totalPrice && totalPrice > 1 &&(
-
-            <button><Link
-            to="/checkout"
-            state={{ totalPrice }}
-            >Checkout</Link></button>
+          {totalPrice && totalPrice > 1 && (
+            <>
+              <button>
+                <Link to="/checkout" state={{ totalPrice }}>
+                  Checkout
+                </Link>
+              </button>
+              {/* Botón de Mercado Pago */}
+              {preferenceId && (
+                <MercadoPagoButton preferenceId={preferenceId} />
+              )}
+            </>
           )}
         </div>
       </div>
