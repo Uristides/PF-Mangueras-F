@@ -1,12 +1,17 @@
-import styles from './Facebookbtn.module.css';
-import FacebookLogin from 'react-facebook-login';
+import styles from './Googlebtn.module.css';
+
+import { app } from '../../credential';
+import { useAuth0 } from '@auth0/auth0-react';
 import { UserContext } from '../../App';
 import { useContext } from 'react';
-import { FaFacebookF } from 'react-icons/fa';
+import { GrGoogle } from "react-icons/gr";
 const backendUrl = import.meta.env.VITE_BACKEND;
-export function FacebookBtn({ setShowLogin }) {
-  const { user, setUser } = useContext(UserContext);
 
+
+export function GoogleBtn({ setShowLogin }) {
+  const {loginWithRedirect ,getAccessTokenSilently} = useAuth0();
+  const { user, setUser } = useContext(UserContext);
+  console.log(user);
   async function login(params) {
     const response = await fetch(`${backendUrl}/user/login`, {
       method: 'POST',
@@ -24,7 +29,6 @@ export function FacebookBtn({ setShowLogin }) {
         credentials: 'include',
       });
       if (data.ok) {
-        setShowLogin(false);
         return setUser(await data.json());
       } else {
         return false;
@@ -33,7 +37,7 @@ export function FacebookBtn({ setShowLogin }) {
       return false;
     }
   }
-  async function auth(object) {
+  async function authentication(object) {
     const register = await fetch(`${backendUrl}/user/register`, {
       method: 'POST',
       headers: {
@@ -41,7 +45,7 @@ export function FacebookBtn({ setShowLogin }) {
       },
       credentials: 'include',
       body: JSON.stringify({
-        name: object.name,
+        name: object.displayName,
         email: object.email,
         password: '',
         tercero: true,
@@ -49,23 +53,27 @@ export function FacebookBtn({ setShowLogin }) {
     });
     if (register.ok) {
       login(object);
+      console.log("talvez funciono");
     } else {
       login(object);
     }
   }
-  const facebookResponse = (response) => {
-    auth(response).then();
-    console.log(response);
-  };
+  const handleLogin = async () => {
+    try {
+      await loginWithRedirect();
 
+      const token = await getAccessTokenSilently();
+      console.log("Access Token:", token);
+
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
   return (
-    <FacebookLogin
-      appId='982520500336766'
-      autoLoad={true}
-      cssClass={styles.facebookButton}
-      fields='name,email'
-      callback={facebookResponse}
-      textButton={<FaFacebookF />}
-    ></FacebookLogin>
+    <>
+    <button onClick={loginWithRedirect} className={styles.googleBtn}><GrGoogle /> Iniciar con google </button>
+    </>
   );
 }
+
