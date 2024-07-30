@@ -1,18 +1,24 @@
-import React, { useState, useEffect, createContext, useCallback } from "react";
+import React, { useState, useEffect, createContext } from "react";
 import { Login } from "./views/login/login";
 import Home from "./views/home/home";
-const backendUrl = import.meta.env.VITE_BACKEND;
-
 import About from "./components/About/about";
 import Cart from "./components/Cart/Cart";
 import Detail from "./components/Detail/Detail";
 import Dashboard from "./views/admin/Dashboard";
 import Navbar from "./components/Navbar/Navbar";
 import Checkout from "./components/Checkout/Checkout";
-
+import PaymentFeedback from "./components/PaymentFeedback/PaymentFeedback";
 import { Route, Routes, Navigate } from "react-router-dom";
+import { initMercadoPago } from "@mercadopago/sdk-react";
+
+const backendUrl = import.meta.env.VITE_BACKEND;
 
 export const UserContext = createContext(null);
+
+// Inicializa Mercado Pago con tu public key
+initMercadoPago("TEST-af207a73-ab9d-40df-84b6-480eafe93cc3", {
+  locale: "es-MX",
+});
 
 function App() {
   const [user, setUser] = useState(false);
@@ -33,9 +39,7 @@ function App() {
   };
 
   useEffect(() => {
-    sesion(); // Llamada inicial a la sesión
-
-    const handleBeforeUnload = () => sesion();
+    const handleBeforeUnload = (event) => sesion();
     const handleLoad = () => sesion();
 
     window.addEventListener("beforeunload", handleBeforeUnload);
@@ -47,23 +51,17 @@ function App() {
     };
   }, []);
 
-  const handleSearch = useCallback((term) => {
-    localStorage.setItem("searchTerm", term);
-  }, []);
-
   return (
     <>
       <UserContext.Provider value={{ user, setUser }}>
-        <Navbar sesion={sesion} onSearch={handleSearch} />
+        <Navbar sesion={sesion} />
         <Routes>
-          <Route
-            path="/"
-            element={<Home sesion={sesion} onSearch={handleSearch} />}
-          />
+          <Route path="/" element={<Home sesion={sesion} />} />
           {user ? (
             <>
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
+              <Route path="/checkout/feedback" element={<PaymentFeedback />} />
             </>
           ) : (
             <Route path="/cart" element={<Login sesion={sesion} />} />
