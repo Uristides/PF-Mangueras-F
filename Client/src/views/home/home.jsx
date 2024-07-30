@@ -112,7 +112,7 @@ const Home = ({ sesion }) => {
           <Cards items={searchResults.length ? searchResults : items} />
         </div>
         <section className={styles.section}>
-          {user && <h1 className={styles.h1}>Bienvenido {user.name}</h1>}
+          {/* {user && <h1 className={styles.h1}>Bienvenido {user.name}</h1>} */}
         </section>
       </section>
       

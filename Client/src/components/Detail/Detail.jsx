@@ -1,10 +1,12 @@
-import axios from "axios";
-import { useEffect, useState, useContext } from "react";
-import { useSelector } from "react-redux";
-import { useParams, useNavigate } from "react-router-dom";
-import AddButton from "../AddRemoveCart/AddButton";
-import styles from "./Detail.module.css";
-import { UserContext } from "../../App";
+import { useEffect, useState, useContext } from 'react';
+import { useSelector } from 'react-redux';
+import { useParams, useNavigate } from 'react-router-dom';
+import { UserContext } from '../../App';
+import AddButton from '../AddRemoveCart/AddButton';
+import Reviews from './Reviews/Reviews';
+import CreateReview from './Reviews/CreateReview/CreateReview';
+import axios from 'axios';
+import styles from './Detail.module.css';
 const backendUrl = import.meta.env.VITE_BACKEND;
 
 const Detail = () => {
@@ -14,9 +16,13 @@ const Detail = () => {
   const productId = id.toString();
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
-  const [quantityString, setQuantityString] = useState("1");
-  const [productWithQuantity, setProductWithQuantity] = useState("");
+  const [quantityString, setQuantityString] = useState('1');
+  const [productWithQuantity, setProductWithQuantity] = useState('');
+
+  const [reviews, setReviews] = useState([])
+  const [ averageRating , setAverageRating] = useState(0)
   const { user } = useContext(UserContext);
+  console.log("User in contex: ", user)
 
   console.log("Product in detail: ", product);
 
@@ -35,6 +41,35 @@ const Detail = () => {
     getById(id);
   }, [id]);
 
+  useEffect(()=>{
+
+    const averageCalc = (data)=>{
+      let overallSum = 0
+      data.map((rat)=>{
+        overallSum += rat.rating
+      })
+      let average = (overallSum/data.length)
+      return average.toFixed(1)
+  }
+    const getReviews = async(productId)=>{
+
+      try {
+        const { data } = await axios.get(`${backendUrl}/products/reviews/id/${productId}`)
+        if(data) setReviews(data)
+          setAverageRating(averageCalc(data))
+        
+
+      } catch (error) {
+        console.log("Error in getReviews", error.message)
+      }
+    }
+   
+    getReviews(id)
+   
+    
+  }, [])
+
+
   useEffect(() => {
     setQuantityString(quantity.toString());
     setProductWithQuantity(`${productId}:${quantity}`);
@@ -44,9 +79,11 @@ const Detail = () => {
     setQuantity(Number(event.target.value));
   };
 
-  const handleBackClick = () => {
-    navigate(-1);
-  };
+  const handleBackClick = ()=>{
+    navigate('/')
+  }
+
+  console.log("Reviews: ", reviews)
   return (
     <div>
       <div className={styles.backButtonDiv}>
@@ -97,57 +134,83 @@ const Detail = () => {
                           )
                         }
                       >
-                        -
-                      </button>
-                      <input
-                        type="number"
-                        value={quantity}
-                        onChange={(e) => {
-                          const value = Math.max(
-                            1,
-                            Math.min(product.stock, Number(e.target.value))
-                          );
-                          setQuantity(value);
-                        }}
-                      />
-                      <button
-                        onClick={() =>
-                          setQuantity((prevQuantity) =>
-                            Math.min(prevQuantity + 1, product.stock)
-                          )
-                        }
-                      >
-                        +
-                      </button>
-                      {product.stock === quantity && (
-                        <p>
-                          **{product.stock} es la maxima cantidad disponible{" "}
-                        </p>
-                      )}
-                    </div>
-                    <AddButton
-                      data={productWithQuantity}
-                      stock={product.stock}
-                      available={product.available}
-                      className={styles.carritoButton}
-                      actionType="add" // Specify the action type for adding specified quantity
+                      -
+                    </button>
+                    <input
+                      type='number'
+                      value={quantity}
+                      onChange={(e) => {
+                        const value = Math.max(
+                          1,
+                          Math.min(product.stock, Number(e.target.value))
+                        );
+                        setQuantity(value);
+                      }}
                     />
-                    {!user && <p>Inicia sesion para agregar a carrito</p>}
+                    <button
+                      onClick={() =>
+                        setQuantity((prevQuantity) =>
+                          Math.min(prevQuantity + 1, product.stock)
+                    )
+                  }
+                    >
+                      +
+                    </button>
+                    {product.stock === quantity && (
+                      <p>**{product.stock} es la maxima cantidad disponible </p>
+                    )}
                   </div>
-                )
-              ) : (
-                <p style={{ color: "red" }}>
-                  <strong>No Disponible</strong>
-                </p>
-              )}
-              <br />
-            </div>
+                  <AddButton
+                    data={productWithQuantity}
+                    stock={product.stock}
+                    available={product.available}
+                    className={styles.carritoButton}
+                  />
+                  {!user && <p>Inicia sesion para agregar a carrito</p>}
+                </div>
+              )
+            ) : (
+              <p style={{ color: 'red' }}>
+                <strong>No Disponible</strong>
+              </p>
+            )}
+            <br />
           </div>
-        ) : (
-          <p>Loading...</p>
-        )}
+        </div>
+      ) : (
+        <p>Loading...</p>
+      )}
+          <div>
+            {reviews ? (
+              <>
+                <p>Average rating {averageRating}</p>
+                   <div>
+                 
+                  {user ? (
+                    reviews.some(rate => rate.userId === user.id) ? (
+                      <p>Ya has escrito una reseña.</p>
+                    ) : (
+                      <div>
+                        <p>Escribe Tu Reseña</p>
+                        <CreateReview data={{ id }} /> {/* Pass an object to the data prop */}
+                      </div>
+                    )
+                  ) : (
+                    <p>Por favor, inicia sesión para escribir una reseña.</p> // Message for not logged in users
+                  )}
+                </div>
+
+                {reviews.map((rev) => (
+                  <Reviews key={rev.id} data={rev} />
+                ))}
+              </>
+            ) : (
+              <p>Loading reviews...</p>
+            )}
       </div>
+
     </div>
+      </div>
   );
 };
 
