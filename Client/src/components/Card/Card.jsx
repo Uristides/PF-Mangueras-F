@@ -16,11 +16,11 @@ const Card = (props) => {
     description,
     available,
     stock,
+    promotions, // Añadimos el array de promociones
   } = props.data;
 
   const [productId, setProductId] = useState(id);
   const [quantity, setQuantity] = useState("1");
-
   const [productWithQuantity, setProductWithQuantity] = useState("");
 
   useEffect(() => {
@@ -34,6 +34,15 @@ const Card = (props) => {
     }
   };
 
+  // Encontrar la promoción activa
+  const activePromotion = promotions?.find(
+    (promotion) => promotion.isActive && new Date(promotion.endDate) > new Date()
+  );
+
+  // Calcular el precio final con el descuento
+  const discount = activePromotion ? price * (activePromotion.discountPercentage / 100) : 0;
+  const finalPrice = price - discount;
+
   return (
     <div className={styles.container}>
       <Link to={`/detail/${id}`}>
@@ -45,8 +54,19 @@ const Card = (props) => {
           <h2 className={styles.otherData}>Marca: {brand}</h2>
           <h2 className={styles.otherData}>Tipo: {type}</h2>
           <h2 className={styles.otherData}>
-            Precio: <span className={styles.price}>${price}</span>
+            Precio: <span className={styles.price}>${finalPrice.toFixed(2)}</span>
+            {discount > 0 && (
+              <span className={styles.originalPrice}>
+                ${price.toFixed(2)}
+              </span>
+            )}
           </h2>
+          {activePromotion && (
+            <p className={styles.promotionInfo}>
+              Descuento: {activePromotion.discountPercentage}% hasta{" "}
+              {new Date(activePromotion.endDate).toLocaleDateString()}
+            </p>
+          )}
         </article>
       </Link>
 
@@ -54,8 +74,7 @@ const Card = (props) => {
         available={available}
         data={productWithQuantity}
         stock={stock}
-        actionType="addOne" // Specify the action type for adding specified quantity
-        // Specify the action type for adding specified quantity
+        actionType="addOne"
       />
     </div>
   );

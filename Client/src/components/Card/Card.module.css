@@ -86,3 +86,15 @@ a {
   border-radius: 4px;
   font-weight: bold;
 }
+
+.originalPrice {
+  text-decoration: line-through;
+  margin-left: 8px;
+  color: red;
+}
+
+.promotionInfo {
+  color: green;
+  font-size: 0.9em;
+  margin-top: 4px;
+}
