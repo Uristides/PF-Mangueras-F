@@ -16,7 +16,7 @@ const backendUrl = import.meta.env.VITE_BACKEND;
 export const UserContext = createContext(null);
 
 // Inicializa Mercado Pago con tu public key
-initMercadoPago("TEST-af207a73-ab9d-40df-84b6-480eafe93cc3", {
+initMercadoPago("APP_USR-f9778cd5-2698-4783-954b-94f05d959a29", {
   locale: "es-MX",
 });
 
