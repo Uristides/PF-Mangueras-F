@@ -22,6 +22,7 @@ initMercadoPago("TEST-af207a73-ab9d-40df-84b6-480eafe93cc3", {
 
 function App() {
   const [user, setUser] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const sesion = async () => {
     try {
@@ -54,9 +55,9 @@ function App() {
   return (
     <>
       <UserContext.Provider value={{ user, setUser }}>
-        <Navbar sesion={sesion} />
+       <Navbar sesion={sesion} onSearch={setSearchTerm} />
         <Routes>
-          <Route path="/" element={<Home sesion={sesion} />} />
+          <Route path="/" element={<Home sesion={sesion} searchTerm={setSearchTerm}/>} />
           {user ? (
             <>
               <Route path="/cart" element={<Cart />} />
