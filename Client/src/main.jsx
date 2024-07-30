@@ -10,6 +10,7 @@ import './index.css'
 ReactDOM.createRoot(document.getElementById('root')).render(
 
 <Provider store={store}>
+  
   <BrowserRouter>
   <React.StrictMode>
     <Auth0Provider domain='facundocortez.us.auth0.com' clientId='Ur1a4ABUQXK5Sl6wiwOgt8Bmtn2E8NMM' >

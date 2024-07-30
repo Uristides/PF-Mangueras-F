@@ -1,14 +1,51 @@
-// src/views/home/home.jsx
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect, useCallback } from "react";
 import Filters from "../../components/Filters/Filters";
 import Cards from "../../components/Cards/Cards";
 import styles from "./home.module.css";
 import { UserContext } from "../../App.jsx";
-import CreateButton from "../../components/CrearBoton/CreateButton.jsx"; // Ajusta la ruta al botón de creación
+import CreateButton from "../../components/CrearBoton/CreateButton.jsx";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchItems } from "../../redux/itemsSlice";
+
 const backendUrl = import.meta.env.VITE_BACKEND;
 
 const Home = ({ sesion }) => {
   const { user } = useContext(UserContext);
+  const dispatch = useDispatch();
+  const items = useSelector((state) => state.items.items);
+
+  // Estado para los filtros
+  const [filters, setFilters] = useState({
+    minPrice: "",
+    maxPrice: "",
+    typeValue: "",
+    brandsValue: "",
+    sortValue: "",
+  });
+
+  const [searchResults, setSearchResults] = useState([]);
+
+  useEffect(() => {
+    dispatch(fetchItems());
+  }, [dispatch]);
+
+  const handleFilterChange = useCallback((newFilters) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      ...newFilters,
+    }));
+  }, []);
+
+  const handleResetFilters = useCallback(() => {
+    setFilters({
+      minPrice: "",
+      maxPrice: "",
+      typeValue: "",
+      brandsValue: "",
+      sortValue: "",
+    });
+    localStorage.clear();
+  }, []);
 
   const borrarCookie = (nombre) => {
     document.cookie =
@@ -23,7 +60,6 @@ const Home = ({ sesion }) => {
         "Content-Type": "application/json",
       },
     });
-
     if (response.ok) {
       borrarCookie("lacookie");
       sesion();
@@ -31,23 +67,39 @@ const Home = ({ sesion }) => {
     }
   };
 
+  const handleSearch = useCallback(
+    (term) => {
+      if (term === "") {
+        setSearchResults(items);
+      } else {
+        const results = items.filter((item) =>
+          item.name.toLowerCase().includes(term.toLowerCase())
+        );
+        setSearchResults(results);
+      }
+    },
+    [items]
+  );
+
   return (
     <main>
       <section className={styles.sectionmain}>
         <div className={styles.container}>
           <div className={styles.filters}>
-            <Filters />
+            <Filters
+              filters={filters}
+              onFilterChange={handleFilterChange}
+              onResetFilters={handleResetFilters}
+            />
           </div>
-          <Cards />
+          <Cards items={searchResults.length ? searchResults : items} />
         </div>
         <section className={styles.section}>
           {user && <h1 className={styles.h1}>Bienvenido {user.name}</h1>}
-          
-          
         </section>
       </section>
     </main>
   );
 };
 
-export default Home; 
+export default Home;

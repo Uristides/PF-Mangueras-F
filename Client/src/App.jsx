@@ -1,29 +1,32 @@
-import React, { useState, useEffect, createContext } from 'react';
+import React, { useState, useEffect, createContext } from "react";
+import { Login } from "./views/login/login";
+import Home from "./views/home/home";
+import About from "./components/About/about";
+import Cart from "./components/Cart/Cart";
+import Detail from "./components/Detail/Detail";
+import Dashboard from "./views/admin/Dashboard";
+import Navbar from "./components/Navbar/Navbar";
+import Checkout from "./components/Checkout/Checkout";
+import PaymentFeedback from "./components/PaymentFeedback/PaymentFeedback";
+import { Route, Routes, Navigate } from "react-router-dom";
+import { initMercadoPago } from "@mercadopago/sdk-react";
 
-import { Login } from './views/login/login';
-import Home from './views/home/home';
 const backendUrl = import.meta.env.VITE_BACKEND;
-
-import About from './components/About/about';
-import Cart from './components/Cart/Cart';
-import Detail from './components/Detail/Detail';
-import Dashboard from './views/admin/Dashboard';
-import Navbar from './components/Navbar/Navbar';
-import Checkout from './components/Checkout/Checkout';
-
-import { Route, Routes, Navigate } from 'react-router-dom';
-//import './App.css'
 
 export const UserContext = createContext(null);
 
+// Inicializa Mercado Pago con tu public key
+initMercadoPago("TEST-af207a73-ab9d-40df-84b6-480eafe93cc3", {
+  locale: "es-MX",
+});
+
 function App() {
   const [user, setUser] = useState(false);
-  // console.log("Backendurl varaible: ", backendUrl)
 
   const sesion = async () => {
     try {
       const data = await fetch(`${backendUrl}/user/protected`, {
-        credentials: 'include',
+        credentials: "include",
       });
       if (data.ok) {
         setUser(await data.json());
@@ -39,12 +42,12 @@ function App() {
     const handleBeforeUnload = (event) => sesion();
     const handleLoad = () => sesion();
 
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    window.addEventListener('load', handleLoad);
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    window.addEventListener("load", handleLoad);
 
     return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-      window.removeEventListener('load', handleLoad);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      window.removeEventListener("load", handleLoad);
     };
   }, []);
 
@@ -53,28 +56,24 @@ function App() {
       <UserContext.Provider value={{ user, setUser }}>
         <Navbar sesion={sesion} />
         <Routes>
-          <Route path='/' element={<Home sesion={sesion} />} />{' '}
-          {/* Renderiza Home correctamente */}
+          <Route path="/" element={<Home sesion={sesion} />} />
           {user ? (
             <>
-            <Route path='/cart' element={<Cart />} />
-            <Route path='/checkout' element={<Checkout />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/checkout/feedback" element={<PaymentFeedback />} />
             </>
-           
-           
           ) : (
-            <Route path='/cart' element={<Login sesion={sesion} />} />
-            
+            <Route path="/cart" element={<Login sesion={sesion} />} />
           )}
-          {user && user.rol === 'Admin' ? (
-            <Route path='/admin/*' element={<Dashboard />} />
+          {user && user.rol === "Admin" ? (
+            <Route path="/admin/*" element={<Dashboard />} />
           ) : (
-            <Route path='/cart' element={<Navigate to="/login" />} />
+            <Route path="/cart" element={<Navigate to="/login" />} />
           )}
-          <Route path='/detail/:id' element={<Detail />} />
-          <Route path='/login' element={<Login sesion={sesion} />} />
-          <Route path='/about' element={<About />} />
-          {/* <Route path='/admin/product/edit/:id' element={<EditItem/>}/> */}
+          <Route path="/detail/:id" element={<Detail />} />
+          <Route path="/login" element={<Login sesion={sesion} />} />
+          <Route path="/about" element={<About />} />
         </Routes>
       </UserContext.Provider>
     </>
