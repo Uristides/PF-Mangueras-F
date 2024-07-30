@@ -31,7 +31,7 @@ const Cart = () => {
       const { data } = await axios.get(`${backendUrl}/products/${id}`);
       return data.price;
     } catch (error) {
-      console.error('Error fetching product price:', error);
+      console.error("Error fetching product price:", error);
       return 0; // Default value if there's an error
     }
   };
@@ -39,7 +39,7 @@ const Cart = () => {
   const calculateTotalPrice = async (items) => {
     let total = 0;
     for (const item of items) {
-      const [id, amount] = item.split(':').map(Number);
+      const [id, amount] = item.split(":").map(Number);
       const price = await fetchProductPrice(id);
       total += price * parseInt(amount, 10);
     }
@@ -61,8 +61,8 @@ const Cart = () => {
     return <div>Loading...</div>; // Show loading message while data is being fetched
   }
 
-  if(userCart.length === 0){
-    return <div>Carrito Vacio. Ve a comprar!</div>
+  if (userCart.length === 0) {
+    return <div>Carrito Vacio. Ve a comprar!</div>;
   }
 
   return (
@@ -71,7 +71,7 @@ const Cart = () => {
         <h2 className={styles.title}>Mi Carrito</h2>
         <hr />
         {userCart?.map((item, index) => {
-          const [id, amount] = item.split(':');
+          const [id, amount] = item.split(":");
           return (
             <CartItem
               key={index} // Use index or id if unique
@@ -90,12 +90,12 @@ const Cart = () => {
           <div>Subtotal: ${totalPrice}</div>
           <div>Shipping: $TBD</div>
           <div>Estimated Total: ${totalPrice}</div>
-          {totalPrice && totalPrice > 1 &&(
-
-            <button><Link
-            to="/checkout"
-            state={{ totalPrice }}
-            >Checkout</Link></button>
+          {totalPrice && totalPrice > 1 && (
+            <button>
+              <Link to="/checkout" state={{ totalPrice }}>
+                Checkout
+              </Link>
+            </button>
           )}
         </div>
       </div>

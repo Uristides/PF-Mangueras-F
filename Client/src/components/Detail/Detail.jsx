@@ -24,7 +24,7 @@ const Detail = () => {
   const { user } = useContext(UserContext);
   console.log("User in contex: ", user)
 
-  console.log('Product in detail: ', product);
+  console.log("Product in detail: ", product);
 
   useEffect(() => {
     const getById = async (id) => {
@@ -87,56 +87,52 @@ const Detail = () => {
   return (
     <div>
       <div className={styles.backButtonDiv}>
+        <button className={styles.backButton} onClick={handleBackClick}>
+          Atras
+        </button>
+      </div>
+      <div className={styles.container}>
+        <h1>Manguera de tipo: {product?.type}</h1>
 
-      <button 
-      className={styles.backButton}
-      onClick={handleBackClick}>
-        Atras
-      </button>
-        </div>
-    <div className={styles.container}>
-      
-      <h1>Manguera de tipo: {product?.type}</h1>
+        {product ? (
+          <div className={styles.productContainer}>
+            <div>
+              <img
+                src={product.image}
+                alt="product"
+                className={styles.productImage}
+              />
+            </div>
+            <div>
+              <h1>{product.name}</h1>
+              <p>{product.brand}</p>
+              <hr />
+              <h3>$ {product.price}</h3>
+              <hr />
+              <p>Marca: {product.brand}</p>
+              <p>Diametro: {product.diameter}cm</p>
+              <p>Tipo/Uso: {product.type}</p>
+              <p>Acerca de: {product.description}</p>
+            </div>
 
-      {product ? (
-        <div className={styles.productContainer}>
-          <div>
-            <img
-              src={product.image}
-              alt='product'
-              className={styles.productImage}
-            />
-          </div>
-          <div>
-            <h1>{product.name}</h1>
-            <p>{product.brand}</p>
-            <hr />
-            <h3>$ {product.price}</h3>
-            <hr />
-            <p>Marca: {product.brand}</p>
-            <p>Diametro: {product.diameter}cm</p>
-            <p>Tipo/Uso: {product.type}</p>
-            <p>Acerca de: {product.description}</p>
-          </div>
-
-          <div className={styles.moneyContainer}>
-            <h2>{product.price} $</h2>
-            {product.available ? (
-              product.stock > 0 && (
-                <div>
-                  <p style={{ color: 'green' }}>
-                    <strong>Disponible</strong>
-                  </p>
-                  <p>En existencia: {product.stock}</p>
-
-                  <label>Cantidad: </label>
+            <div className={styles.moneyContainer}>
+              <h2>{product.price} $</h2>
+              {product.available ? (
+                product.stock > 0 && (
                   <div>
-                    <button
-                      onClick={() =>
-                        setQuantity((prevQuantity) =>
-                          Math.max(prevQuantity - 1, 1)
-                        )
-                      }
+                    <p style={{ color: "green" }}>
+                      <strong>Disponible</strong>
+                    </p>
+                    <p>En existencia: {product.stock}</p>
+
+                    <label>Cantidad: </label>
+                    <div>
+                      <button
+                        onClick={() =>
+                          setQuantity((prevQuantity) =>
+                            Math.max(prevQuantity - 1, 1)
+                          )
+                        }
                       >
                       -
                     </button>

@@ -1,105 +1,80 @@
-// import { useEffect, useState } from 'react';
-// import { useDispatch, useSelector } from 'react-redux';
-// import Card from '../Card/Card';
-// import styles from './Cards.module.css';
-// import { fetchItems } from '../../redux/itemsSlice';
-
-// const Cards = ({ filters, sortOption, searchQuery }) => {
-//   const [products, setProducts] = useState([]);
-//   const [currentPage, setCurrentPage] = useState(0);
-//   const itemsPerPage = 4;
-
-//   const dispatch = useDispatch();
-//   const mangueras = useSelector((state) => state.items.items);
-//   const status = useSelector((state) => state.items.status);
-
-//   // Fetch items when status is 'idle'
-//   useEffect(() => {
-//     if (status === 'idle') {
-//       dispatch(fetchItems());
-//     }
-//   }, [status, dispatch]);
-
-//   // Handle updates to products based on filters, sortOption, searchQuery, and mangueras
-//   useEffect(() => {
-//     setProducts(
-//       mangueras.slice(
-//         currentPage * itemsPerPage,
-//         (currentPage + 1) * itemsPerPage
-//       )
-//     );
-//   }, [mangueras, filters, sortOption, searchQuery, currentPage, itemsPerPage]);
-
-//   const restart = () => {
-//     setCurrentPage(0);
-//   };
-
-//   const nextPage = () => {
-//     setCurrentPage((prevPage) => prevPage + 1);
-//   };
-
-//   const prevPage = () => {
-//     setCurrentPage((prevPage) => prevPage - 1);
-//   };
-
-//   return (
-//     <section className={styles.section}>
-//       <article className={styles.Card}>
-//         {products.map((mang) => (
-//           <Card key={mang.id} id={mang.id} data={mang} />
-//         ))}
-//       </article>
-//       <article className={styles.pagination}>
-//         <button onClick={prevPage} className={styles.button}>
-//           ⬅️ Anterior
-//         </button>
-//         <button onClick={restart} className={styles.refresh}>
-//           {currentPage}
-//         </button>
-//         <button onClick={nextPage} className={styles.button}>
-//           Siguiente ➡️
-//         </button>
-//       </article>
-//     </section>
-//   );
-// };
-
-// export default Cards;
-
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import Card from '../Card/Card';
-import styles from './Cards.module.css';
-import { fetchItems } from '../../redux/itemsSlice';
+import { useEffect, useState, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Card from "../Card/Card";
+import styles from "./Cards.module.css";
+import { fetchItems } from "../../redux/itemsSlice";
 
 const Cards = ({ filters, sortOption, searchQuery }) => {
-  const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 4;
 
   const dispatch = useDispatch();
   const allMangueras = useSelector((state) => state.items.items);
-  const mangueras = Array.isArray(allMangueras)? allMangueras.filter((mang)=> mang.show === true) : [];
   const status = useSelector((state) => state.items.status);
 
-  // Fetch items when status is 'idle'
+  const mangueras = useMemo(() => {
+    if (!Array.isArray(allMangueras)) return [];
+    let filteredItems = allMangueras.filter((mang) => mang.show === true);
+
+    // Apply search filter
+    if (searchQuery) {
+      filteredItems = filteredItems.filter((item) =>
+        item.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    // Apply other filters
+    if (filters) {
+      if (filters.minPrice) {
+        filteredItems = filteredItems.filter(
+          (item) => item.price >= parseFloat(filters.minPrice)
+        );
+      }
+      if (filters.maxPrice) {
+        filteredItems = filteredItems.filter(
+          (item) => item.price <= parseFloat(filters.maxPrice)
+        );
+      }
+      if (filters.typeValue) {
+        filteredItems = filteredItems.filter(
+          (item) => item.type === filters.typeValue
+        );
+      }
+      if (filters.brandsValue) {
+        filteredItems = filteredItems.filter(
+          (item) => item.brand === filters.brandsValue
+        );
+      }
+    }
+
+    // Apply sorting
+    if (sortOption) {
+      if (sortOption === "price_asc") {
+        filteredItems.sort((a, b) => a.price - b.price);
+      } else if (sortOption === "price_desc") {
+        filteredItems.sort((a, b) => b.price - a.price);
+      } else if (sortOption === "name_asc") {
+        filteredItems.sort((a, b) => a.name.localeCompare(b.name));
+      } else if (sortOption === "name_desc") {
+        filteredItems.sort((a, b) => b.name.localeCompare(a.name));
+      }
+    }
+
+    return filteredItems;
+  }, [allMangueras, filters, sortOption, searchQuery]);
+
   useEffect(() => {
-    if (status === 'idle') {
+    if (status === "idle") {
       dispatch(fetchItems());
     }
   }, [status, dispatch]);
 
-  // Handle updates to products based on filters, sortOption, searchQuery, and mangueras
-  useEffect(() => {
-    const filteredAndSortedItems = mangueras;
-
-    setProducts(
-      filteredAndSortedItems.slice(
-        currentPage * itemsPerPage,
-        (currentPage + 1) * itemsPerPage
-      )
+  const products = useMemo(() => {
+    return mangueras.slice(
+      currentPage * itemsPerPage,
+      (currentPage + 1) * itemsPerPage
     );
-  }, [allMangueras, filters, sortOption, searchQuery, currentPage, itemsPerPage]);
+  }, [mangueras, currentPage, itemsPerPage]);
 
   const totalPages = Math.ceil(mangueras.length / itemsPerPage);
 
@@ -115,12 +90,12 @@ const Cards = ({ filters, sortOption, searchQuery }) => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 0));
   };
 
-  console.log('Products in cards: ', products);
+  console.log("Products in cards: ", products);
 
   return (
     <section className={styles.section}>
       <article className={styles.Card}>
-        {products ? (
+        {products.length > 0 ? (
           products.map((mang) => (
             <Card key={mang.id} id={mang.id} data={mang} />
           ))

@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
-import AddButton from '../AddRemoveCart/AddButton';
-import styles from './Card.module.css';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import AddButton from "../AddRemoveCart/AddButton";
+import styles from "./Card.module.css";
+import { Link } from "react-router-dom";
 
 const Card = (props) => {
   const {
@@ -13,15 +13,15 @@ const Card = (props) => {
     longitude,
     brand,
     type,
-    description, 
+    description,
     available,
     stock,
   } = props.data;
 
   const [productId, setProductId] = useState(id);
-  const [quantity, setQuantity] = useState('1');
+  const [quantity, setQuantity] = useState("1");
 
-  const [productWithQuantity, setProductWithQuantity] = useState('');
+  const [productWithQuantity, setProductWithQuantity] = useState("");
 
   useEffect(() => {
     setProductWithQuantity(`${productId}:${quantity}`);
@@ -38,7 +38,7 @@ const Card = (props) => {
     <div className={styles.container}>
       <Link to={`/detail/${id}`}>
         <article className={styles.card} key={id}>
-          <img src={image} alt='manguera pic' className={styles.img} />
+          <img src={image} alt="manguera pic" className={styles.img} />
           {!available && <div className={styles.soldOutLabel}>Agotado</div>}
           <h1 className={styles.title}>{name}</h1>
           <p className={styles.description}>{description}</p>
@@ -49,8 +49,14 @@ const Card = (props) => {
           </h2>
         </article>
       </Link>
-      
-      <AddButton available={available} data={productWithQuantity} stock={stock}/>
+
+      <AddButton
+        available={available}
+        data={productWithQuantity}
+        stock={stock}
+        actionType="addOne" // Specify the action type for adding specified quantity
+        // Specify the action type for adding specified quantity
+      />
     </div>
   );
 };

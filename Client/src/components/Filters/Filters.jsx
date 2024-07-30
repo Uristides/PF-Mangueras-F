@@ -1,15 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchItems,
   filterItemsByPriceRange,
   filterByType,
   filterByBrand,
-  resetFilters,
   sortItemsByNameAscending,
   sortItemsByNameDescending,
   sortItemsByPriceAscending,
   sortItemsByPriceDescending,
+  resetFilters,
 } from "../../redux/itemsSlice";
 import { fetchBrands } from "../../redux/brandsSlice";
 import { fetchTypes } from "../../redux/typesSlice";
@@ -48,35 +48,50 @@ const Filters = ({ filters, onFilterChange, onResetFilters }) => {
     if (sortValue) handleSort(sortValue);
   }, [filters, dispatch]);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    onFilterChange({ [name]: value });
-    if (name === "minPrice" || name === "maxPrice")
-      dispatch(filterItemsByPriceRange({ ...filters, [name]: value }));
-    if (name === "typeValue") dispatch(filterByType(value));
-    if (name === "brandsValue") dispatch(filterByBrand(value));
-    if (name === "sortValue") handleSort(value);
-    localStorage.setItem(name, value);
+  const handleInputChange = useCallback(
+    (e) => {
+      const { name, value } = e.target;
+      onFilterChange({ [name]: value });
+      if (name === "minPrice" || name === "maxPrice")
+        dispatch(filterItemsByPriceRange({ ...filters, [name]: value }));
+      if (name === "typeValue") dispatch(filterByType(value));
+      if (name === "brandsValue") dispatch(filterByBrand(value));
+      if (name === "sortValue") handleSort(value);
+      localStorage.setItem(name, value);
+    },
+    [filters, onFilterChange, dispatch]
+  );
+
+  const handleSort = useCallback(
+    (value) => {
+      switch (value) {
+        case "price_asc":
+          dispatch(sortItemsByPriceAscending());
+          break;
+        case "price_desc":
+          dispatch(sortItemsByPriceDescending());
+          break;
+        case "name_asc":
+          dispatch(sortItemsByNameAscending());
+          break;
+        case "name_desc":
+          dispatch(sortItemsByNameDescending());
+          break;
+        default:
+          break;
+      }
+    },
+    [dispatch]
+  );
+
+  const handleResetFilters = () => {
+    dispatch(resetFilters());
+    dispatch(fetchItems());
+    onResetFilters();
   };
 
-  const handleSort = (value) => {
-    switch (value) {
-      case "price_asc":
-        dispatch(sortItemsByPriceAscending());
-        break;
-      case "price_desc":
-        dispatch(sortItemsByPriceDescending());
-        break;
-      case "name_asc":
-        dispatch(sortItemsByNameAscending());
-        break;
-      case "name_desc":
-        dispatch(sortItemsByNameDescending());
-        break;
-      default:
-        break;
-    }
-  };
+  const memoizedBrandsList = useMemo(() => brandsList, [brandsList]);
+  const memoizedTypesList = useMemo(() => typesList, [typesList]);
 
   const { minPrice, maxPrice, typeValue, brandsValue, sortValue } = filters;
 
@@ -89,8 +104,8 @@ const Filters = ({ filters, onFilterChange, onResetFilters }) => {
         value={typeValue}
       >
         <option value="">Tipos:</option>
-        {Array.isArray(typesList) &&
-          typesList.map((type) => (
+        {Array.isArray(memoizedTypesList) &&
+          memoizedTypesList.map((type) => (
             <option key={type.id} value={type.type}>
               {type.type}
             </option>
@@ -103,8 +118,8 @@ const Filters = ({ filters, onFilterChange, onResetFilters }) => {
         value={brandsValue}
       >
         <option value="">Marcas:</option>
-        {Array.isArray(brandsList) &&
-          brandsList.map((brand) => (
+        {Array.isArray(memoizedBrandsList) &&
+          memoizedBrandsList.map((brand) => (
             <option key={brand.id} value={brand.brand}>
               {brand.brand}
             </option>
@@ -132,7 +147,7 @@ const Filters = ({ filters, onFilterChange, onResetFilters }) => {
           handleInputChange({ target: { name: "sortValue", value } })
         }
       />
-      <button onClick={onResetFilters} className={styles.resetButton}>
+      <button onClick={handleResetFilters} className={styles.resetButton}>
         Limpiar Filtros
       </button>
     </div>
