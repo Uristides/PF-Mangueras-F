@@ -2,6 +2,8 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../App";
 import axios from "axios";
 import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
+import { MdOutlineShoppingCartCheckout } from "react-icons/md";
+import styles from './CheckoutButton.module.css'
 
 const backendUrl = import.meta.env.VITE_BACKEND;
 
@@ -51,8 +53,14 @@ const CheckoutButton = ({ totalPrice }) => {
   };
   return (
     <div>
-      <button onClick={handleBuy} disabled={!possibleCheckout}>
-        Checkout
+      <button
+        onClick={handleBuy}
+        disabled={!possibleCheckout}
+        className={styles.checkoutButton}
+        
+      >
+        <MdOutlineShoppingCartCheckout style={{ fontSize: '30px' }} />
+        <span>Proceder al Checkout</span>
       </button>
       <div id="wallet_container">
         {preferenceId && <Wallet initialization={{ preferenceId }} />}

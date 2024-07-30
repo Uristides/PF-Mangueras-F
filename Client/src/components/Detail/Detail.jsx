@@ -183,7 +183,12 @@ const Detail = () => {
           <div>
             {reviews ? (
               <>
-                <p>Average rating {averageRating}</p>
+            {reviews.length > 1 ? (
+
+                <h3>Average rating {averageRating}</h3>
+            ): (
+              <p>No hay reseñas </p>
+            )}
                    <div>
                  
                   {user ? (

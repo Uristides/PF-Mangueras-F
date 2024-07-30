@@ -53,11 +53,11 @@ const CreateReview = (props) => {
           >
             <option value="" disabled>Select a rating</option>
             <option >Escoge Rating</option>
-            <option value={1}>1</option>
-            <option value={2}>2</option>
-            <option value={3}>3</option>
-            <option value={4}>4</option>
-            <option value={5}>5</option>
+            <option value={1}>⭐1</option>
+            <option value={2}>⭐⭐2</option>
+            <option value={3}>⭐⭐⭐3</option>
+            <option value={4}>⭐⭐⭐⭐4</option>
+            <option value={5}>⭐⭐⭐⭐⭐5</option>
           </select>
         </div>
         <div>

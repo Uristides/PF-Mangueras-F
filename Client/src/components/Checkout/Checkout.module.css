@@ -1,0 +1,11 @@
+.checkoutContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.yourTotal{
+    margin: 20px;
+}
