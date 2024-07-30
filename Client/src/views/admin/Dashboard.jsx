@@ -8,6 +8,7 @@ import Orders from '../../components/Admin/Orders/Orders';
 import CreateForm from '../../components/Admin/CreateForm/CreateForm';
 import EditItem from '../../components/Admin/Edit/EditItem';
 import styles from './Dashboard.module.css'
+import AdminPromotions from '../../components/Admin/Banner/AdminPromotions';
 import { useEffect } from 'react';
 import { fetchTypes } from '../../redux/typesSlice';
 
@@ -31,6 +32,7 @@ const Dashboard = ()=>{
                     <Route path="users" element={<Users/>} />
                     <Route path='orders' element={<Orders />} />
                     <Route path="create-product" element={<CreateForm/>}/>
+                    <Route path="/admin/promotions" element={<AdminPromotions/>} />
                     
                 </Routes>              
             </div>
