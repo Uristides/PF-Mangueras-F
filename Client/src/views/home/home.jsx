@@ -80,7 +80,24 @@ const Home = ({ sesion }) => {
     },
     [items]
   );
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://cdn.voiceflow.com/widget/bundle.mjs";
+    script.type = "text/javascript";
+    script.async = true;
+    script.onload = () => {
+      window.voiceflow.chat.load({
+        verify: { projectID: '66a1d9ccfe7738be9c3505fd' },
+        url: 'https://general-runtime.voiceflow.com',
+        versionID: 'production',
+      });
+    };
+    document.body.appendChild(script);
 
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
   return (
     <main>
       <section className={styles.sectionmain}>
@@ -98,6 +115,7 @@ const Home = ({ sesion }) => {
           {user && <h1 className={styles.h1}>Bienvenido {user.name}</h1>}
         </section>
       </section>
+      
     </main>
   );
 };
