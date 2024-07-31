@@ -20,7 +20,7 @@ const PaymentFeedback = () => {
       if (collectionStatus === "approved") {
         try {
           const response = await axios.get(
-            `${backendUrl}/feedback?userId=${user.id}&totalPrice=${totalPrice}`
+            `${backendUrl}/user/feedBack?userId=${user.id}&totalPrice=${totalPrice}`
           );
           setFeedback(response.data);
         } catch (error) {
