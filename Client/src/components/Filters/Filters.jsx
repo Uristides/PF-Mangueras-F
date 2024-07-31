@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useMemo } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchItems,
@@ -20,6 +20,7 @@ const Filters = ({ filters, onFilterChange, onResetFilters }) => {
   const dispatch = useDispatch();
   const brandsList = useSelector((state) => state.brands.brands);
   const typesList = useSelector((state) => state.types.types);
+  const [filterError, setFilterError] = useState("");
 
   useEffect(() => {
     dispatch(fetchItems());
@@ -51,12 +52,31 @@ const Filters = ({ filters, onFilterChange, onResetFilters }) => {
   const handleInputChange = useCallback(
     (e) => {
       const { name, value } = e.target;
+
+      if (name === "minPrice" && value < 0) {
+        setFilterError("El precio mínimo no puede ser negativo.");
+        return;
+      }
+
+      if (name === "maxPrice" && value < 0) {
+        setFilterError("El precio máximo no puede ser negativo.");
+        return;
+      }
+
+      if (name === "maxPrice" && value && Number(value) < Number(filters.minPrice)) {
+        setFilterError("El precio máximo no puede ser menor que el precio mínimo.");
+      } else {
+        setFilterError("");
+      }
+
       onFilterChange({ [name]: value });
+
       if (name === "minPrice" || name === "maxPrice")
         dispatch(filterItemsByPriceRange({ ...filters, [name]: value }));
       if (name === "typeValue") dispatch(filterByType(value));
       if (name === "brandsValue") dispatch(filterByBrand(value));
       if (name === "sortValue") handleSort(value);
+
       localStorage.setItem(name, value);
     },
     [filters, onFilterChange, dispatch]
@@ -96,60 +116,63 @@ const Filters = ({ filters, onFilterChange, onResetFilters }) => {
   const { minPrice, maxPrice, typeValue, brandsValue, sortValue } = filters;
 
   return (
-    <div className={styles.container}>
-      <select
-        name="typeValue"
-        onChange={handleInputChange}
-        className={styles.select}
-        value={typeValue}
-      >
-        <option value="">Tipos:</option>
-        {Array.isArray(memoizedTypesList) &&
-          memoizedTypesList.map((type) => (
-            <option key={type.id} value={type.type}>
-              {type.type}
-            </option>
-          ))}
-      </select>
-      <select
-        name="brandsValue"
-        onChange={handleInputChange}
-        className={styles.select}
-        value={brandsValue}
-      >
-        <option value="">Marcas:</option>
-        {Array.isArray(memoizedBrandsList) &&
-          memoizedBrandsList.map((brand) => (
-            <option key={brand.id} value={brand.brand}>
-              {brand.brand}
-            </option>
-          ))}
-      </select>
-      <input
-        type="number"
-        name="minPrice"
-        value={minPrice}
-        onChange={handleInputChange}
-        placeholder="Precio Mínimo"
-        className={styles.input}
-      />
-      <input
-        type="number"
-        name="maxPrice"
-        value={maxPrice}
-        onChange={handleInputChange}
-        placeholder="Precio Máximo"
-        className={styles.input}
-      />
-      <Sort
-        sortValue={sortValue}
-        onSortChange={(value) =>
-          handleInputChange({ target: { name: "sortValue", value } })
-        }
-      />
-      <button onClick={handleResetFilters} className={styles.resetButton}>
-        Limpiar Filtros
-      </button>
+    <div>
+      <div className={styles.container}>
+        <select
+          name="typeValue"
+          onChange={handleInputChange}
+          className={styles.select}
+          value={typeValue}
+        >
+          <option value="">Tipos:</option>
+          {Array.isArray(memoizedTypesList) &&
+            memoizedTypesList.map((type) => (
+              <option key={type.id} value={type.type}>
+                {type.type}
+              </option>
+            ))}
+        </select>
+        <select
+          name="brandsValue"
+          onChange={handleInputChange}
+          className={styles.select}
+          value={brandsValue}
+        >
+          <option value="">Marcas:</option>
+          {Array.isArray(memoizedBrandsList) &&
+            memoizedBrandsList.map((brand) => (
+              <option key={brand.id} value={brand.brand}>
+                {brand.brand}
+              </option>
+            ))}
+        </select>
+        <input
+          type="number"
+          name="minPrice"
+          value={minPrice}
+          onChange={handleInputChange}
+          placeholder="Precio Mínimo"
+          className={styles.input}
+        />
+        <input
+          type="number"
+          name="maxPrice"
+          value={maxPrice}
+          onChange={handleInputChange}
+          placeholder="Precio Máximo"
+          className={styles.input}
+        />
+        <Sort
+          sortValue={sortValue}
+          onSortChange={(value) =>
+            handleInputChange({ target: { name: "sortValue", value } })
+          }
+        />
+        <button onClick={handleResetFilters} className={styles.resetButton}>
+          Limpiar Filtros
+        </button>
+      </div>
+        {filterError && <p style={{color: 'red'}}><strongs>*{filterError}</strongs></p>}
     </div>
   );
 };

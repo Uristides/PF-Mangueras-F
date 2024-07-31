@@ -7,12 +7,13 @@ import Users from '../../components/Admin/Users/Users'
 import Orders from '../../components/Admin/Orders/Orders';
 import CreateForm from '../../components/Admin/CreateForm/CreateForm';
 import EditItem from '../../components/Admin/Edit/EditItem';
+import EditUser from '../../components/Admin/Users/EditUser/EditUser';
 import styles from './Dashboard.module.css'
 import { useEffect } from 'react';
 import { fetchTypes } from '../../redux/typesSlice';
 
 
-const Dashboard = ()=>{
+const Dashboard = ({sesion})=>{
 
    
 
@@ -28,7 +29,8 @@ const Dashboard = ()=>{
                 <Routes>
                     <Route path="products/*" element={<Products/>} />
                     <Route path="products/edit/:id" element={<EditItem />} />
-                    <Route path="users" element={<Users/>} />
+                    <Route path="users/*" element={<Users/>} />
+                    <Route path='users/edit/:id' element={<EditUser sesion={sesion} />} />
                     <Route path='orders' element={<Orders />} />
                     <Route path="create-product" element={<CreateForm/>}/>
                     

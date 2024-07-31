@@ -82,7 +82,7 @@ export const addOneToCart = createAsyncThunk(
       return { productId }; // Return needed payload
     } catch (error) {
       console.error("Error in addOneToCart: ", error.message);
-      throw error;
+      
     }
   }
 );

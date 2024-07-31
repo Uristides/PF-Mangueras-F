@@ -202,7 +202,7 @@ const EditItem = () => {
             <option value="false">False</option>
           </select>
             </div>
-          
+           
           <div>
 
           <label>Current Show {String(fetchedData.show)}</label>

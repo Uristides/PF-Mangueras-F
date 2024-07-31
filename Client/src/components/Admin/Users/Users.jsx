@@ -27,6 +27,7 @@ const Users = ()=>{
 
     return(
         <div>
+            
             <div className={styles.usersList}>
             <div className={styles.usersHeader}>
             <p>id</p>
@@ -34,8 +35,9 @@ const Users = ()=>{
             <p>email</p>
             <p>tercero</p>
             <p>carrito</p>
+            <p>status</p>
             <p>rol</p>
-            <p></p>
+            <p></p> 
 
             </div>
             {users ? users.map((person)=>(

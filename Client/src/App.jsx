@@ -68,7 +68,7 @@ function App() {
             <Route path="/cart" element={<Login sesion={sesion} />} />
           )}
           {user && user.rol === "Admin" ? (
-            <Route path="/admin/*" element={<Dashboard />} />
+            <Route path="/admin/*" element={<Dashboard sesion={sesion}/>} />
           ) : (
             <Route path="/cart" element={<Navigate to="/login" />} />
           )}
