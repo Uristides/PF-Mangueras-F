@@ -1,0 +1,32 @@
+/* OrderDetailsPage.module.css */
+.detailsContainer {
+  padding: 20px;
+  border: 1px solid #ddd;
+  margin: 20px;
+}
+
+.cartList {
+  margin-top: 20px;
+}
+
+.cartHeader {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background-color: #f4f4f4;
+  padding: 10px;
+  font-weight: bold;
+}
+
+.cartItem {
+  display: grid;
+  grid-template-columns: 50px 1fr 1fr;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.productImage {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+}

@@ -1,0 +1,34 @@
+/* Orders.module.css */
+.ordersList {
+  margin: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+.ordersHeader {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  background-color: #f4f4f4;
+  padding: 10px;
+  font-weight: bold;
+}
+
+.order {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.order:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.order p {
+  margin: 0;
+}
+
+.edit {
+  color: blue;
+  cursor: pointer;
+}

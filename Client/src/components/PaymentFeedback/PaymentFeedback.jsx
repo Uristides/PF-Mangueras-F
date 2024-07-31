@@ -13,7 +13,7 @@ const PaymentFeedback = () => {
   const params = new URLSearchParams(location.search);
   const collectionStatus = params.get("collection_status");
   const totalPrice = params.get("totalPrice");
-  const paymentId = params.get("paymentId");
+  const paymentId = params.get("payment_id");
   useEffect(() => {
     const fetchFeedback = async () => {
       if (collectionStatus === "approved") {
