@@ -32,6 +32,7 @@ const Detail = () => {
         const { data } = await axios.get(`${backendUrl}/products/${id}`);
         if (data) {
           setProduct(data);
+          console.log(data)
           setProductWithQuantity(`${id}:1`);
         }
       } catch (error) {
@@ -54,7 +55,7 @@ const Detail = () => {
     const getReviews = async(productId)=>{
 
       try {
-        const { data } = await axios.get(`${backendUrl}/products/reviews/id/${productId}`)
+        const { data } = await axios.get(`${backendUrl}/products/reviews/${productId}`)
         if(data) setReviews(data)
           setAverageRating(averageCalc(data))
         
