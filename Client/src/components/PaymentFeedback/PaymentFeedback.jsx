@@ -1,37 +1,42 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
+import { UserContext } from "../../App";
 
 const backendUrl = import.meta.env.VITE_BACKEND;
 
 const PaymentFeedback = () => {
   const location = useLocation();
+  const { user } = useContext(UserContext);
   const [feedback, setFeedback] = useState(null);
 
+  const params = new URLSearchParams(location.search);
+  const collectionStatus = params.get("collection_status");
+  const totalPrice = params.get("totalPrice");
+  const paymentId = params.get("paymentId");
   useEffect(() => {
     const fetchFeedback = async () => {
-      const params = new URLSearchParams(location.search);
-      const totalPrice = params.get("totalPrice"); // Obtén totalPrice de la URL
-
-      try {
-        const response = await axios.get(
-          `${backendUrl}/feedback${location.search}&totalPrice=${totalPrice}`
-        );
-        setFeedback(response.data);
-      } catch (error) {
-        console.error("Error al obtener feedback del pago:", error.message);
+      if (collectionStatus === "approved") {
+        try {
+          const response = await axios.get(
+            `${backendUrl}/user/feedBack?userId=${user.id}&totalPrice=${totalPrice}`
+          );
+          setFeedback(response.data);
+        } catch (error) {
+          console.error("Error al obtener feedback del pago:", error.message);
+        }
       }
     };
 
     fetchFeedback();
-  }, [location.search]);
+  }, [collectionStatus, totalPrice, user?.id, backendUrl]);
 
   return (
     <div>
       {feedback ? (
         <div>
           <h1>Estado del Pago: {feedback.status}</h1>
-          <p>ID de Pago: {feedback.paymentId}</p>
+          <p>ID de Pago: {paymentId}</p>
           <p>ID de Orden: {feedback.order.id}</p>
         </div>
       ) : (
