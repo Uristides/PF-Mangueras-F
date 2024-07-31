@@ -31,7 +31,7 @@ const CreateReview = (props) => {
   const handleSubmit = async()=>{
     try {
 
-      const { data } = await axios.post(`${backendUrl}/products/reviews/`, productReview)
+      const { data } = await axios.post(`${backendUrl}/products/reviews`, productReview)
       if (data){
         alert("Resena agregada exitosamente!") 
         window.location.reload()
