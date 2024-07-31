@@ -13,7 +13,7 @@ const PaymentFeedback = () => {
   const params = new URLSearchParams(location.search);
   const collectionStatus = params.get("collection_status");
   const totalPrice = params.get("totalPrice");
-
+  const paymentId = params.get("paymentId");
   useEffect(() => {
     const fetchFeedback = async () => {
       if (collectionStatus === "approved") {
@@ -36,7 +36,7 @@ const PaymentFeedback = () => {
       {feedback ? (
         <div>
           <h1>Estado del Pago: {feedback.status}</h1>
-          <p>ID de Pago: {feedback.paymentId}</p>
+          <p>ID de Pago: {paymentId}</p>
           <p>ID de Orden: {feedback.order.id}</p>
         </div>
       ) : (
