@@ -1,20 +1,21 @@
+// src/components/PaymentFeedback/PaymentFeedback.js
 import React, { useEffect, useState, useContext } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
-import { UserContext } from "../../App"; // Ajusta la ruta según la ubicación del UserContext
+import { UserContext } from "../../App";
 
 const backendUrl = import.meta.env.VITE_BACKEND;
 
 const PaymentFeedback = () => {
   const location = useLocation();
-  const { user } = useContext(UserContext); // Obtener el usuario del contexto
+  const { user } = useContext(UserContext);
   const [feedback, setFeedback] = useState(null);
+  const params = new URLSearchParams(location.search);
+  const totalPrice = params.get("totalPrice");
 
   useEffect(() => {
     const fetchFeedback = async () => {
-      const params = new URLSearchParams(location.search);
       const collectionStatus = params.get("collection_status");
-      const totalPrice = location.state.totalPrice; // Obtiene el totalPrice del estado
 
       if (collectionStatus === "approved") {
         try {
@@ -29,7 +30,7 @@ const PaymentFeedback = () => {
     };
 
     fetchFeedback();
-  }, [location.search, user?.id, location.state.totalPrice]);
+  }, [params, user?.id, totalPrice]);
 
   return (
     <div>
