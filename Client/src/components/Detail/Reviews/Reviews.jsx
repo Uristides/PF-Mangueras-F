@@ -6,7 +6,7 @@ const Reviews = (props)=>{
 
     
 
-    console.log("comment and rating", comment, rating)
+    // console.log("comment and rating", comment, rating)
     
 
     
