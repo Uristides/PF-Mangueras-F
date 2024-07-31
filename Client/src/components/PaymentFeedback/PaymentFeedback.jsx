@@ -1,30 +1,35 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
+import { UserContext } from "../../App"; // Ajusta la ruta según la ubicación del UserContext
 
 const backendUrl = import.meta.env.VITE_BACKEND;
 
 const PaymentFeedback = () => {
   const location = useLocation();
+  const { user } = useContext(UserContext); // Obtener el usuario del contexto
   const [feedback, setFeedback] = useState(null);
 
   useEffect(() => {
     const fetchFeedback = async () => {
       const params = new URLSearchParams(location.search);
-      const totalPrice = params.get("totalPrice"); // Obtén totalPrice de la URL
+      const collectionStatus = params.get("collection_status");
+      const totalPrice = location.state.totalPrice; // Obtiene el totalPrice del estado
 
-      try {
-        const response = await axios.get(
-          `${backendUrl}/feedback${location.search}&totalPrice=${totalPrice}`
-        );
-        setFeedback(response.data);
-      } catch (error) {
-        console.error("Error al obtener feedback del pago:", error.message);
+      if (collectionStatus === "approved") {
+        try {
+          const response = await axios.get(
+            `${backendUrl}/feedback?userId=${user.id}&totalPrice=${totalPrice}`
+          );
+          setFeedback(response.data);
+        } catch (error) {
+          console.error("Error al obtener feedback del pago:", error.message);
+        }
       }
     };
 
     fetchFeedback();
-  }, [location.search]);
+  }, [location.search, user?.id, location.state.totalPrice]);
 
   return (
     <div>
