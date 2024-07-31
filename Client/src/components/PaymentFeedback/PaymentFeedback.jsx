@@ -1,4 +1,3 @@
-// src/components/PaymentFeedback/PaymentFeedback.js
 import React, { useEffect, useState, useContext } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
@@ -10,13 +9,13 @@ const PaymentFeedback = () => {
   const location = useLocation();
   const { user } = useContext(UserContext);
   const [feedback, setFeedback] = useState(null);
+
   const params = new URLSearchParams(location.search);
+  const collectionStatus = params.get("collection_status");
   const totalPrice = params.get("totalPrice");
 
   useEffect(() => {
     const fetchFeedback = async () => {
-      const collectionStatus = params.get("collection_status");
-
       if (collectionStatus === "approved") {
         try {
           const response = await axios.get(
@@ -30,7 +29,7 @@ const PaymentFeedback = () => {
     };
 
     fetchFeedback();
-  }, [params, user?.id, totalPrice]);
+  }, [collectionStatus, totalPrice, user?.id, backendUrl]);
 
   return (
     <div>
