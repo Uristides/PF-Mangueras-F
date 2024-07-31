@@ -22,7 +22,11 @@ initMercadoPago('APP_USR-f9778cd5-2698-4783-954b-94f05d959a29', {
 });
 
 function App() {
-  const [user, setUser] = useState(false);
+  const [user, setUser] = useState(() => {
+    // Recupera el usuario de localStorage al inicializar el estado
+    const savedUser = localStorage.getItem('user');
+    return savedUser ? JSON.parse(savedUser) : false;
+  });
   const [searchTerm, setSearchTerm] = useState('');
 
   const sesion = async () => {
@@ -31,7 +35,10 @@ function App() {
         credentials: 'include',
       });
       if (data.ok) {
-        setUser(await data.json());
+        const userData = await data.json();
+        setUser(userData);
+        // Guarda el usuario en localStorage
+        localStorage.setItem('user', JSON.stringify(userData));
       } else {
         return;
       }

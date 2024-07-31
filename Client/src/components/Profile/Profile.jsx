@@ -5,6 +5,7 @@ import {
   fetchUserById,
   editUser,
   fetchUserReviews,
+  fetchUserOrders,
 } from '../../redux/userSlice';
 import EditModal from '../Profile/editModal/EditModal';
 import ConfirmModal from '../Profile/confirmModal/ConfirmModal';
@@ -22,17 +23,29 @@ const Profile = ({ data, sesion }) => {
   const dataUser = useSelector((state) => state.user.item);
   const dataReviews = useSelector((state) => state.user.reviews);
   const products = useSelector((state) => state.items.items);
-  const dataHistory = false;
+  const orders = useSelector((state) => state.user.orders);
 
   useEffect(() => {
     dispatch(fetchUserById(userID.id));
     dispatch(fetchUserReviews(userID.id));
+    dispatch(fetchUserOrders(userID.id));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handlerEditUser = (newUser) => {
     dispatch(editUser(newUser));
     setShowModalEdit(false);
+  };
+
+  const formatDateTime = (isoString) => {
+    const date = new Date(isoString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = String(date.getFullYear()).slice(-2);
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+
+    return `${day}/${month}/${year} - ${hours}:${minutes}hs`;
   };
 
   return (
@@ -77,11 +90,15 @@ const Profile = ({ data, sesion }) => {
           </div>
         </div>
         <div className={styles.sideContent}>
+          <p>Historial de compras</p>
           <div className={styles.purchaseHistory}>
-            {dataHistory ? (
-              dataHistory.map((item, index) => (
+            {orders ? (
+              orders.slice(-3).map((item, index) => (
                 <div className={styles.purchaseHistoryItem} key={index}>
-                  <p>Compra {item}</p>
+                  <p>N° de pedido: {item?.id.slice(0, 7)}...</p>
+                  <p>Monto: ${item?.amount}</p>
+                  <p>Fecha: {formatDateTime(item?.creation_date)}</p>
+                  <button className={styles.detailButton}>Ver detalle</button>
                 </div>
               ))
             ) : (
@@ -90,6 +107,7 @@ const Profile = ({ data, sesion }) => {
               </div>
             )}
           </div>
+          <p>Historial de comentarios</p>
           <div className={styles.purchaseHistory}>
             {dataReviews.length ? (
               dataReviews?.map((item, index) => (

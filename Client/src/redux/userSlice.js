@@ -53,12 +53,25 @@ export const fetchUserReviews = createAsyncThunk(
   }
 );
 
+export const fetchUserOrders = createAsyncThunk(
+  'user/fetchUserOrders',
+  async (userId) => {
+    try {
+      const { data } = await axios.get(`${backendUrl}/user/orders/${userId}`);
+      return data;
+    } catch (error) {
+      console.log('error in fetchUserOrders: ', error.message);
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: 'user',
   initialState: {
     items: {},
     item: {},
     reviews: [],
+    orders: [],
     loading: false,
     error: null,
   },
@@ -110,6 +123,18 @@ const userSlice = createSlice({
         state.reviews = action.payload;
       })
       .addCase(fetchUserReviews.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(fetchUserOrders.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchUserOrders.fulfilled, (state, action) => {
+        state.loading = false;
+        state.orders = action.payload;
+      })
+      .addCase(fetchUserOrders.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       });
