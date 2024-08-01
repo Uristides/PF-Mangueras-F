@@ -45,4 +45,8 @@ const ConfirmModal = ({ setShowModal, sesion, data }) => {
   );
 };
 
+<<<<<<< HEAD
 export default ConfirmModal;
+=======
+export default ConfirmModal;
+>>>>>>> 51d59fdbabff9a1e945dbac0334c80c5dabae4ab

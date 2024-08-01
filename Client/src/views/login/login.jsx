@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import styles from "./login.module.css";
-import { GoogleBtn } from "../../components/GoogleBtn/Googlebtn";
+import { FacebookBtn } from "../../components/FaceBookBtn/Facebookbtn";
+import { FaFacebookF } from "react-icons/fa6";
 import { UserContext } from "../../App";
 const backendUrl = import.meta.env.VITE_BACKEND;
 import emailjs from "@emailjs/browser";
@@ -211,7 +212,7 @@ export function Login({ sesion }) {
             ? "¿No tienes cuenta? Regístrate"
             : "¿Ya tienes cuenta? Iniciar sesión"}
         </button>
-        {loged && <GoogleBtn></GoogleBtn>}
+        {loged && !user &&(!showLogin ?<button className={styles.facebook} onClick={()=>{setShowLogin(true)}}><FaFacebookF /> Iniciar con Facebook</button>:<FacebookBtn setShowLogin={setShowLogin}></FacebookBtn>)}
       </form>
     </main>
   );

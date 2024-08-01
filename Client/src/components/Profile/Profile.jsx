@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 import { useEffect, useState, useCallback, useContext } from 'react';
+=======
+/* eslint-disable react/prop-types */
+import { useEffect, useState } from 'react';
+>>>>>>> 51d59fdbabff9a1e945dbac0334c80c5dabae4ab
 import { useSelector, useDispatch } from 'react-redux';
 import {
   fetchUserById,
@@ -8,7 +13,10 @@ import {
 } from '../../redux/userSlice';
 import EditModal from '../Profile/editModal/EditModal';
 import ConfirmModal from '../Profile/confirmModal/ConfirmModal';
+<<<<<<< HEAD
 import { UserContext } from '../../App';
+=======
+>>>>>>> 51d59fdbabff9a1e945dbac0334c80c5dabae4ab
 import { BsPersonCircle } from 'react-icons/bs';
 import { CiEdit } from 'react-icons/ci';
 import { AiOutlineUserDelete } from 'react-icons/ai';
@@ -16,9 +24,14 @@ import styles from './Profile.module.css';
 
 const Profile = ({ data, sesion }) => {
   const dispatch = useDispatch();
+<<<<<<< HEAD
   const { user } = useContext(UserContext)
   localStorage.setItem('user', JSON.stringify(data));
   const userID = user.id
+=======
+  localStorage.setItem('user', JSON.stringify(data));
+  const userID = JSON.parse(localStorage.getItem('user'));
+>>>>>>> 51d59fdbabff9a1e945dbac0334c80c5dabae4ab
   const [showModalEdit, setShowModalEdit] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const dataUser = useSelector((state) => state.user.item);
@@ -27,9 +40,15 @@ const Profile = ({ data, sesion }) => {
   const orders = useSelector((state) => state.user.orders);
 
   useEffect(() => {
+<<<<<<< HEAD
     dispatch(fetchUserById(userID));
     dispatch(fetchUserReviews(userID));
     dispatch(fetchUserOrders(userID));
+=======
+    dispatch(fetchUserById(userID.id));
+    dispatch(fetchUserReviews(userID.id));
+    dispatch(fetchUserOrders(userID.id));
+>>>>>>> 51d59fdbabff9a1e945dbac0334c80c5dabae4ab
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -139,4 +158,8 @@ const Profile = ({ data, sesion }) => {
   );
 };
 
+<<<<<<< HEAD
 export default Profile;
+=======
+export default Profile;
+>>>>>>> 51d59fdbabff9a1e945dbac0334c80c5dabae4ab

@@ -34,7 +34,7 @@ const CartItem = ({ id, amount, onPriceUpdate }) => {
   if (!product) return <div>Loading...</div>;
 
   return (
-    <Link to={`/detail/${id}`} className={styles.link}>
+    <div>
       {" "}
       {/* Wrap in Link */}
       <div className={styles.container}>
@@ -47,7 +47,9 @@ const CartItem = ({ id, amount, onPriceUpdate }) => {
             />
           )}
           <div className={styles.productContainer}>
-            <h2 className={styles.titleProduct}>{product.name}</h2>
+            <Link to={`/detail/${id}`} className={styles.link}>
+              <h2 className={styles.titleProduct}>{product.name}</h2>
+            </Link>
             <p>Brand: {product.brand}</p>
             <p>Diameter: {product.diameter}</p>
             <p>Length: {product.longitude}</p>
@@ -65,7 +67,7 @@ const CartItem = ({ id, amount, onPriceUpdate }) => {
           </p>
         </div>
       </div>
-    </Link>
+    </div>
   );
 };
 

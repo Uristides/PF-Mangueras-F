@@ -67,4 +67,8 @@ const EditModal = ({ setShowModalEdit, data, handlerEditUser }) => {
   );
 };
 
+<<<<<<< HEAD
 export default EditModal;
+=======
+export default EditModal;
+>>>>>>> 51d59fdbabff9a1e945dbac0334c80c5dabae4ab

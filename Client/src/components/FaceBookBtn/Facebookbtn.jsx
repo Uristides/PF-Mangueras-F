@@ -1,17 +1,20 @@
-import styles from './Googlebtn.module.css';
+import styles from './Facebookbtn.module.css';
+import {GoogleAuthProvider,signInWithPopup,getAuth} from "firebase/auth";
 
 import { app } from '../../credential';
-import { useAuth0 } from '@auth0/auth0-react';
+//import { useAuth0 } from '@auth0/auth0-react';
 import { UserContext } from '../../App';
 import { useContext } from 'react';
 import { GrGoogle } from "react-icons/gr";
+import FacebookLogin from 'react-facebook-login'
 const backendUrl = import.meta.env.VITE_BACKEND;
 
 
-export function GoogleBtn({ setShowLogin }) {
-  const {loginWithRedirect ,getAccessTokenSilently} = useAuth0();
+export function FacebookBtn({setShowLogin}) {
+  
+  //const {loginWithRedirect ,getAccessTokenSilently} = useAuth0();
   const { user, setUser } = useContext(UserContext);
-  console.log(user);
+  //const auth = getAuth(app);
   async function login(params) {
     const response = await fetch(`${backendUrl}/user/login`, {
       method: 'POST',
@@ -21,7 +24,7 @@ export function GoogleBtn({ setShowLogin }) {
       credentials: 'include',
       body: JSON.stringify({
         email: params.email,
-        password: '',
+        password: '1',
       }),
     });
     if (response.ok) {
@@ -45,35 +48,55 @@ export function GoogleBtn({ setShowLogin }) {
       },
       credentials: 'include',
       body: JSON.stringify({
-        name: object.displayName,
+        name: object.name,
         email: object.email,
-        password: '',
+        password: '1',
         tercero: true,
       }),
     });
     if (register.ok) {
       login(object);
       console.log("talvez funciono");
+      
     } else {
       login(object);
     }
   }
-  const handleLogin = async () => {
-    try {
-      await loginWithRedirect();
-
-      const token = await getAccessTokenSilently();
-      console.log("Access Token:", token);
-
-    } catch (error) {
-      console.error(error);
+  const facebookLog = (response)=>{
+    console.log(response);
+    if (response.status) {
+      setShowLogin(false)
+      location.reload()
     }
-  };
+    authentication(response).then();
+
+  }
   
   return (
     <>
-    <button onClick={loginWithRedirect} className={styles.googleBtn}><GrGoogle /> Iniciar con google </button>
+      <FacebookLogin
+      appId='982520500336766'
+      autoLoad={true}
+      fields='name,email'
+      callback={facebookLog}
+      textButton={false}
+      cssClass={styles.facebook}
+      >
+
+      </FacebookLogin>
     </>
   );
 }
 
+
+  {//<button onClick={handleLogin} className={styles.googleBtn}><GrGoogle /> Iniciar con google </button>
+  }
+    /*const handleLogin = async () => {
+      const provider = new GoogleAuthProvider();
+      try {
+        const credentials = await signInWithPopup(provider,auth)
+        console.log(credentials);
+      } catch (error) {
+        console.error(error);
+      }
+    };*/
