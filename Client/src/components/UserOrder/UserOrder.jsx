@@ -5,7 +5,7 @@ import styles from "./OrderDetailsPage.module.css";
 
 const backendUrl = import.meta.env.VITE_BACKEND;
 
-const OrderDetailsPage = () => {
+const OrderDetailsPageUser = () => {
   const { orderId } = useParams();
   const navigate = useNavigate();
   const [orderDetails, setOrderDetails] = useState(null);
@@ -51,7 +51,7 @@ const OrderDetailsPage = () => {
           cursor: "pointer",
         }}
         onClick={() => {
-          navigate("/admin/orders");
+          navigate("/profile");
         }}
       >
         Atras
@@ -97,4 +97,4 @@ const OrderDetailsPage = () => {
   );
 };
 
-export default OrderDetailsPage;
+export default OrderDetailsPageUser;

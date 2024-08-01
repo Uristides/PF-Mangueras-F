@@ -81,3 +81,18 @@
     font-size: 12px;
     margin-top: 5px;
 }
+.facebook{
+    width: 95%;
+    padding: .5em;
+    border-radius: 5px;
+    border: none;
+    background-color: #0056b3;
+    color: white;
+    display: flex;
+    justify-content: space-around;
+    font-size: 1em;
+    cursor: pointer;
+}
+.facebook:hover{
+    background-color: #034388;
+}
