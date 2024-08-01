@@ -7,6 +7,8 @@ import { UserContext } from "../../App";
 import { useContext } from "react";
 import { GrGoogle } from "react-icons/gr";
 import FacebookLogin from "react-facebook-login";
+import emailjs from "@emailjs/browser";
+
 const backendUrl = import.meta.env.VITE_BACKEND;
 
 export function FacebookBtn({ setShowLogin }) {
