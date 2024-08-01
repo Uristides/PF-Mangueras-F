@@ -10,6 +10,7 @@ import { FaUserAlt } from "react-icons/fa";
 const backendUrl = import.meta.env.VITE_BACKEND;
 
 const Navbar = ({ sesion, onSearch }) => {
+  
   const { pathname } = useLocation();
   const dispatch = useDispatch();
   const { user } = useContext(UserContext);
@@ -88,18 +89,22 @@ const Navbar = ({ sesion, onSearch }) => {
           REGISTRARSE
         </Link>
       ) : (
+        pathname !=='/profile'?
         <Link to={'/profile'} className={styles.profile}>
-        <div className={styles.profileIcon} >
-          <FaUserAlt />
-      </div>
-      </Link>
+          <div className={styles.profileIcon} >
+            <FaUserAlt />
+          </div>
+        </Link>
+        :
+        <button className={styles.logout} onClick={logout}>
+        CERRAR SESIÓN
+      </button>
       )}
+      
     </div>
   );
 };
 
 export default Navbar;
 
-      {/*<button className={styles.logout} onClick={logout}>
-        CERRAR SESIÓN
-      </button>*/}
+      {/**/}
