@@ -1,32 +1,77 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
 const backendUrl = import.meta.env.VITE_BACKEND;
 
-// Async thunk to fetch user data
-export const fetchUser = createAsyncThunk("user/fetchUser", async () => {
+export const fetchUser = createAsyncThunk('user/fetchUser', async () => {
   try {
-    const { data } = await axios.get(`${backendUrl}/user/`); // Replace with your API endpoint
+    const { data } = await axios.get(`${backendUrl}/user/`);
     return data;
   } catch (error) {
-    console.log("error in fetchUser: ", error.message);
+    console.log('error in fetchUser: ', error.message);
   }
 });
 
-export const editUser = createAsyncThunk("user/editUser", async (updatedUser)=>{
-  try {
-    const { data } = await axios.post(`${backendUrl}/user/editUser`, updatedUser)
-            if(data) {
-                alert ("Usuario actualizado exitosamente!")
-            }
-  } catch (error) {
-    return alert("Error in edit user: ", error.message)
+export const editUser = createAsyncThunk(
+  'user/editUser',
+  async (updatedUser) => {
+    try {
+      const { data } = await axios.post(
+        `${backendUrl}/user/editUser`,
+        updatedUser
+      );
+      if (data) {
+        alert('Usuario actualizado exitosamente!');
+      }
+    } catch (error) {
+      return alert('Error in edit user: ', error.message);
+    }
   }
-})
+);
+export const fetchUserById = createAsyncThunk(
+  'user/fetchUserById',
+  async (userId) => {
+    try {
+      const { data } = await axios.get(`${backendUrl}/user/id/${userId}`);
+      return data;
+    } catch (error) {
+      console.log('error in fetchUserById: ', error.message);
+    }
+  }
+);
+
+export const fetchUserReviews = createAsyncThunk(
+  'user/fetchUserReviews',
+  async (userId) => {
+    try {
+      const { data } = await axios.get(
+        `${backendUrl}/user/myReviews/${userId}`
+      );
+      return data;
+    } catch (error) {
+      console.log('error in fetchUserReviews: ', error.message);
+    }
+  }
+);
+
+export const fetchUserOrders = createAsyncThunk(
+  'user/fetchUserOrders',
+  async (userId) => {
+    try {
+      const { data } = await axios.get(`${backendUrl}/user/orders/${userId}`);
+      return data;
+    } catch (error) {
+      console.log('error in fetchUserOrders: ', error.message);
+    }
+  }
+);
 
 const userSlice = createSlice({
-  name: "user",
+  name: 'user',
   initialState: {
     items: {},
+    item: {},
+    reviews: [],
+    orders: [],
     loading: false,
     error: null,
   },
@@ -45,20 +90,54 @@ const userSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
-      .addCase(editUser.rejected, (state, action)=>{
-        state.loading = false;
-        state.error = action.error.message
-      })
-      .addCase(editUser.pending, (state)=>{
+      .addCase(fetchUserById.pending, (state) => {
         state.loading = true;
-        state.error = null
+        state.error = null;
       })
-      .addCase(editUser.fulfilled, (state, action)=>{
+      .addCase(fetchUserById.fulfilled, (state, action) => {
         state.loading = false;
-        state.items = { ...state.items, ...action.payload };
-        window.location.reload();
+        state.item = action.payload;
       })
-      ;
+      .addCase(fetchUserById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(editUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(editUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.item = action.payload.usuario;
+      })
+      .addCase(editUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(fetchUserReviews.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchUserReviews.fulfilled, (state, action) => {
+        state.loading = false;
+        state.reviews = action.payload;
+      })
+      .addCase(fetchUserReviews.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(fetchUserOrders.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchUserOrders.fulfilled, (state, action) => {
+        state.loading = false;
+        state.orders = action.payload;
+      })
+      .addCase(fetchUserOrders.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      });
   },
 });
 
