@@ -52,7 +52,8 @@ const Card = (props) => {
 
       <AddButton
         available={available}
-        data={productWithQuantity}
+        productId={productId}
+        quantity={quantity}
         stock={stock}
         actionType="addOne" // Specify the action type for adding specified quantity
         // Specify the action type for adding specified quantity

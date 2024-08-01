@@ -8,6 +8,7 @@ import Dashboard from "./views/admin/Dashboard";
 import Navbar from "./components/Navbar/Navbar";
 import Checkout from "./components/Checkout/Checkout";
 import PaymentFeedback from "./components/PaymentFeedback/PaymentFeedback";
+import Profile from './components/Profile/Profile';
 import { Route, Routes, Navigate } from "react-router-dom";
 import { initMercadoPago } from "@mercadopago/sdk-react";
 
@@ -66,6 +67,11 @@ function App() {
             </>
           ) : (
             <Route path="/cart" element={<Login sesion={sesion} />} />
+          )}
+          {user && user.rol === "User" ?(
+            <Route path="/profile" element={<Profile />} />
+          ):(
+            <Route path="/login" element={<Login sesion={sesion} />} />
           )}
           {user && user.rol === "Admin" ? (
             <Route path="/admin/*" element={<Dashboard sesion={sesion}/>} />

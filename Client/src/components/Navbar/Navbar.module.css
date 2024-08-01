@@ -41,6 +41,18 @@
   color: #fff;
 }
 
+.profile {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #3d6a3e;
+}
+
+.profileIcon {
+  width: 20px;
+  height: 20px;
+}
+
 .loginButton {
   display: inline-block;
   padding: 1em;
