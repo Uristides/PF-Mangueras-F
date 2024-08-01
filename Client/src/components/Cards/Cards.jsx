@@ -6,7 +6,7 @@ import { fetchItems } from "../../redux/itemsSlice";
 
 const Cards = ({ filters, sortOption, searchQuery }) => {
   const [currentPage, setCurrentPage] = useState(0);
-  const itemsPerPage = 4;
+  const itemsPerPage = 8;
 
   const dispatch = useDispatch();
   const allMangueras = useSelector((state) => state.items.items);

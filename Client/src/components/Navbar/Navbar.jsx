@@ -107,4 +107,4 @@ const Navbar = ({ sesion, onSearch }) => {
 
 export default Navbar;
 
-      {/**/}
+      

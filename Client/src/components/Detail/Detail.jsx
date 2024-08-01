@@ -23,7 +23,7 @@ const Detail = () => {
   const [averageRating, setAverageRating] = useState(0);
   const [purchased, setPurchased] = useState([]);
   const { user } = useContext(UserContext);
-  console.log("User in context: ", user);
+  // console.log("User in context: ", user);
 
   useEffect(() => {
     const getById = async (id) => {
@@ -46,7 +46,7 @@ const Detail = () => {
         const { data } = await axios.get(`${backendUrl}/user/id/${userId}`);
         if (data) {
           setPurchased(data.purchases);
-          console.log("data in getUserPurchases: ", data.purchases);
+          // console.log("data in getUserPurchases: ", data.purchases);
         } else {
           console.log("Nothing in getUserPurchases");
         }
@@ -92,7 +92,7 @@ const Detail = () => {
   };
 
   const handleBackClick = () => {
-    navigate('/');
+    navigate('/'); 
   };
 
   const userHasPurchased = purchased.includes(parseInt(id, 10));
@@ -171,7 +171,8 @@ const Detail = () => {
                       )}
                     </div>
                     <AddButton
-                      data={productWithQuantity}
+                      productId={productId}
+                      quantity={quantity}
                       stock={product.stock}
                       available={product.available}
                       className={styles.carritoButton}

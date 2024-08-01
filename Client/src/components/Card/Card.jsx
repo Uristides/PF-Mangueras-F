@@ -19,27 +19,16 @@ const Card = (props) => {
   } = props.data;
 
   const [productId, setProductId] = useState(id);
-  const [quantity, setQuantity] = useState("1");
-
-  const [productWithQuantity, setProductWithQuantity] = useState("");
-
-  useEffect(() => {
-    setProductWithQuantity(`${productId}:${quantity}`);
-  }, [productId, quantity]);
-
-  const handleQuantityChange = (event) => {
-    const value = event.target.value;
-    if (value <= stock) {
-      setQuantity(value);
-    }
-  };
+  const [quantity, setQuantity] = useState(1);
 
   return (
     <div className={styles.container}>
       <Link to={`/detail/${id}`}>
         <article className={styles.card} key={id}>
           <img src={image} alt="manguera pic" className={styles.img} />
-          {!available && <div className={styles.soldOutLabel}>Agotado</div>}
+          {!available && (
+            <div className={styles.soldOutLabel}>No Disponible</div>
+          )}
           <h1 className={styles.title}>{name}</h1>
           {/* <p className={styles.description}>{description}</p> */}
           <h2 className={styles.otherData}>Marca: {brand}</h2>
@@ -52,7 +41,8 @@ const Card = (props) => {
 
       <AddButton
         available={available}
-        data={productWithQuantity}
+        productId={productId}
+        quantity={quantity}
         stock={stock}
         actionType="addOne" // Specify the action type for adding specified quantity
         // Specify the action type for adding specified quantity
