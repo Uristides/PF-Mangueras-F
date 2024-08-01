@@ -5,7 +5,7 @@ import { searchItems, fetchItems } from '../../redux/itemsSlice';
 import SearchBar from '../SearchBar/SearchBar';
 import styles from './Navbar.module.css';
 import { useDispatch } from 'react-redux';
-import { BsPersonCircle } from 'react-icons/bs';
+import { FaUserAlt } from "react-icons/fa";
 
 const backendUrl = import.meta.env.VITE_BACKEND;
 
@@ -82,20 +82,24 @@ const Navbar = ({ sesion, onSearch }) => {
         )}
       </div>
       <SearchBar onSearch={handleSearch} />
-      <Link to={'/profile'} className={styles.profile}>
-        <BsPersonCircle className={styles.profileIcon} />
-      </Link>
+
       {!user ? (
         <Link to='/login' className={styles.loginButton}>
           REGISTRARSE
         </Link>
       ) : (
-        <button className={styles.logout} onClick={logout}>
-          CERRAR SESIÓN
-        </button>
+        <Link to={'/profile'} className={styles.profile}>
+        <div className={styles.profileIcon} >
+          <FaUserAlt />
+      </div>
+      </Link>
       )}
     </div>
   );
 };
 
 export default Navbar;
+
+      {/*<button className={styles.logout} onClick={logout}>
+        CERRAR SESIÓN
+      </button>*/}

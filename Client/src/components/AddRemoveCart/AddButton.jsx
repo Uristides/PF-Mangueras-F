@@ -16,7 +16,7 @@ const AddButton = (props) => {
   const dispatch = useDispatch();
   const { user } = useContext(UserContext);
   const cartItems = useSelector((state) => state.cart.items); // Get cart items from the store
-
+  
   // Initialize state with the user ID and an empty item field
   const [itemInfo, setItemInfo] = useState({
     id: user.id,

@@ -44,8 +44,11 @@
 .profile {
   display: flex;
   align-items: center;
+  text-align: center;
   text-decoration: none;
   color: #3d6a3e;
+  font-size: 2em;
+  margin-right:1em ;
 }
 
 .profileIcon {

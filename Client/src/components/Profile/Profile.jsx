@@ -24,7 +24,7 @@ const Profile = ({ data, sesion }) => {
   const dataReviews = useSelector((state) => state.user.reviews);
   const products = useSelector((state) => state.items.items);
   const orders = useSelector((state) => state.user.orders);
-
+  console.log(userID);
   useEffect(() => {
     dispatch(fetchUserById(userID.id));
     dispatch(fetchUserReviews(userID.id));

@@ -16,17 +16,17 @@ const backendUrl = import.meta.env.VITE_BACKEND;
 
 export const UserContext = createContext(null);
 
-// Inicializa Mercado Pago con tu public key
+
 initMercadoPago('APP_USR-f9778cd5-2698-4783-954b-94f05d959a29', {
   locale: 'es-MX',
 });
 
 function App() {
-  const [user, setUser] = useState(() => {
+  const [user, setUser] = useState(false
     // Recupera el usuario de localStorage al inicializar el estado
-    const savedUser = localStorage.getItem('user');
-    return savedUser ? JSON.parse(savedUser) : false;
-  });
+    //const savedUser = localStorage.getItem('user');
+    //return savedUser ? JSON.parse(savedUser) : false;
+  );
   const [searchTerm, setSearchTerm] = useState('');
 
   const sesion = async () => {
