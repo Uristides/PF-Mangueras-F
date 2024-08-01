@@ -1,0 +1,16 @@
+
+
+.checkoutButton{
+    display:  flex;  
+    flex-direction:  column ;
+    align-items:  center ; 
+    width:  250px ; 
+    border :  solid 2px black ; 
+    background-color:  #99e49b ; 
+    border-radius: 25em;
+
+}
+
+.checkoutButton:hover{
+    cursor: pointer;
+}

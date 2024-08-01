@@ -1,0 +1,25 @@
+.emptyCartContainer{
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+}
+
+.emptyCartIcon{
+    font-size: 100px;
+}
+
+.returnToShopBtn{
+    background-color: #99e49b;
+    font-size: 20px;
+    padding: 20px;
+    border: 0;
+    border-radius: 25em;
+}
+
+.returnToShopBtn:hover{
+    cursor: pointer;
+}
+

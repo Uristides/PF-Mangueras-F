@@ -2,11 +2,13 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../App";
 import axios from "axios";
 import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
+import { MdOutlineShoppingCartCheckout } from "react-icons/md";
+import styles from './CheckoutButton.module.css'
 
 const backendUrl = import.meta.env.VITE_BACKEND;
 
 const CheckoutButton = ({ totalPrice }) => {
-  initMercadoPago("TEST-af207a73-ab9d-40df-84b6-480eafe93cc3", {
+  initMercadoPago("APP_USR-f9778cd5-2698-4783-954b-94f05d959a29", {
     locale: "es-MX",
   }); // Reemplaza 'YOUR_PUBLIC_KEY' con tu clave pública real
 
@@ -51,8 +53,14 @@ const CheckoutButton = ({ totalPrice }) => {
   };
   return (
     <div>
-      <button onClick={handleBuy} disabled={!possibleCheckout}>
-        Checkout
+      <button
+        onClick={handleBuy}
+        disabled={!possibleCheckout}
+        className={styles.checkoutButton}
+        
+      >
+        <MdOutlineShoppingCartCheckout style={{ fontSize: '30px' }} />
+        <span>Proceder al Checkout</span>
       </button>
       <div id="wallet_container">
         {preferenceId && <Wallet initialization={{ preferenceId }} />}

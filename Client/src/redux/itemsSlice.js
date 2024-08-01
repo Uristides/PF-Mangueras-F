@@ -5,6 +5,7 @@ const backendUrl = import.meta.env.VITE_BACKEND;
 export const fetchItems = createAsyncThunk("items/fetchItems", async () => {
   try {
     const response = await axios.get(`${backendUrl}/products/`);
+    // console.log("fetchItems function: ", response.data)
     return response.data;
   } catch (error) {
     console.error("Error in fetchItems: ", error.message);
@@ -74,6 +75,21 @@ export const productCreate = createAsyncThunk(
   }
 );
 
+export const searchItems = createAsyncThunk(
+  "items/searchItems",
+  async (query) => {
+    try {
+      const response = await axios.get(
+        `${backendUrl}/products/search?name=${query}`
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error in searchItems: ", error.message);
+      throw error;
+    }
+  }
+);
+
 export const sortItemsByNameAscending = createAction(
   "items/sortByNameAscending"
 );
@@ -107,6 +123,7 @@ const itemsSlice = createSlice({
   initialState: {
     items: [],
     originalItems: [],
+    brands: [],
     status: "idle",
     error: null,
   },
@@ -124,6 +141,19 @@ const itemsSlice = createSlice({
         applySort(state, localStorage.getItem("selectedSort"));
       })
       .addCase(fetchItems.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(searchItems.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(searchItems.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.items = action.payload;
+        state.originalItems = action.payload;
+        applyFilters(state); // Aplica los filtros almacenados
+      })
+      .addCase(searchItems.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
       })
@@ -157,6 +187,8 @@ const itemsSlice = createSlice({
       })
       .addCase(productCreate.fulfilled, (state, action) => {
         state.status = "succeeded";
+        // Add the newly created item to the items array
+        // state.allItems.push(action.payload);
         state.items.push(action.payload);
       })
       .addCase(productCreate.rejected, (state, action) => {
@@ -168,12 +200,13 @@ const itemsSlice = createSlice({
       })
       .addCase(editItem.fulfilled, (state, action) => {
         state.status = "succeeded";
+        // Update the edited item in the items array
         const index = state.items.findIndex(
           (item) => item.id === action.payload.id
         );
         if (index !== -1) {
           state.items[index] = action.payload;
-          state.originalItems[index] = action.payload;
+          state.allItems[index] = action.payload;
         }
       })
       .addCase(editItem.rejected, (state, action) => {

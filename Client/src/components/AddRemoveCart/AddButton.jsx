@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
-import { UserContext } from "../../App";
+import { UserContext } from "../../App"; 
+import { useNavigate } from "react-router-dom";
 import { addToCart, addOneToCart } from "../../redux/cartSlice"; // Import both actions
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -11,6 +12,7 @@ import styles from "./addButton.module.css";
 const AddButton = (props) => {
   const stock = props.stock;
 
+  const navigate = useNavigate()
   const dispatch = useDispatch();
   const { user } = useContext(UserContext);
   const cartItems = useSelector((state) => state.cart.items); // Get cart items from the store
@@ -31,6 +33,12 @@ const AddButton = (props) => {
 
   // Handle click event to dispatch the appropriate action based on the actionType prop
   const handleClick = () => {
+    if(!user){
+      
+      navigate('/login')
+    } else{
+
+    
     const [productId, quantity] = props.data.split(":").map(Number);
     const existingItem = cartItems.find((i) => i.startsWith(`${productId}:`));
     let existingQuantity = 0;
@@ -53,12 +61,13 @@ const AddButton = (props) => {
         .unwrap()
         .catch((error) => {
           console.error("Error in adding to cart: ", error.message);
-          alert(error.message);
+          
         });
     } else {
       console.log("Cannot add more than available stock.");
       alert("Cannot add more than available stock.");
     }
+  }
   };
 
   return (

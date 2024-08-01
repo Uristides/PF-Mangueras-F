@@ -16,12 +16,13 @@ const backendUrl = import.meta.env.VITE_BACKEND;
 export const UserContext = createContext(null);
 
 // Inicializa Mercado Pago con tu public key
-initMercadoPago("TEST-af207a73-ab9d-40df-84b6-480eafe93cc3", {
+initMercadoPago("APP_USR-f9778cd5-2698-4783-954b-94f05d959a29", {
   locale: "es-MX",
 });
 
 function App() {
   const [user, setUser] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const sesion = async () => {
     try {
@@ -54,9 +55,9 @@ function App() {
   return (
     <>
       <UserContext.Provider value={{ user, setUser }}>
-        <Navbar sesion={sesion} />
+       <Navbar sesion={sesion} onSearch={setSearchTerm} />
         <Routes>
-          <Route path="/" element={<Home sesion={sesion} />} />
+          <Route path="/" element={<Home sesion={sesion} searchTerm={setSearchTerm}/>} />
           {user ? (
             <>
               <Route path="/cart" element={<Cart />} />
@@ -67,7 +68,7 @@ function App() {
             <Route path="/cart" element={<Login sesion={sesion} />} />
           )}
           {user && user.rol === "Admin" ? (
-            <Route path="/admin/*" element={<Dashboard />} />
+            <Route path="/admin/*" element={<Dashboard sesion={sesion}/>} />
           ) : (
             <Route path="/cart" element={<Navigate to="/login" />} />
           )}

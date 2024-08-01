@@ -1,5 +1,6 @@
 import CartItem from "../CartItem/CartItem";
 import Checkout from "../Checkout/Checkout";
+import EmptyCart from "./EmptyCart/EmptyCart";
 import styles from "./Cart.module.css";
 import { UserContext } from "../../App";
 import { useContext, useEffect, useState } from "react";
@@ -62,7 +63,7 @@ const Cart = () => {
   }
 
   if (userCart.length === 0) {
-    return <div>Carrito Vacio. Ve a comprar!</div>;
+    return <EmptyCart />;
   }
 
   return (
