@@ -63,7 +63,7 @@ const Cart = () => {
   }
 
   if (userCart.length === 0) {
-    return <EmptyCart/>;
+    return <EmptyCart />;
   }
 
   return (
