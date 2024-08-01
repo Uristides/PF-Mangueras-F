@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import styles from "./OrderDetailsPage.module.css";
 
@@ -7,6 +7,7 @@ const backendUrl = import.meta.env.VITE_BACKEND;
 
 const OrderDetailsPage = () => {
   const { orderId } = useParams();
+  const navigate = useNavigate();
   const [orderDetails, setOrderDetails] = useState(null);
 
   useEffect(() => {
@@ -39,6 +40,22 @@ const OrderDetailsPage = () => {
 
   return (
     <div className={styles.detailsContainer}>
+      <button
+        style={{
+          margin: "15px",
+          width: "70px",
+          border: "solid 1px black",
+          borderRadius: "20em",
+          textDecoration: "underline",
+          backgroundColor: "#99e49b",
+          cursor: "pointer",
+        }}
+        onClick={() => {
+          navigate("/admin/orders");
+        }}
+      >
+        Atras
+      </button>
       <h2>Detalles de la Orden</h2>
       <p>
         <strong>ID:</strong> {orderDetails.id}
