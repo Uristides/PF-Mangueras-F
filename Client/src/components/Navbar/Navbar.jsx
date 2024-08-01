@@ -1,10 +1,11 @@
-import { Link, useLocation } from 'react-router-dom';
-import { useContext } from 'react';
-import { UserContext } from '../../App';
-import { searchItems, fetchItems } from '../../redux/itemsSlice';
-import SearchBar from '../SearchBar/SearchBar';
-import styles from './Navbar.module.css';
-import { useDispatch } from 'react-redux';
+import { Link, useLocation } from "react-router-dom";
+import { useContext } from "react";
+import { UserContext } from "../../App";
+import { searchItems, fetchItems } from "../../redux/itemsSlice";
+import SearchBar from "../SearchBar/SearchBar";
+import styles from "./Navbar.module.css";
+import { useDispatch } from "react-redux";
+
 import { BsPersonCircle } from 'react-icons/bs';
 
 const backendUrl = import.meta.env.VITE_BACKEND;

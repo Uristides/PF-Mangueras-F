@@ -67,4 +67,7 @@ const EditModal = ({ setShowModalEdit, data, handlerEditUser }) => {
   );
 };
 
+
 export default EditModal;
+
+

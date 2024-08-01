@@ -1,82 +1,82 @@
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../App"; 
 import { useNavigate } from "react-router-dom";
-import { addToCart, addOneToCart } from "../../redux/cartSlice"; // Import both actions
 import { useDispatch, useSelector } from "react-redux";
+import { fetchCart } from "../../redux/cartSlice";
 import {
   MdOutlineShoppingCart,
   MdOutlineRemoveShoppingCart,
 } from "react-icons/md";
 import styles from "./addButton.module.css";
+import axios from "axios";
 
-const AddButton = (props) => {
-  const stock = props.stock;
+const backendUrl = import.meta.env.VITE_BACKEND;
 
-  const navigate = useNavigate()
+const AddButton = ({ quantity, productId, stock, available }) => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useContext(UserContext);
-  const cartItems = useSelector((state) => state.cart.items); // Get cart items from the store
+  const cartItems = useSelector((state) => state.cart.items); 
 
-  // Initialize state with the user ID and an empty item field
+  // Use state to hold item information
   const [itemInfo, setItemInfo] = useState({
-    id: user.id,
-    item: "",
+    id:  user.id,
+    item: `${productId}:0`,
   });
 
-  // Update the itemInfo state whenever props.data changes
   useEffect(() => {
-    setItemInfo((prevState) => ({
-      ...prevState,
-      item: props.data,
-    }));
-  }, [props.data, user.id, cartItems]);
+    if (user) {
+      dispatch(fetchCart(user.id));
+      setItemInfo((prev) => ({
+        ...prev,
+        id: user.id,
+        item: `${productId}:${quantity}`,
+      }));
+    }
+  }, [quantity, user, dispatch]);
+  const [isDisabled, setIsDisabled] = useState(false);
 
-  // Handle click event to dispatch the appropriate action based on the actionType prop
-  const handleClick = () => {
-    if(!user){
-      
-      navigate('/login')
-    } else{
+  const handleClick = async () => {
+    if (!user) {
+      navigate('/login');
+    } else {
 
     
-    const [productId, quantity] = props.data.split(":").map(Number);
-    const existingItem = cartItems.find((i) => i.startsWith(`${productId}:`));
-    let existingQuantity = 0;
 
-    if (existingItem) {
-      existingQuantity = parseInt(existingItem.split(":")[1], 10);
-      console.log("existingquantity in if(existingItem): ", existingQuantity);
-    }
+      const existingItem = cartItems.find(item => item.startsWith(`${productId}:`));
+      const existingQuantity = existingItem ? parseInt(existingItem.split(':')[1], 10) : 0;
+      const totalQuantity = existingQuantity + quantity;
 
-    const newQuantity =
-      existingQuantity + (props.actionType === "addOne" ? 1 : quantity);
+      if (totalQuantity > stock) {
+        alert("Cannot add more quantity than stock");
+      } else {
+        try {
 
-    if (newQuantity <= stock) {
-      const action =
-        props.actionType === "addOne"
-          ? addOneToCart({ userId: user.id, productId })
-          : addToCart({ userId: user.id, productId, quantity });
-
-      dispatch(action)
-        .unwrap()
-        .catch((error) => {
-          console.error("Error in adding to cart: ", error.message);
           
-        });
-    } else {
-      console.log("Cannot add more than available stock.");
-      alert("Cannot add more than available stock.");
+         
+          const { data } = await axios.post(`${backendUrl}/user/addCart`, itemInfo);
+          console.log("Cart updated successfully: ", data);
+          
+
+          dispatch(fetchCart(user.id)); // Refresh the cart data
+          setTimeout(() => {
+            setIsDisabled(false);
+          }, 500);
+        } catch (error) {
+
+          console.error("Error in handleClick: ", error.message);
+        }
+      }
     }
-  }
   };
 
   return (
     <button
       onClick={handleClick}
       className={styles.button}
-      disabled={!props.available}
+      disabled={!available || isDisabled}
     >
-      {props.available ? (
+      {available ? (
         <MdOutlineShoppingCart />
       ) : (
         <MdOutlineRemoveShoppingCart />

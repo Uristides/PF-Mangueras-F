@@ -8,10 +8,9 @@ import Dashboard from "./views/admin/Dashboard";
 import Navbar from "./components/Navbar/Navbar";
 import Checkout from "./components/Checkout/Checkout";
 import PaymentFeedback from "./components/PaymentFeedback/PaymentFeedback";
-import Profile from "./components/Profile/Profile";
+import Profile from './components/Profile/Profile';
 import { Route, Routes, Navigate } from "react-router-dom";
 import { initMercadoPago } from "@mercadopago/sdk-react";
-import OrderDetailsPageUser from "./components/UserOrder/UserOrder";
 
 const backendUrl = import.meta.env.VITE_BACKEND;
 
@@ -32,10 +31,7 @@ function App() {
         credentials: "include",
       });
       if (data.ok) {
-        const userData = await data.json();
-        setUser(userData);
-        // Guarda el usuario en localStorage
-        localStorage.setItem("user", JSON.stringify(userData));
+        setUser(await data.json());
       } else {
         return;
       }
@@ -60,31 +56,25 @@ function App() {
   return (
     <>
       <UserContext.Provider value={{ user, setUser }}>
-        <Navbar sesion={sesion} onSearch={setSearchTerm} />
+       <Navbar sesion={sesion} onSearch={setSearchTerm} />
         <Routes>
-          <Route
-            path="/"
-            element={<Home sesion={sesion} searchTerm={setSearchTerm} />}
-          />
+          <Route path="/" element={<Home sesion={sesion} searchTerm={setSearchTerm}/>} />
           {user ? (
             <>
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/checkout/feedback" element={<PaymentFeedback />} />
-              <Route
-                path="/profile"
-                element={<Profile data={user} sesion={sesion} />}
-              />
-              <Route
-                path="/profile/order/:orderId"
-                element={<OrderDetailsPageUser data={user} sesion={sesion} />}
-              />
             </>
           ) : (
             <Route path="/cart" element={<Login sesion={sesion} />} />
           )}
+          {user && user.rol === "User" ?(
+            <Route path="/profile" element={<Profile />} />
+          ):(
+            <Route path="/login" element={<Login sesion={sesion} />} />
+          )}
           {user && user.rol === "Admin" ? (
-            <Route path="/admin/*" element={<Dashboard sesion={sesion} />} />
+            <Route path="/admin/*" element={<Dashboard sesion={sesion}/>} />
           ) : (
             <Route path="/cart" element={<Navigate to="/login" />} />
           )}
