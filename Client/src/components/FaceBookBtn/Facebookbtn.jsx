@@ -59,8 +59,8 @@ export function FacebookBtn({ setShowLogin }) {
             "service_fummu1u",
             "template_u4639sc",
             {
-              to_name: info.nombre,
-              to_email: info.correo,
+              to_name: object.name,
+              to_email: object.email,
               message: "¡Gracias por registrarte!",
             },
             "rLKlxYuL7bCRIIRjV"
