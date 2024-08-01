@@ -53,7 +53,7 @@ const AddButton = ({ quantity, productId, stock, available }) => {
         try {
 
           
-         
+          setIsDisabled(true)
           const { data } = await axios.post(`${backendUrl}/user/addCart`, itemInfo);
           console.log("Cart updated successfully: ", data);
           
