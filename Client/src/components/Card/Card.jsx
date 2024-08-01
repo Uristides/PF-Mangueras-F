@@ -19,20 +19,9 @@ const Card = (props) => {
   } = props.data;
 
   const [productId, setProductId] = useState(id);
-  const [quantity, setQuantity] = useState("1");
+  const [quantity, setQuantity] = useState(1);
 
-  const [productWithQuantity, setProductWithQuantity] = useState("");
-
-  useEffect(() => {
-    setProductWithQuantity(`${productId}:${quantity}`);
-  }, [productId, quantity]);
-
-  const handleQuantityChange = (event) => {
-    const value = event.target.value;
-    if (value <= stock) {
-      setQuantity(value);
-    }
-  };
+  
 
   return (
     <div className={styles.container}>

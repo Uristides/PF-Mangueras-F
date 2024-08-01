@@ -1,109 +1,80 @@
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../App"; 
 import { useNavigate } from "react-router-dom";
-import { addToCart, addOneToCart } from "../../redux/cartSlice"; // Import both actions
 import { useDispatch, useSelector } from "react-redux";
+import { fetchCart } from "../../redux/cartSlice";
 import {
   MdOutlineShoppingCart,
   MdOutlineRemoveShoppingCart,
 } from "react-icons/md";
 import styles from "./addButton.module.css";
 import axios from "axios";
+
 const backendUrl = import.meta.env.VITE_BACKEND;
 
-
-
-const AddButton = ( {quantity, productId, stock,available, actionType }) => {
-
-  const productQuantity = quantity.toString()
-  
-  // console.log("Quantity by props: ", quantity)
-  console.log("Stock: ", stock)
-
-  const navigate = useNavigate()
+const AddButton = ({ quantity, productId, stock, available }) => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useContext(UserContext);
   const cartItems = useSelector((state) => state.cart.items); 
-  
 
-  // console.log("Quantity: ", productQuantity)
-
-  let productwq = `${productId}:${productQuantity}`
-  console.log("Product with q: ", productwq)
-
-  // Initialize state with the user ID and an empty item field
+  // Use state to hold item information
   const [itemInfo, setItemInfo] = useState({
-    id: user.id,
-    item: productwq,
+    id:  user.id,
+    item: `${productId}:0`,
   });
 
-  console.log("Item info: ", itemInfo)
-
-  // Update the itemInfo state whenever props.data changes
   useEffect(() => {
-    setItemInfo((prevState) => ({
-      ...prevState,
-      item: productId,
-    }));
-  }, [productId, user.id, cartItems]);
-
-
-
-
-  const handleClick =async () => {
-    if(!user){
-      
-      navigate('/login')
+    if (user) {
+      dispatch(fetchCart(user.id));
+      setItemInfo((prev) => ({
+        ...prev,
+        id: user.id,
+        item: `${productId}:${quantity}`,
+      }));
     }
-     else if( quantity > stock){
-      alert("Cannot add more quantity than stock")
-     }else{
+  }, [quantity, user, dispatch]);
+  const [isDisabled, setIsDisabled] = useState(false);
 
-      try {
-        const { data } = await axios.post(`${backendUrl}/user/addCart`, itemInfo )
-        console.log("posthandleclick data: ", data)
-        
-      } catch (error) {
-        console.log("Error in handle click", error.message)
-      }
-      
-    // const existingItem = cartItems.find((i) => i.startsWith(`${productId}:`));
-    let existingQuantity = 0;
+  const handleClick = async () => {
+    if (!user) {
+      navigate('/login');
+    } else {
+
     
 
-    // if (existingItem) {
-    //   existingQuantity = parseInt(existingItem.split(":")[1], 10);
-    //   console.log("existingquantity in if(existingItem): ", existingQuantity);
-    // }
+      const existingItem = cartItems.find(item => item.startsWith(`${productId}:`));
+      const existingQuantity = existingItem ? parseInt(existingItem.split(':')[1], 10) : 0;
+      const totalQuantity = existingQuantity + quantity;
 
-    // const newQuantity =
-    //   existingQuantity + (actionType === "addOne" ? 1 : quantity);
+      if (totalQuantity > stock) {
+        alert("Cannot add more quantity than stock");
+      } else {
+        try {
 
-    // if (newQuantity <= stock) {
-    //   const action =
-    //     actionType === "addOne"
-    //       ? addOneToCart({ userId: user.id, productId })
-    //       : addToCart({ userId: user.id, productId, quantity });
-
-    //   dispatch(action)
-    //     .unwrap()
-    //     .catch((error) => {
-    //       console.error("Error in adding to cart: ", error.message);
           
-    //     });
-    // } else {
-    //   console.log("Cannot add more than available stock.");
-    //   alert("Cannot add more than available stock.");
-    // }
-  }
-  
+         
+          const { data } = await axios.post(`${backendUrl}/user/addCart`, itemInfo);
+          console.log("Cart updated successfully: ", data);
+          
+
+          dispatch(fetchCart(user.id)); // Refresh the cart data
+          setTimeout(() => {
+            setIsDisabled(false);
+          }, 500);
+        } catch (error) {
+
+          console.error("Error in handleClick: ", error.message);
+        }
+      }
+    }
   };
 
   return (
     <button
       onClick={handleClick}
       className={styles.button}
-      disabled={!available}
+      disabled={!available || isDisabled}
     >
       {available ? (
         <MdOutlineShoppingCart />
