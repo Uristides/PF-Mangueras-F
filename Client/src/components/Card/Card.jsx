@@ -21,14 +21,14 @@ const Card = (props) => {
   const [productId, setProductId] = useState(id);
   const [quantity, setQuantity] = useState(1);
 
-  
-
   return (
     <div className={styles.container}>
       <Link to={`/detail/${id}`}>
         <article className={styles.card} key={id}>
           <img src={image} alt="manguera pic" className={styles.img} />
-          {!available && <div className={styles.soldOutLabel}>Agotado</div>}
+          {!available && (
+            <div className={styles.soldOutLabel}>No Disponible</div>
+          )}
           <h1 className={styles.title}>{name}</h1>
           {/* <p className={styles.description}>{description}</p> */}
           <h2 className={styles.otherData}>Marca: {brand}</h2>
