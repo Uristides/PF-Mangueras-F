@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import styles from "./OrderDetailsPage.module.css";
 
@@ -80,15 +80,17 @@ const OrderDetailsPage = () => {
           <p>Cantidad</p>
         </div>
         {orderDetails.products.map((product) => (
-          <div key={product.id} className={styles.cartItem}>
-            <img
-              src={product.image}
-              alt={product.name}
-              className={styles.productImage}
-            />
-            <p>{product.name}</p>
-            <p>{product.quantity}</p>
-          </div>
+          <Link to={`/detail/${product.id}`}>
+            <div key={product.id} className={styles.cartItem}>
+              <img
+                src={product.image}
+                alt={product.name}
+                className={styles.productImage}
+              />
+              <p>{product.name}</p>
+              <p>{product.quantity}</p>
+            </div>
+          </Link>
         ))}
       </div>
     </div>
