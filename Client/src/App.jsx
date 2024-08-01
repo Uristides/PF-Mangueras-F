@@ -8,7 +8,7 @@ import Dashboard from "./views/admin/Dashboard";
 import Navbar from "./components/Navbar/Navbar";
 import Checkout from "./components/Checkout/Checkout";
 import PaymentFeedback from "./components/PaymentFeedback/PaymentFeedback";
-import Profile from './components/Profile/Profile';
+import Profile from "./components/Profile/Profile";
 import { Route, Routes, Navigate } from "react-router-dom";
 import { initMercadoPago } from "@mercadopago/sdk-react";
 
@@ -56,31 +56,35 @@ function App() {
   return (
     <>
       <UserContext.Provider value={{ user, setUser }}>
-       <Navbar sesion={sesion} onSearch={setSearchTerm} />
+        <Navbar sesion={sesion} onSearch={setSearchTerm} />
         <Routes>
-          <Route path="/" element={<Home sesion={sesion} searchTerm={setSearchTerm}/>} />
+          <Route
+            path="/"
+            element={<Home sesion={sesion} searchTerm={setSearchTerm} />}
+          />
           {user ? (
             <>
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/checkout/feedback" element={<PaymentFeedback />} />
+              <Route path="/profile" element={<Profile />} />
+              {user.rol === "Admin" && (
+                <Route
+                  path="/admin/*"
+                  element={<Dashboard sesion={sesion} />}
+                />
+              )}
             </>
           ) : (
-            <Route path="/cart" element={<Login sesion={sesion} />} />
-          )}
-          {user && user.rol === "User" ?(
-            <Route path="/profile" element={<Profile />} />
-          ):(
-            <Route path="/login" element={<Login sesion={sesion} />} />
-          )}
-          {user && user.rol === "Admin" ? (
-            <Route path="/admin/*" element={<Dashboard sesion={sesion}/>} />
-          ) : (
-            <Route path="/cart" element={<Navigate to="/login" />} />
+            <>
+              <Route path="/cart" element={<Login sesion={sesion} />} />
+              <Route path="/profile" element={<Navigate to="/login" />} />
+            </>
           )}
           <Route path="/detail/:id" element={<Detail />} />
           <Route path="/login" element={<Login sesion={sesion} />} />
           <Route path="/about" element={<About />} />
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </UserContext.Provider>
     </>
