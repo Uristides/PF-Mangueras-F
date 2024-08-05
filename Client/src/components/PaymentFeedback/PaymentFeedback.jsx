@@ -39,6 +39,7 @@ const PaymentFeedback = () => {
           <h1>Estado del Pago: {feedback.status}</h1>
           <p>ID de Pago: {paymentId}</p>
           <p>ID de Orden: {feedback.order.id}</p>
+          {console.log(feedback.order.id)}
           <OrderDetailsPageUser props={feedback.order.id} />
         </div>
       ) : (
