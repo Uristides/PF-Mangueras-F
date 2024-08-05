@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { UserContext } from "../../App";
+import OrderDetailsPageUser from "./components/UserOrder/UserOrder";
 
 const backendUrl = import.meta.env.VITE_BACKEND;
 
@@ -38,6 +39,7 @@ const PaymentFeedback = () => {
           <h1>Estado del Pago: {feedback.status}</h1>
           <p>ID de Pago: {paymentId}</p>
           <p>ID de Orden: {feedback.order.id}</p>
+          <OrderDetailsPageUser />
         </div>
       ) : (
         <p>Cargando feedback del pago...</p>

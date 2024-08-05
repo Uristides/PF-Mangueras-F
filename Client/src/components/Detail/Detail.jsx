@@ -1,12 +1,12 @@
-import { useEffect, useState, useContext } from 'react';
-import { useSelector } from 'react-redux';
-import { useParams, useNavigate } from 'react-router-dom';
-import { UserContext } from '../../App';
-import AddButton from '../AddRemoveCart/AddButton';
-import Reviews from './Reviews/Reviews';
-import CreateReview from './Reviews/CreateReview/CreateReview';
-import axios from 'axios';
-import styles from './Detail.module.css';
+import { useEffect, useState, useContext } from "react";
+import { useSelector } from "react-redux";
+import { useParams, useNavigate } from "react-router-dom";
+import { UserContext } from "../../App";
+import AddButton from "../AddRemoveCart/AddButton";
+import Reviews from "./Reviews/Reviews";
+import CreateReview from "./Reviews/CreateReview/CreateReview";
+import axios from "axios";
+import styles from "./Detail.module.css";
 const backendUrl = import.meta.env.VITE_BACKEND;
 
 const Detail = () => {
@@ -16,8 +16,8 @@ const Detail = () => {
   const productId = id.toString();
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
-  const [quantityString, setQuantityString] = useState('1');
-  const [productWithQuantity, setProductWithQuantity] = useState('');
+  const [quantityString, setQuantityString] = useState("1");
+  const [productWithQuantity, setProductWithQuantity] = useState("");
 
   const [reviews, setReviews] = useState([]);
   const [averageRating, setAverageRating] = useState(0);
@@ -70,7 +70,9 @@ const Detail = () => {
     };
     const getReviews = async (productId) => {
       try {
-        const { data } = await axios.get(`${backendUrl}/products/reviews/${productId}`);
+        const { data } = await axios.get(
+          `${backendUrl}/products/reviews/${productId}`
+        );
         if (data) {
           setReviews(data);
           setAverageRating(averageCalc(data));
@@ -92,17 +94,17 @@ const Detail = () => {
   };
 
   const handleBackClick = () => {
-    navigate('/'); 
+    navigate("/");
   };
 
   const userHasPurchased = purchased.includes(parseInt(id, 10));
-  const userHasReviewed = reviews.some(rate => rate.userId === user.id);
+  const userHasReviewed = reviews.some((rate) => rate.userId === user.id);
 
   return (
     <div>
       <div className={styles.backButtonDiv}>
         <button className={styles.backButton} onClick={handleBackClick}>
-          Atras
+          Inicio
         </button>
       </div>
       <div className={styles.container}>
@@ -111,7 +113,11 @@ const Detail = () => {
         {product ? (
           <div className={styles.productContainer}>
             <div>
-              <img src={product.image} alt="product" className={styles.productImage} />
+              <img
+                src={product.image}
+                alt="product"
+                className={styles.productImage}
+              />
             </div>
             <div>
               <h1>{product.name}</h1>
@@ -147,7 +153,7 @@ const Detail = () => {
                         -
                       </button>
                       <input
-                        type='number'
+                        type="number"
                         value={quantity}
                         onChange={(e) => {
                           const value = Math.max(
@@ -167,7 +173,9 @@ const Detail = () => {
                         +
                       </button>
                       {product.stock === quantity && (
-                        <p>**{product.stock} es la maxima cantidad disponible </p>
+                        <p>
+                          **{product.stock} es la maxima cantidad disponible{" "}
+                        </p>
                       )}
                     </div>
                     <AddButton
@@ -181,7 +189,7 @@ const Detail = () => {
                   </div>
                 )
               ) : (
-                <p style={{ color: 'red' }}>
+                <p style={{ color: "red" }}>
                   <strong>No Disponible</strong>
                 </p>
               )}
@@ -207,7 +215,8 @@ const Detail = () => {
                     ) : (
                       <div>
                         <p>Escribe Tu Reseña</p>
-                        <CreateReview data={{ id }} /> {/* Pass an object to the data prop */}
+                        <CreateReview data={{ id }} />{" "}
+                        {/* Pass an object to the data prop */}
                       </div>
                     )
                   ) : (
