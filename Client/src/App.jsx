@@ -11,22 +11,19 @@ import PaymentFeedback from "./components/PaymentFeedback/PaymentFeedback";
 import Profile from "./components/Profile/Profile";
 import { Route, Routes, Navigate } from "react-router-dom";
 import { initMercadoPago } from "@mercadopago/sdk-react";
+import OrderDetailsPageUser from "./components/UserOrder/UserOrder";
 
 const backendUrl = import.meta.env.VITE_BACKEND;
 
 export const UserContext = createContext(null);
 
+// Inicializa Mercado Pago con tu public key
 initMercadoPago("APP_USR-f9778cd5-2698-4783-954b-94f05d959a29", {
   locale: "es-MX",
 });
 
 function App() {
-  const [user, setUser] = useState(
-    false
-    // Recupera el usuario de localStorage al inicializar el estado
-    //const savedUser = localStorage.getItem('user');
-    //return savedUser ? JSON.parse(savedUser) : false;
-  );
+  const [user, setUser] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
   const sesion = async () => {
@@ -35,7 +32,10 @@ function App() {
         credentials: "include",
       });
       if (data.ok) {
-        setUser(await data.json());
+        const userData = await data.json();
+        setUser(userData);
+        // Guarda el usuario en localStorage
+        localStorage.setItem("user", JSON.stringify(userData));
       } else {
         return;
       }
@@ -71,19 +71,22 @@ function App() {
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/checkout/feedback" element={<PaymentFeedback />} />
-              <Route path="/profile" element={<Profile />} />
-              {user.rol === "Admin" && (
-                <Route
-                  path="/admin/*"
-                  element={<Dashboard sesion={sesion} />}
-                />
-              )}
+              <Route
+                path="/profile"
+                element={<Profile data={user} sesion={sesion} />}
+              />
+              <Route
+                path="/profile/order/:orderId"
+                element={<OrderDetailsPageUser data={user} sesion={sesion} />}
+              />
             </>
           ) : (
-            <>
-              <Route path="/cart" element={<Login sesion={sesion} />} />
-              <Route path="/profile" element={<Navigate to="/login" />} />
-            </>
+            <Route path="/cart" element={<Login sesion={sesion} />} />
+          )}
+          {user && user.rol === "Admin" ? (
+            <Route path="/admin/*" element={<Dashboard sesion={sesion} />} />
+          ) : (
+            <Route path="/cart" element={<Navigate to="/login" />} />
           )}
           <Route path="/detail/:id" element={<Detail />} />
           <Route path="/login" element={<Login sesion={sesion} />} />
