@@ -5,10 +5,13 @@ import styles from "./OrderDetailsPage.module.css";
 
 const backendUrl = import.meta.env.VITE_BACKEND;
 
-const OrderDetailsPageUser = () => {
-  const { orderId } = useParams();
+const OrderDetailsPageUser = (props) => {
+  const { orderId: paramOrderId } = useParams();
   const navigate = useNavigate();
   const [orderDetails, setOrderDetails] = useState(null);
+
+  // Usar la id pasada como prop o la de los parámetros de la URL
+  const orderId = props.orderId || paramOrderId;
 
   useEffect(() => {
     const fetchOrderDetails = async () => {
@@ -80,8 +83,8 @@ const OrderDetailsPageUser = () => {
           <p>Cantidad</p>
         </div>
         {orderDetails.products.map((product) => (
-          <Link to={`/detail/${product.id}`}>
-            <div key={product.id} className={styles.cartItem}>
+          <Link to={`/detail/${product.id}`} key={product.id}>
+            <div className={styles.cartItem}>
               <img
                 src={product.image}
                 alt={product.name}
