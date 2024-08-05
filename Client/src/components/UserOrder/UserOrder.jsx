@@ -5,13 +5,13 @@ import styles from "./OrderDetailsPage.module.css";
 
 const backendUrl = import.meta.env.VITE_BACKEND;
 
-const OrderDetailsPageUser = (props) => {
+const OrderDetailsPageUser = ({ orderId: propOrderId }) => {
   const { orderId: paramOrderId } = useParams();
   const navigate = useNavigate();
   const [orderDetails, setOrderDetails] = useState(null);
 
   // Usar la id pasada como prop o la de los parámetros de la URL
-  const orderId = props.orderId || paramOrderId;
+  const orderId = propOrderId || paramOrderId;
 
   useEffect(() => {
     const fetchOrderDetails = async () => {
