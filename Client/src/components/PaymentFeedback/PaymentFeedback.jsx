@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { UserContext } from "../../App";
-import OrderDetailsPageUser from "./components/UserOrder/UserOrder";
+import OrderDetailsPageUser from "../UserOrder/UserOrder";
 
 const backendUrl = import.meta.env.VITE_BACKEND;
 
