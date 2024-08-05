@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback, useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import {
   fetchUserById,
   editUser,
@@ -17,25 +18,21 @@ import styles from "./Profile.module.css";
 const Profile = ({ data, sesion }) => {
   const dispatch = useDispatch();
   const { user } = useContext(UserContext);
-
-  console.log("User ID:", user?.id); // Agrega este log para verificar el valor de user.id
-
-  const userID = user?.id;
+  localStorage.setItem("user", JSON.stringify(data));
+  const userID = user.id;
   const [showModalEdit, setShowModalEdit] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const dataUser = useSelector((state) => state.user.item);
   const dataReviews = useSelector((state) => state.user.reviews);
   const products = useSelector((state) => state.items.items);
   const orders = useSelector((state) => state.user.orders);
-  console.log(userID);
+
   useEffect(() => {
-    if (userID) {
-      dispatch(fetchUserById(userID));
-      dispatch(fetchUserReviews(userID));
-      dispatch(fetchUserOrders(userID));
-    }
+    dispatch(fetchUserById(userID));
+    dispatch(fetchUserReviews(userID));
+    dispatch(fetchUserOrders(userID));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userID]);
+  }, []);
 
   const handlerEditUser = (newUser) => {
     dispatch(editUser(newUser));
@@ -99,12 +96,17 @@ const Profile = ({ data, sesion }) => {
           <div className={styles.purchaseHistory}>
             {orders ? (
               orders.slice(-3).map((item, index) => (
-                <div className={styles.purchaseHistoryItem} key={index}>
-                  <p>N° de pedido: {item?.id.slice(0, 7)}...</p>
-                  <p>Monto: ${item?.amount}</p>
-                  <p>Fecha: {formatDateTime(item?.creation_date)}</p>
-                  <button className={styles.detailButton}>Ver detalle</button>
-                </div>
+                <Link
+                  to={`/profile/order/${item.id}`}
+                  key={index}
+                  className={styles.purchaseHistoryItemLink}
+                >
+                  <div className={styles.purchaseHistoryItem}>
+                    <p>N° de pedido: {item?.id.slice(0, 7)}...</p>
+                    <p>Monto: ${item?.amount}</p>
+                    <p>Fecha: {formatDateTime(item?.creation_date)}</p>
+                  </div>
+                </Link>
               ))
             ) : (
               <div className={styles.purchaseHistoryItem}>
@@ -116,20 +118,27 @@ const Profile = ({ data, sesion }) => {
           <div className={styles.purchaseHistory}>
             {dataReviews.length ? (
               dataReviews?.map((item, index) => (
-                <div className={styles.purchaseHistoryItem} key={index}>
-                  <p className={styles.comment}>
-                    {item.comment === "" ? "No hay comentarios" : item.comment}
-                  </p>
-                  <p>Rating: {"⭐".repeat(item.rating)}</p>
-                  <p>
-                    Producto:{" "}
-                    {
-                      products.filter(
-                        (product) => product.id === item.mangueraId
-                      )[0]?.name
-                    }
-                  </p>
-                </div>
+                <Link
+                  to={`/detail/${item.mangueraId}`}
+                  className={styles.purchaseHistoryItemLink}
+                >
+                  <div className={styles.purchaseHistoryItem} key={index}>
+                    <p>Rating: {"⭐".repeat(item.rating)}</p>
+                    <p>
+                      Producto:{" "}
+                      {
+                        products.find(
+                          (product) => product.id === item.mangueraId
+                        )?.name
+                      }
+                    </p>
+                    <p className={styles.comment}>
+                      {item.comment === ""
+                        ? "No hay comentarios"
+                        : item.comment}
+                    </p>
+                  </div>
+                </Link>
               ))
             ) : (
               <div className={styles.purchaseHistoryItem}>
