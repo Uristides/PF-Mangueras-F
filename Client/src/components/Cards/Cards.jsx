@@ -90,7 +90,7 @@ const Cards = ({ filters, sortOption, searchQuery }) => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 0));
   };
 
-  console.log("Products in cards: ", products);
+  // console.log("Products in cards: ", products);
 
   return (
     <section className={styles.section}>

@@ -144,6 +144,7 @@ const Detail = () => {
                     <label>Cantidad: </label>
                     <div>
                       <button
+                        className={styles.buttonSetQuantity}
                         onClick={() =>
                           setQuantity((prevQuantity) =>
                             Math.max(prevQuantity - 1, 1)

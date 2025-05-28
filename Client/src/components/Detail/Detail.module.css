@@ -6,11 +6,10 @@
   font-family: Arial, sans-serif;
 }
 
-
-.backButton{
+.backButton {
   background-color: #00b853;
   margin-top: 50px;
-  margin-left: 100px; 
+  margin-left: 100px;
   border: 0;
   border-radius: 2em;
   width: 5%;
@@ -19,11 +18,10 @@
   color: white;
 }
 
-.backButton:hover{
+.backButton:hover {
   background-color: #218838;
   cursor: pointer;
 }
-
 
 .productContainer {
   display: flex;
@@ -100,7 +98,7 @@ hr {
 }
 
 .carritoButton:disabled {
-  background-color: #ddd;
+  background-color: #b94c4c;
   cursor: not-allowed;
 }
 
