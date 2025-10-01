@@ -6,11 +6,16 @@ import SearchBar from '../SearchBar/SearchBar';
 import styles from './Navbar.module.css';
 import { useDispatch } from 'react-redux';
 import { FaUserAlt } from "react-icons/fa";
+import {useNavigate} from 'react-router-dom';
+
+
 
 const backendUrl = import.meta.env.VITE_BACKEND;
 
+
 const Navbar = ({ sesion, onSearch }) => {
   
+  const navigate = useNavigate();
   const { pathname } = useLocation();
   const dispatch = useDispatch();
   const { user } = useContext(UserContext);
@@ -29,7 +34,8 @@ const Navbar = ({ sesion, onSearch }) => {
     if (response.ok) {
       deleteCookie('lacookie');
       sesion();
-      location.reload();
+      navigate('/login');
+       location.reload();
     }
   };
 

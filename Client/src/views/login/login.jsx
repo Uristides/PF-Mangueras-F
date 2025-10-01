@@ -5,8 +5,10 @@ import { FaFacebookF } from "react-icons/fa6";
 import { UserContext } from "../../App";
 const backendUrl = import.meta.env.VITE_BACKEND;
 import emailjs from "@emailjs/browser";
+import { useNavigate } from "react-router-dom";
 
 export function Login({ sesion }) {
+  const navigate = useNavigate();
   const { user } = useContext(UserContext);
   const [showLogin, setShowLogin] = useState(false);
   const [loged, setLoged] = useState(false);
@@ -86,7 +88,7 @@ export function Login({ sesion }) {
 
         if (response.ok) {
           sesion();
-          setOkey("¡Inicio de sesión exitoso!");
+          navigate("/");
         } else {
           setNotOkey("Contraseña o correo inválidos");
         }
