@@ -6,11 +6,13 @@ import { MdOutlineShoppingCartCheckout } from "react-icons/md";
 import styles from './CheckoutButton.module.css'
 
 const backendUrl = import.meta.env.VITE_BACKEND;
+const publicKey = import.meta.env.VITE_PUBLIC_KEY_MERCADO_PAGO;
+
 
 const CheckoutButton = ({ totalPrice }) => {
-  initMercadoPago("APP_USR-f9778cd5-2698-4783-954b-94f05d959a29", {
+  initMercadoPago(publicKey, {
     locale: "es-MX",
-  }); // Reemplaza 'YOUR_PUBLIC_KEY' con tu clave pública real
+  });
 
   const { user } = useContext(UserContext);
   const [possibleCheckout, setPossibleCheckout] = useState(false);
